@@ -23,10 +23,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside className="sidebar">
       <div className="logo-container">
-        <div className="logo-icon">漢</div>
+        <div className="logo-icon">書</div>
         <div className="logo-text">
-          <span className="logo-title">Antigravity JP</span>
-          <span className="logo-subtitle">Kanji Practice</span>
+          <span className="logo-title">Kakitai</span>
+          <span className="logo-subtitle">書きたい</span>
         </div>
       </div>
 

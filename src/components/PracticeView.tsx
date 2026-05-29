@@ -101,7 +101,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                 <Award size={32} />
               </div>
             </div>
-            <h1 style={{ textAlign: "center", marginBottom: "12px" }}>TOEIC Kanji Practice Arena</h1>
+            <h1 style={{ textAlign: "center", marginBottom: "12px" }}>Kakitai Practice Arena</h1>
             <p style={{ color: "var(--color-text-secondary)", textAlign: "center", lineHeight: 1.6, marginBottom: "28px" }}>
               Test your writing comprehension, reading context, and sentence vocabulary. 
               Each session contains 10 randomized multiple-choice questions assessing readings, meanings, and spelling context.

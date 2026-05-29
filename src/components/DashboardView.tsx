@@ -34,7 +34,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
         <div>
           <h1>Konnichiwa! 👋</h1>
           <p style={{ color: "var(--color-text-secondary)", marginTop: "4px" }}>
-            Welcome to your Japanese Kanji & Vocabulary study board.
+            Welcome to Kakitai, your Japanese Kanji & Vocabulary study board.
           </p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--color-text-muted)", fontSize: "14px" }}>
