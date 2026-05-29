@@ -149,7 +149,13 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
               <button
                 type="button"
                 className="speak-btn"
-                onClick={() => speakJapanese(currentQuestion.sentence)}
+                onClick={() => {
+                  if (currentQuestion.type === "translate_en_jp") {
+                    speakJapanese(currentQuestion.correctAnswer);
+                  } else {
+                    speakJapanese(currentQuestion.sentence);
+                  }
+                }}
                 title="Speak sentence"
                 style={{ width: "36px", height: "36px" }}
               >

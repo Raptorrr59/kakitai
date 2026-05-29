@@ -4,21 +4,34 @@ import { DashboardView } from "./components/DashboardView";
 import { KanjiBankView } from "./components/KanjiBankView";
 import { PracticeView } from "./components/PracticeView";
 import { WritingView } from "./components/WritingView";
+import { VocabView } from "./components/VocabView";
 import { useSRS } from "./hooks/useSRS";
+import { useVocabSRS } from "./hooks/useVocabSRS";
 
 function App() {
   const [view, setView] = useState<string>("dashboard");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  
   const {
+    progress: kanjiProgress,
     getKanjiProgress,
     gradeKanji,
     startLearning,
-    isDue,
-    getStats,
-    resetAllProgress
+    isDue: isKanjiDue,
+    getStats: getKanjiStats,
+    resetAllProgress: resetKanjiProgress
   } = useSRS();
 
-  const stats = getStats();
+  const {
+    getActiveVocab,
+    startLearningVocab,
+    gradeVocab,
+    getVocabStats,
+    resetVocabProgress
+  } = useVocabSRS(kanjiProgress);
+
+  const stats = getKanjiStats();
+  const vocabStats = getVocabStats();
 
   // Load and apply user theme
   useEffect(() => {
@@ -37,20 +50,30 @@ function App() {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
+  const handleResetAll = () => {
+    resetKanjiProgress();
+    resetVocabProgress();
+  };
+
   return (
     <div className="app-container">
       <Sidebar
         currentView={view}
         setView={setView}
         dueCount={stats.dueCount}
+        vocabDueCount={vocabStats.dueCount}
         theme={theme}
         toggleTheme={toggleTheme}
-        onReset={resetAllProgress}
+        onReset={handleResetAll}
       />
       
       <main className="main-content">
         {view === "dashboard" && (
-          <DashboardView stats={stats} setView={setView} />
+          <DashboardView 
+            stats={stats} 
+            vocabStats={vocabStats} 
+            setView={setView} 
+          />
         )}
         {view === "bank" && (
           <KanjiBankView
@@ -67,7 +90,15 @@ function App() {
             getKanjiProgress={getKanjiProgress}
             gradeKanji={gradeKanji}
             startLearning={startLearning}
-            isDue={isDue}
+            isDue={isKanjiDue}
+          />
+        )}
+        {view === "vocab" && (
+          <VocabView
+            activeVocabList={getActiveVocab()}
+            gradeVocab={gradeVocab}
+            startLearningVocab={startLearningVocab}
+            vocabStats={vocabStats}
           />
         )}
       </main>

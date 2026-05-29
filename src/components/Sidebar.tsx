@@ -1,10 +1,11 @@
 import React from "react";
-import { BookOpen, LayoutDashboard, Award, Edit3, Moon, Sun, RefreshCw } from "lucide-react";
+import { BookOpen, LayoutDashboard, Award, Edit3, Moon, Sun, RefreshCw, GraduationCap } from "lucide-react";
 
 interface SidebarProps {
   currentView: string;
   setView: (view: string) => void;
   dueCount: number;
+  vocabDueCount: number;
   theme: "dark" | "light";
   toggleTheme: () => void;
   onReset: () => void;
@@ -14,6 +15,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   currentView,
   setView,
   dueCount,
+  vocabDueCount,
   theme,
   toggleTheme,
   onReset
@@ -73,6 +75,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 style={{ marginLeft: "auto", fontSize: "10px", padding: "2px 6px" }}
               >
                 {dueCount} Due
+              </span>
+            )}
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            type="button"
+            className={`nav-button ${currentView === "vocab" ? "active" : ""}`}
+            onClick={() => setView("vocab")}
+          >
+            <GraduationCap size={18} />
+            <span>Vocab Trainer</span>
+            {vocabDueCount > 0 && (
+              <span 
+                className="tag tag-onyomi" 
+                style={{ marginLeft: "auto", fontSize: "10px", padding: "2px 6px" }}
+              >
+                {vocabDueCount} Due
               </span>
             )}
           </button>

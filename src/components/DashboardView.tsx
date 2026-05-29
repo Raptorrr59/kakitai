@@ -1,17 +1,31 @@
 import React from "react";
-import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar } from "lucide-react";
+import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap } from "lucide-react";
 import type { SRSStats } from "../hooks/useSRS";
+import type { VocabStats } from "../hooks/useVocabSRS";
 
 interface DashboardViewProps {
   stats: SRSStats;
+  vocabStats: VocabStats;
   setView: (view: string) => void;
 }
 
-export const DashboardView: React.FC<DashboardViewProps> = ({ stats, setView }) => {
-  const totalKanji = 30;
+export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats, setView }) => {
+  const totalKanji = 60; // Expanded pool (N5 + N4 + N3)
   const learnedCount = totalKanji - stats.newCount;
   const learningPercentage = Math.round((learnedCount / totalKanji) * 100);
   const masteryPercentage = Math.round((stats.masteredCount / totalKanji) * 100);
+
+  // Vocabulary stats calculations
+  const totalUnlockedVocab = vocabStats.newCount + vocabStats.learningCount + vocabStats.reviewCount + vocabStats.masteredCount;
+  const learnedVocabCount = totalUnlockedVocab - vocabStats.newCount;
+  const vocabLearningPercentage = totalUnlockedVocab > 0 
+    ? Math.round((learnedVocabCount / totalUnlockedVocab) * 100) 
+    : 0;
+  const vocabMasteryPercentage = totalUnlockedVocab > 0 
+    ? Math.round((vocabStats.masteredCount / totalUnlockedVocab) * 100) 
+    : 0;
+
+  const totalDueCount = stats.dueCount + vocabStats.dueCount;
 
   return (
     <div className="dashboard-view animate-fade-in">
@@ -19,7 +33,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, setView }) 
         <div>
           <h1>Konnichiwa! 👋</h1>
           <p style={{ color: "var(--color-text-secondary)", marginTop: "4px" }}>
-            Welcome to your Japanese Kanji learning dashboard.
+            Welcome to your Japanese Kanji & Vocabulary study board.
           </p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--color-text-muted)", fontSize: "14px" }}>
@@ -29,26 +43,42 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, setView }) 
       </div>
 
       {/* SRS Due Alerts */}
-      {stats.dueCount > 0 ? (
+      {totalDueCount > 0 ? (
         <div className="review-alert-banner">
           <div className="review-alert-content">
             <h3 className="review-alert-title" style={{ color: "var(--color-kunyomi)" }}>
               <AlertCircle size={20} />
-              Spaced Repetition Review Due
+              Spaced Repetition Reviews Due
             </h3>
             <p className="review-alert-desc">
-              You have <strong>{stats.dueCount}</strong> Kanji due for review. Tracing these characters today will reinforce them in your long-term memory!
+              You have {stats.dueCount > 0 && <strong>{stats.dueCount} Kanji</strong>}
+              {stats.dueCount > 0 && vocabStats.dueCount > 0 && " and "}
+              {vocabStats.dueCount > 0 && <strong>{vocabStats.dueCount} Vocabulary words</strong>} due for review today.
             </p>
           </div>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => setView("writing")}
-            style={{ flexShrink: 0 }}
-          >
-            <Edit3 size={16} />
-            <span>Start Review Now</span>
-          </button>
+          <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+            {stats.dueCount > 0 && (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => setView("writing")}
+              >
+                <Edit3 size={16} />
+                <span>Review Kanji</span>
+              </button>
+            )}
+            {vocabStats.dueCount > 0 && (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => setView("vocab")}
+                style={{ background: "var(--color-kunyomi)", boxShadow: "0 4px 12px rgba(32, 201, 151, 0.3)" }}
+              >
+                <GraduationCap size={16} />
+                <span>Review Vocab</span>
+              </button>
+            )}
+          </div>
         </div>
       ) : (
         <div className="review-alert-banner" style={{ background: "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(32, 201, 151, 0.08) 100%)", borderColor: "rgba(16, 185, 129, 0.2)" }}>
@@ -58,14 +88,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, setView }) 
               All caught up!
             </h3>
             <p className="review-alert-desc">
-              Amazing work! No reviews due right now. You can learn new Kanji in the Bank or test your comprehension in the Practice Arena.
+              Amazing work! No reviews due right now. You can learn new Kanji in the Bank, review vocabulary, or test your comprehension in the Practice Arena.
             </p>
           </div>
         </div>
       )}
 
       {/* Stats Summary Bar */}
-      <div className="stats-bar">
+      <h2 style={{ fontSize: "16px", textTransform: "uppercase", color: "var(--color-text-muted)", letterSpacing: "0.05em", marginBottom: "12px" }}>
+        Kanji Progress Details
+      </h2>
+      <div className="stats-bar" style={{ marginBottom: "32px" }}>
         <div className="glass-card stat-item">
           <div className="stat-icon-wrapper purple">
             <BookOpen size={20} />
@@ -113,9 +146,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, setView }) 
           <h2 style={{ marginBottom: "20px" }}>Learning Progress</h2>
           
           <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+            {/* Kanji study pool */}
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", fontSize: "14px" }}>
-                <span style={{ fontWeight: 600 }}>Active Study Pool (Started Learning)</span>
+                <span style={{ fontWeight: 600 }}>Kanji Study Pool (Started Learning)</span>
                 <span style={{ color: "var(--color-primary)", fontWeight: 700 }}>{learnedCount} / {totalKanji} Kanji ({learningPercentage}%)</span>
               </div>
               <div className="progress-bar-bg">
@@ -123,9 +157,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, setView }) 
               </div>
             </div>
 
+            {/* Vocab study pool */}
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", fontSize: "14px" }}>
-                <span style={{ fontWeight: 600 }}>Mastery Ratio (Scheduled &gt; 1 month)</span>
+                <span style={{ fontWeight: 600 }}>Vocabulary Study Pool (Started Learning)</span>
+                <span style={{ color: "var(--color-kunyomi)", fontWeight: 700 }}>
+                  {learnedVocabCount} / {totalUnlockedVocab} Words ({vocabLearningPercentage}%)
+                </span>
+              </div>
+              <div className="progress-bar-bg" style={{ backgroundColor: "var(--color-bg-surface-hover)" }}>
+                <div className="progress-bar-fg" style={{ width: `${vocabLearningPercentage}%`, background: "var(--color-kunyomi)" }} />
+              </div>
+            </div>
+
+            {/* Kanji Mastery */}
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", fontSize: "14px" }}>
+                <span style={{ fontWeight: 600 }}>Kanji Mastery Ratio (Box 5)</span>
                 <span style={{ color: "var(--color-success)", fontWeight: 700 }}>{stats.masteredCount} / {totalKanji} Kanji ({masteryPercentage}%)</span>
               </div>
               <div className="progress-bar-bg" style={{ backgroundColor: "var(--color-bg-surface-hover)" }}>
@@ -134,7 +182,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, setView }) 
             </div>
           </div>
 
-          <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>SRS Mastery Box Breakdown</h3>
+          <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>SRS Mastery Box Breakdown (Kanji)</h3>
           <div className="stats-panel-grid">
             <div className="glass-card box-stat new">
               <span className="box-stat-num">{stats.newCount}</span>
@@ -175,6 +223,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, setView }) 
 
             <button
               type="button"
+              className="btn btn-secondary"
+              onClick={() => setView("vocab")}
+              style={{ justifyContent: "flex-start", width: "100%" }}
+            >
+              <GraduationCap size={16} />
+              <span>Vocab Trainer ({totalUnlockedVocab} unlocked)</span>
+            </button>
+
+            <button
+              type="button"
               className="btn btn-primary"
               onClick={() => setView("practice")}
               style={{ justifyContent: "flex-start", width: "100%" }}
@@ -185,15 +243,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, setView }) 
           </div>
 
           <div className="glass-card">
-            <h3>Spaced Repetition Tip</h3>
+            <h3>Vocabulary Unlock System</h3>
             <p style={{ fontSize: "13px", color: "var(--color-text-secondary)", marginTop: "10px", lineHeight: 1.6 }}>
-              Learning Japanese requires consistent recall. When you draw Kanji in the <strong>Writing Studio</strong>, grade yourself honestly:
+              You don't need to manually add words! When you begin learning a Kanji (Kanji box state &gt; 0), <strong>all of its associated compound vocabulary words are automatically imported</strong> into your active Vocabulary Study Pool. This keeps your vocabulary learning strictly aligned with the Kanji characters you already recognize.
             </p>
-            <ul style={{ fontSize: "12px", color: "var(--color-text-secondary)", marginLeft: "20px", marginTop: "8px", display: "flex", flexDirection: "column", gap: "6px" }}>
-              <li><strong>Blackout (0-1)</strong> resets review intervals back to 1 day.</li>
-              <li><strong>Difficult (2-3)</strong> increases intervals slightly, scheduling early.</li>
-              <li><strong>Perfect (4-5)</strong> grows interval scales by 2.5x, solidifying your memory.</li>
-            </ul>
           </div>
         </div>
       </div>
