@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { CheckCircle2, AlertCircle, Edit3, Volume2, Sparkles } from "lucide-react";
-import { KANJI_DATASET, KanjiItem } from "../data/kanji";
-import { SRSProgress, SRSStats } from "../hooks/useSRS";
+import { KANJI_DATASET } from "../data/kanji";
+import type { KanjiItem } from "../data/kanji";
+import type { SRSProgress, SRSStats } from "../hooks/useSRS";
 import { CanvasPad } from "./CanvasPad";
 
 interface WritingViewProps {

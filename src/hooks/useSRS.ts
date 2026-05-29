@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { KanjiItem, KANJI_DATASET } from "../data/kanji";
+import { KANJI_DATASET } from "../data/kanji";
 
 export interface SRSProgress {
   kanji: string;

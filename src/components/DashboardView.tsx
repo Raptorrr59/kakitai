@@ -1,6 +1,6 @@
 import React from "react";
 import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar } from "lucide-react";
-import { SRSStats } from "../hooks/useSRS";
+import type { SRSStats } from "../hooks/useSRS";
 
 interface DashboardViewProps {
   stats: SRSStats;

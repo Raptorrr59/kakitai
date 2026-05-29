@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Award, Volume2, ArrowRight, CheckCircle2, XCircle, RotateCcw, Home } from "lucide-react";
-import { Question, PRACTICE_QUESTIONS } from "../data/questions";
+import { PRACTICE_QUESTIONS } from "../data/questions";
+import type { Question } from "../data/questions";
 
 interface PracticeViewProps {
   setView: (view: string) => void;
