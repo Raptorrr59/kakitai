@@ -2,6 +2,7 @@ import React from "react";
 import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap } from "lucide-react";
 import type { SRSStats } from "../hooks/useSRS";
 import type { VocabStats } from "../hooks/useVocabSRS";
+import { KANJI_DATASET } from "../data/kanji";
 
 interface DashboardViewProps {
   stats: SRSStats;
@@ -10,7 +11,7 @@ interface DashboardViewProps {
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats, setView }) => {
-  const totalKanji = 60; // Expanded pool (N5 + N4 + N3)
+  const totalKanji = KANJI_DATASET.length;
   const learnedCount = totalKanji - stats.newCount;
   const learningPercentage = Math.round((learnedCount / totalKanji) * 100);
   const masteryPercentage = Math.round((stats.masteredCount / totalKanji) * 100);
