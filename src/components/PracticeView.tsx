@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Award, Volume2, ArrowRight, CheckCircle2, XCircle, RotateCcw, Home } from "lucide-react";
+import { Award, Volume2, ArrowRight, CheckCircle2, XCircle, RotateCcw, Home, Eye, EyeOff } from "lucide-react";
 import { PRACTICE_QUESTIONS } from "../data/questions";
 import type { Question } from "../data/questions";
 
@@ -15,13 +15,14 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, { answer: string; isCorrect: boolean }>>({});
+  const [showFurigana, setShowFurigana] = useState(true);
 
   // Helper to Speak Japanese sentences
   const speakJapanese = (text: string) => {
     if (!("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    // Strip bold markers '**' or blanks '[ ]' for natural reading
-    const cleanText = text.replace(/\*\*/g, "").replace(/\[\s*\]/g, " ");
+    // Strip furigana markers '漢字{かんじ}', bold markers '**', or blanks '[ ]' for natural reading
+    const cleanText = text.replace(/\{[^}]*\}/g, "").replace(/\*\*/g, "").replace(/\[\s*\]/g, " ");
     
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = "ja-JP";
@@ -79,15 +80,34 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   const currentQuestion = questions[currentIndex];
   const finished = sessionActive && currentIndex >= questions.length;
 
-  // Render question text in styled Japanese (support bold markdown blocks)
+  // Render question text in styled Japanese (support bold markdown blocks and furigana tags)
   const formatSentence = (sentenceText: string) => {
-    const parts = sentenceText.split("**");
-    return parts.map((part, index) => {
-      // odd indices are inside **...**
-      if (index % 2 === 1) {
-        return <strong key={index}>{part}</strong>;
+    const boldParts = sentenceText.split("**");
+    return boldParts.map((part, index) => {
+      const isBold = index % 2 === 1;
+      const rubyRegex = /([^{}\s]+)\{([^}]+)\}/g;
+      const renderedPart = [];
+      let match;
+      let lastIdx = 0;
+      while ((match = rubyRegex.exec(part)) !== null) {
+        const matchIndex = match.index;
+        if (matchIndex > lastIdx) {
+          renderedPart.push(part.substring(lastIdx, matchIndex));
+        }
+        const baseWord = match[1];
+        const reading = match[2];
+        renderedPart.push(
+          <ruby key={matchIndex}>
+            {baseWord}
+            {showFurigana && <rt style={{ fontSize: "0.55em", color: "var(--color-primary)", display: "block" }}>{reading}</rt>}
+          </ruby>
+        );
+        lastIdx = rubyRegex.lastIndex;
       }
-      return part;
+      if (lastIdx < part.length) {
+        renderedPart.push(part.substring(lastIdx));
+      }
+      return isBold ? <strong key={index}>{renderedPart}</strong> : <span key={index}>{renderedPart}</span>;
     });
   };
 
@@ -145,22 +165,54 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
           </div>
 
           <div className="glass-card question-card">
-            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
-              <button
-                type="button"
-                className="speak-btn"
-                onClick={() => {
-                  if (currentQuestion.type === "translate_en_jp") {
-                    speakJapanese(currentQuestion.correctAnswer);
-                  } else {
-                    speakJapanese(currentQuestion.sentence);
-                  }
-                }}
-                title="Speak sentence"
-                style={{ width: "36px", height: "36px" }}
-              >
-                <Volume2 size={20} />
-              </button>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", borderBottom: "1px solid var(--color-border)", paddingBottom: "12px" }}>
+              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                <span className="tag tag-jlpt">N{currentQuestion.level}</span>
+                <span className="label" style={{ fontSize: "12px" }}>
+                  {currentQuestion.type === "kanji_select" ? "Kanji Selection" :
+                   currentQuestion.type === "cloze" ? "Cloze Sentence" :
+                   currentQuestion.type === "reading" ? "Reading" :
+                   currentQuestion.type === "meaning" ? "Meaning" :
+                   currentQuestion.type === "translate_jp_en" ? "JP → EN Translation" :
+                   currentQuestion.type === "translate_en_jp" ? "EN → JP Translation" : 
+                   currentQuestion.type}
+                </span>
+              </div>
+              <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowFurigana((prev) => !prev)}
+                  style={{
+                    padding: "6px 12px",
+                    fontSize: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    height: "36px",
+                    borderRadius: "8px"
+                  }}
+                  title="Toggle Furigana reading hints"
+                >
+                  {showFurigana ? <EyeOff size={16} /> : <Eye size={16} />}
+                  <span>{showFurigana ? "Hide Furigana" : "Show Furigana"}</span>
+                </button>
+                <button
+                  type="button"
+                  className="speak-btn"
+                  onClick={() => {
+                    if (currentQuestion.type === "translate_en_jp") {
+                      speakJapanese(currentQuestion.correctAnswer);
+                    } else {
+                      speakJapanese(currentQuestion.sentence);
+                    }
+                  }}
+                  title="Speak sentence"
+                  style={{ width: "36px", height: "36px" }}
+                >
+                  <Volume2 size={20} />
+                </button>
+              </div>
             </div>
 
             <div className="question-sentence">
@@ -283,10 +335,13 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                         backgroundColor: "var(--color-bg-surface)"
                       }}
                     >
-                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "4px" }}>
-                        <span className="kanji-text" style={{ fontSize: "15px", fontWeight: 600 }}>
-                          {q.sentence.replace(/\*\*/g, "")}
-                        </span>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "6px", flex: 1 }}>
+                        <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
+                          <span className="tag tag-jlpt" style={{ fontSize: "9px", padding: "1px 4px" }}>N{q.level}</span>
+                          <span className="kanji-text" style={{ fontSize: "15px", fontWeight: 600, display: "flex", gap: "2px", flexWrap: "wrap", lineHeight: "1.8" }}>
+                            {formatSentence(q.sentence)}
+                          </span>
+                        </div>
                         <span style={{ fontSize: "11px", color: "var(--color-text-muted)" }}>
                           Correct: {q.correctAnswer} | Yours: {ua?.answer}
                         </span>

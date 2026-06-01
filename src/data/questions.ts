@@ -3,7 +3,8 @@ export type QuestionType = "cloze" | "reading" | "kanji_select" | "meaning" | "t
 export interface Question {
   id: string;
   type: QuestionType;
-  sentence: string; // The sentence in Japanese or English
+  level: 5 | 4 | 3; // JLPT level (N5, N4, N3)
+  sentence: string; // The sentence in Japanese (with ruby annotation syntax word{furigana}) or English
   targetWord?: string; // Bolded word if any
   questionText: string; // English question explanation
   options: string[]; // 4 options
@@ -17,7 +18,8 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q1",
     type: "reading",
-    sentence: "あの**先生**はとても親切です。",
+    level: 5,
+    sentence: "あの**先生{せんせい}**はとても親切{しんせつ}です。",
     targetWord: "先生",
     questionText: "What is the correct reading of the bolded word?",
     options: ["せんせい", "がくせい", "こども", "おとな"],
@@ -28,7 +30,8 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q2",
     type: "cloze",
-    sentence: "私たちは来週、[ ]に行きます。",
+    level: 5,
+    sentence: "私{わたし}たちは来週{らいしゅう}、[ ]に行{い}きます。",
     questionText: "Which word best completes the sentence to mean 'We will go to Japan next week'?",
     options: ["日本", "毎日", "山道", "学校"],
     correctAnswer: "日本",
@@ -38,6 +41,7 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q3",
     type: "kanji_select",
+    level: 5,
     sentence: "あそこにかわいい**おんなのこ**がいます。",
     targetWord: "おんなのこ",
     questionText: "Choose the correct Kanji representation for the bolded hiragana word.",
@@ -51,7 +55,8 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q4",
     type: "reading",
-    sentence: "私たちは**電車**に乗って行きます。",
+    level: 4,
+    sentence: "私{わたし}たちは**電車{でんしゃ}**に乗{の}って行{い}きます。",
     targetWord: "電車",
     questionText: "What is the correct reading of the bolded word?",
     options: ["でんしゃ", "じてんしゃ", "じどうしゃ", "えき"],
@@ -62,7 +67,8 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q5",
     type: "cloze",
-    sentence: "彼は昨日、[ ]を読みました。",
+    level: 4,
+    sentence: "彼{かれ}は昨日{きのう}、[ ]を読{よ}みました。",
     questionText: "Which word best completes the sentence to mean 'He read a newspaper yesterday'?",
     options: ["新聞", "手紙", "辞書", "教科書"],
     correctAnswer: "新聞",
@@ -72,12 +78,13 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q6",
     type: "kanji_select",
-    sentence: "私は明日、**かいしゃ**に行きます。",
+    level: 4,
+    sentence: "私{わたし}は明日{あした}、**かいしゃ**に行{い}きます。",
     targetWord: "かいしゃ",
     questionText: "Choose the correct Kanji spelling for the bolded word.",
     options: ["会社", "社長", "社会", "会議"],
     correctAnswer: "会社",
-    explanation: "会社 (かいしゃ - kaisha) means 'company'. 社会 (しゃかい) means 'society'.",
+    explanation: "会社 (かいしゃ - kaisha) means 'company'.",
     englishTranslation: "I am going to the company tomorrow."
   },
 
@@ -85,18 +92,20 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q7",
     type: "reading",
-    sentence: "彼は**最近**、とても忙しいです。",
+    level: 3,
+    sentence: "彼{かれ}は**最近{さいきん}**、とても忙{いそが}しいです。",
     targetWord: "最近",
     questionText: "What is the correct reading of the bolded word?",
     options: ["さいきん", "さいこう", "もっとも", "とくべつ"],
     correctAnswer: "さいきん",
-    explanation: "最近 (さいきん - saikin) means 'recently'. 最高 (さいこう) is 'the best'.",
+    explanation: "最近 (さいきん - saikin) means 'recently'.最高 (さいこう) is 'the best'.",
     englishTranslation: "He has been very busy recently."
   },
   {
     id: "q8",
     type: "cloze",
-    sentence: "来週のテストの[ ]を決めました。",
+    level: 3,
+    sentence: "来週{らいしゅう}のテストの[ ]を決{き}めました。",
     questionText: "Which word completes the sentence to mean 'We decided the schedule for next week\\'s test'?",
     options: ["予定", "決定", "解決", "理由"],
     correctAnswer: "予定",
@@ -106,7 +115,8 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q9",
     type: "meaning",
-    sentence: "私は自分の能力に**自信**があります。",
+    level: 3,
+    sentence: "私{わたし}は自分{じぶん}の能力{のうりょく}に**自信{じしん}**があります。",
     targetWord: "自信",
     questionText: "What does the bolded word mean in this sentence?",
     options: ["Self-confidence", "Trust", "Traffic signal", "Emotion"],
@@ -119,7 +129,8 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q10",
     type: "translate_jp_en",
-    sentence: "会社の会議はいつも長くて大変です。",
+    level: 4,
+    sentence: "会社{かいしゃ}の会議{かいぎ}はいつも長{なが}くて大変{たいへん}です。",
     questionText: "Choose the correct English translation for this Japanese sentence.",
     options: [
       "Company meetings are always long and difficult.",
@@ -134,7 +145,8 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q11",
     type: "translate_jp_en",
-    sentence: "雨が降っていますから、急いで帰りましょう。",
+    level: 3,
+    sentence: "雨{あめ}が降{ふ}っていますから、急{いそ}いで帰り{かえり}ましょう。",
     questionText: "Choose the correct English translation for this Japanese sentence.",
     options: [
       "Since it is raining, let's hurry home.",
@@ -149,7 +161,8 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q12",
     type: "translate_jp_en",
-    sentence: "最近は新しい新幹線が走っています。",
+    level: 3,
+    sentence: "最近{さいきん}は新{あたら}しい新幹線{しんかんせん}が走{はし}っています。",
     questionText: "Choose the correct English translation for this Japanese sentence.",
     options: [
       "Recently, new bullet trains are running.",
@@ -166,6 +179,7 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q13",
     type: "translate_en_jp",
+    level: 4,
     sentence: "He is going to return to his country next week.",
     questionText: "Choose the correct Japanese translation for this English sentence.",
     options: [
@@ -181,21 +195,23 @@ export const PRACTICE_QUESTIONS: Question[] = [
   {
     id: "q14",
     type: "translate_en_jp",
+    level: 3,
     sentence: "I do not believe that story at all.",
     questionText: "Choose the correct Japanese translation for this English sentence.",
     options: [
       "私はその話を全然信じません。",
       "私はその言葉を信用します。",
       "私は感情を信じます。",
-      "私は彼の意見に反対しません。"
+      "私は彼の意見に反対しません."
     ],
     correctAnswer: "私はその話を全然信じません。",
-    explanation: "I (私) + that story (その話) + at all (全然 - used with negative) + do not believe (信じません).",
+    explanation: "I (私) + that story (その話) + at all (全然) + do not believe (信じません).",
     englishTranslation: "I do not believe that story at all."
   },
   {
     id: "q15",
     type: "translate_en_jp",
+    level: 4,
     sentence: "There is a telephone at the station entrance.",
     questionText: "Choose the correct Japanese translation for this English sentence.",
     options: [
