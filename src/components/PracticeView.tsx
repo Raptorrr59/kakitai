@@ -17,6 +17,54 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   const [userAnswers, setUserAnswers] = useState<Record<string, { answer: string; isCorrect: boolean }>>({});
   const [showFurigana, setShowFurigana] = useState(true);
 
+  const {
+    scores,
+    getScore,
+    isLearned,
+    updateScores,
+    getStats: getPracticeStats,
+    resetProgress: resetPracticeProgress
+  } = usePracticeProgress();
+
+  // Weighted sampling of questions based on learned status
+  const getWeightedQuestions = (count: number): Question[] => {
+    const weighted = PRACTICE_QUESTIONS.map((q) => {
+      const currentScore = scores[q.subject] || 0;
+      const learned = currentScore >= 10;
+      // Learned items appear much less frequently (weight 0.15 vs 1.0)
+      const weight = learned ? 0.15 : 1.0;
+      return { q, weight };
+    });
+
+    const selected: Question[] = [];
+    const pool = [...weighted];
+
+    for (let i = 0; i < count && pool.length > 0; i++) {
+      const totalWeight = pool.reduce((sum, item) => sum + item.weight, 0);
+      if (totalWeight === 0) {
+        const idx = Math.floor(Math.random() * pool.length);
+        selected.push(pool[idx].q);
+        pool.splice(idx, 1);
+        continue;
+      }
+
+      let r = Math.random() * totalWeight;
+      let selectedIdx = 0;
+      for (let j = 0; j < pool.length; j++) {
+        r -= pool[j].weight;
+        if (r <= 0) {
+          selectedIdx = j;
+          break;
+        }
+      }
+
+      selected.push(pool[selectedIdx].q);
+      pool.splice(selectedIdx, 1);
+    }
+
+    return selected;
+  };
+
   // Helper to Speak Japanese sentences
   const speakJapanese = (text: string) => {
     if (!("speechSynthesis" in window)) return;
@@ -37,9 +85,8 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   };
 
   const startSession = () => {
-    // Shuffle and pick 10 random questions from our pool
-    const shuffled = [...PRACTICE_QUESTIONS].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 10).map((q) => {
+    // Perform weighted sampling based on Practice Arena scores
+    const selected = getWeightedQuestions(10).map((q) => {
       // Create a shallow copy of the question and shuffle its options array
       const shuffledOptions = [...q.options].sort(() => 0.5 - Math.random());
       return {
@@ -68,6 +115,9 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     if (isCorrect) {
       setScore((prev) => prev + 1);
     }
+
+    // Update the custom practice scores in database
+    updateScores(currentQuestion.subject, currentQuestion.sentence, isCorrect);
 
     setUserAnswers((prev) => ({
       ...prev,
@@ -145,6 +195,43 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
               </ul>
             </div>
 
+            {/* Practice progress dashboard */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "28px" }}>
+              <div className="glass-card" style={{ padding: "16px", textAlign: "center", backgroundColor: "var(--color-bg-surface-solid)" }}>
+                <div style={{ fontSize: "28px", fontWeight: "bold", color: "#10b981", marginBottom: "4px" }}>
+                  {getPracticeStats().learnedCount}
+                </div>
+                <div style={{ fontSize: "12px", color: "var(--color-text-secondary)", textTransform: "uppercase", fontWeight: 600 }}>
+                  ✨ Items Learned
+                </div>
+              </div>
+              <div className="glass-card" style={{ padding: "16px", textAlign: "center", backgroundColor: "var(--color-bg-surface-solid)" }}>
+                <div style={{ fontSize: "28px", fontWeight: "bold", color: "var(--color-primary)", marginBottom: "4px" }}>
+                  {getPracticeStats().inProgressCount}
+                </div>
+                <div style={{ fontSize: "12px", color: "var(--color-text-secondary)", textTransform: "uppercase", fontWeight: 600 }}>
+                  📈 In Progress
+                </div>
+              </div>
+            </div>
+
+            {(getPracticeStats().learnedCount > 0 || getPracticeStats().inProgressCount > 0) && (
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to reset all Practice Arena scores? This cannot be undone.")) {
+                      resetPracticeProgress();
+                    }
+                  }}
+                  style={{ padding: "8px 16px", fontSize: "12px", color: "var(--color-danger)" }}
+                >
+                  Reset Practice Scores
+                </button>
+              </div>
+            )}
+
             <button
               type="button"
               className="btn btn-primary"
@@ -174,8 +261,13 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
 
           <div className="glass-card question-card">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", borderBottom: "1px solid var(--color-border)", paddingBottom: "12px" }}>
-              <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+              <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
                 <span className="tag tag-jlpt">N{currentQuestion.level}</span>
+                {isLearned(currentQuestion.subject) ? (
+                  <span className="tag" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)" }}>✨ Learned</span>
+                ) : (
+                  <span className="tag" style={{ backgroundColor: "var(--color-bg-surface-hover)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)" }}>📈 Score: {getScore(currentQuestion.subject)}/10</span>
+                )}
                 <span className="label" style={{ fontSize: "12px" }}>
                   {currentQuestion.type === "kanji_select" ? "Kanji Selection" :
                    currentQuestion.type === "cloze" ? "Cloze Sentence" :
@@ -348,6 +440,11 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "6px", flex: 1 }}>
                         <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
                           <span className="tag tag-jlpt" style={{ fontSize: "9px", padding: "1px 4px" }}>N{q.level}</span>
+                          {isLearned(q.subject) ? (
+                            <span className="tag" style={{ fontSize: "9px", padding: "1px 4px", backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)" }}>✨ Learned</span>
+                          ) : (
+                            <span className="tag" style={{ fontSize: "9px", padding: "1px 4px", backgroundColor: "var(--color-bg-surface-hover)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)" }}>📈 Score: {getScore(q.subject)}/10</span>
+                          )}
                           <span className="kanji-text" style={{ fontSize: "15px", fontWeight: 600, display: "flex", gap: "2px", flexWrap: "wrap", lineHeight: "1.8" }}>
                             {formatSentence(q.sentence)}
                           </span>

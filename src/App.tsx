@@ -63,6 +63,7 @@ function App() {
   const handleResetAll = () => {
     resetKanjiProgress();
     resetVocabProgress();
+    localStorage.removeItem("practice_arena_scores");
   };
 
   return (
