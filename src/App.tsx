@@ -7,6 +7,8 @@ import { WritingView } from "./components/WritingView";
 import { VocabView } from "./components/VocabView";
 import { useSRS } from "./hooks/useSRS";
 import { useVocabSRS } from "./hooks/useVocabSRS";
+import { usePresets } from "./hooks/usePresets";
+import { PresetsView } from "./components/PresetsView";
 
 function App() {
   const [view, setView] = useState<string>("dashboard");
@@ -29,6 +31,13 @@ function App() {
     getVocabStats,
     resetVocabProgress
   } = useVocabSRS(kanjiProgress);
+
+  const {
+    presets,
+    createPreset,
+    deletePreset,
+    activatePreset
+  } = usePresets();
 
   const stats = getKanjiStats();
   const vocabStats = getVocabStats();
@@ -99,6 +108,16 @@ function App() {
             gradeVocab={gradeVocab}
             startLearningVocab={startLearningVocab}
             vocabStats={vocabStats}
+          />
+        )}
+        {view === "presets" && (
+          <PresetsView
+            presets={presets}
+            createPreset={createPreset}
+            deletePreset={deletePreset}
+            activatePreset={activatePreset}
+            startLearning={startLearning}
+            getKanjiProgress={getKanjiProgress}
           />
         )}
       </main>

@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, LayoutDashboard, Award, Edit3, Moon, Sun, RefreshCw, GraduationCap } from "lucide-react";
+import { BookOpen, LayoutDashboard, Award, Edit3, Moon, Sun, RefreshCw, GraduationCap, FolderOpen } from "lucide-react";
 
 interface SidebarProps {
   currentView: string;
@@ -95,6 +95,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 {vocabDueCount} Due
               </span>
             )}
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            type="button"
+            className={`nav-button ${currentView === "presets" ? "active" : ""}`}
+            onClick={() => setView("presets")}
+          >
+            <FolderOpen size={18} />
+            <span>Study Sets</span>
           </button>
         </li>
       </ul>

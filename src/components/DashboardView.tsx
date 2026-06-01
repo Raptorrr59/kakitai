@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap } from "lucide-react";
+import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap, FolderOpen } from "lucide-react";
 import type { SRSStats } from "../hooks/useSRS";
 import type { VocabStats } from "../hooks/useVocabSRS";
 import { KANJI_DATASET } from "../data/kanji";
@@ -230,6 +230,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
             >
               <GraduationCap size={16} />
               <span>Vocab Trainer ({totalUnlockedVocab} unlocked)</span>
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setView("presets")}
+              style={{ justifyContent: "flex-start", width: "100%" }}
+            >
+              <FolderOpen size={16} />
+              <span>Study Sets & Presets</span>
             </button>
 
             <button
