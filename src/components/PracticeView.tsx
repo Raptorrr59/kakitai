@@ -81,7 +81,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   const finished = sessionActive && currentIndex >= questions.length;
 
   // Render question text in styled Japanese (support bold markdown blocks and furigana tags)
-  const formatSentence = (sentenceText: string) => {
+  const formatSentence = (sentenceText: string, forceHideFurigana: boolean = false) => {
     const boldParts = sentenceText.split("**");
     return boldParts.map((part, index) => {
       const isBold = index % 2 === 1;
@@ -96,10 +96,11 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
         }
         const baseWord = match[1];
         const reading = match[2];
+        const displayFurigana = showFurigana && !forceHideFurigana;
         renderedPart.push(
           <ruby key={matchIndex}>
             {baseWord}
-            {showFurigana && <rt style={{ fontSize: "0.55em", color: "var(--color-primary)", display: "block" }}>{reading}</rt>}
+            {displayFurigana && <rt style={{ fontSize: "0.55em", color: "var(--color-primary)", display: "block" }}>{reading}</rt>}
           </ruby>
         );
         lastIdx = rubyRegex.lastIndex;
@@ -179,24 +180,26 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                 </span>
               </div>
               <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setShowFurigana((prev) => !prev)}
-                  style={{
-                    padding: "6px 12px",
-                    fontSize: "12px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px",
-                    height: "36px",
-                    borderRadius: "8px"
-                  }}
-                  title="Toggle Furigana reading hints"
-                >
-                  {showFurigana ? <EyeOff size={16} /> : <Eye size={16} />}
-                  <span>{showFurigana ? "Hide Furigana" : "Show Furigana"}</span>
-                </button>
+                {currentQuestion.type !== "reading" && (
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setShowFurigana((prev) => !prev)}
+                    style={{
+                      padding: "6px 12px",
+                      fontSize: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      height: "36px",
+                      borderRadius: "8px"
+                    }}
+                    title="Toggle Furigana reading hints"
+                  >
+                    {showFurigana ? <EyeOff size={16} /> : <Eye size={16} />}
+                    <span>{showFurigana ? "Hide Furigana" : "Show Furigana"}</span>
+                  </button>
+                )}
                 <button
                   type="button"
                   className="speak-btn"
@@ -216,7 +219,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
             </div>
 
             <div className="question-sentence">
-              {formatSentence(currentQuestion.sentence)}
+              {formatSentence(currentQuestion.sentence, currentQuestion.type === "reading")}
             </div>
 
             <p className="question-text">
