@@ -39,7 +39,14 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   const startSession = () => {
     // Shuffle and pick 10 random questions from our pool
     const shuffled = [...PRACTICE_QUESTIONS].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 10);
+    const selected = shuffled.slice(0, 10).map((q) => {
+      // Create a shallow copy of the question and shuffle its options array
+      const shuffledOptions = [...q.options].sort(() => 0.5 - Math.random());
+      return {
+        ...q,
+        options: shuffledOptions
+      };
+    });
     setQuestions(selected);
     setCurrentIndex(0);
     setSelectedAnswer(null);
