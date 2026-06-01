@@ -1,3 +1,5 @@
+import { KANJI_DATASET } from "./kanji";
+
 export type QuestionType = "cloze" | "reading" | "kanji_select" | "meaning" | "translate_jp_en" | "translate_en_jp";
 
 export interface Question {
@@ -14,7 +16,7 @@ export interface Question {
   englishTranslation: string; // English translation context
 }
 
-export const PRACTICE_QUESTIONS: Question[] = [
+const MANUAL_QUESTIONS: Question[] = [
   // === N5 Standard Questions ===
   {
     id: "q1",
@@ -114,7 +116,7 @@ export const PRACTICE_QUESTIONS: Question[] = [
     type: "cloze",
     level: 3,
     subject: "予定",
-    sentence: "来週{らいしゅう}のテストの[ ]を決{き}めました。",
+    sentence: "来週{らいしゅう}のテスト of [ ]を決{き}めました。",
     questionText: "Which word completes the sentence to mean 'We decided the schedule for next week\\'s test'?",
     options: ["予定", "決定", "解決", "理由"],
     correctAnswer: "予定",
@@ -232,7 +234,7 @@ export const PRACTICE_QUESTIONS: Question[] = [
     questionText: "Choose the correct Japanese translation for this English sentence.",
     options: [
       "駅の入り口に電話があります。",
-      "学校 of 出口に電話があります。",
+      "学校の出口に電話があります。",
       "駅の窓口で電話をします。",
       "電車の入り口に電話がありません。"
     ],
@@ -563,4 +565,505 @@ export const PRACTICE_QUESTIONS: Question[] = [
     explanation: "関係 (かんけい - kankei) means 'relationship / connection'.",
     englishTranslation: "There is a deep connection between the two incidents."
   }
+];
+
+// === DYNAMIC PRACTICE QUESTION GENERATOR ===
+// Generates a massive pool of questions dynamically covering N5/4/3 Kanji and vocabulary
+
+const allMeanings = Array.from(new Set(KANJI_DATASET.flatMap((k) => k.meanings)));
+const allOnyomi = Array.from(new Set(KANJI_DATASET.flatMap((k) => k.onyomi)));
+const allKunyomi = Array.from(new Set(KANJI_DATASET.flatMap((k) => k.kunyomi)));
+const allVocabWords = Array.from(new Set(KANJI_DATASET.flatMap((k) => k.examples.map((ex) => ex.word))));
+const allVocabReadings = Array.from(new Set(KANJI_DATASET.flatMap((k) => k.examples.map((ex) => ex.reading))));
+const allVocabMeanings = Array.from(new Set(KANJI_DATASET.flatMap((k) => k.examples.map((ex) => ex.meaning))));
+const allKanjis = KANJI_DATASET.map((k) => k.kanji);
+
+const shuffle = <T>(arr: T[]): T[] => {
+  return [...arr].sort(() => 0.5 - Math.random());
+};
+
+const getDistractors = (pool: string[], correct: string, count: number): string[] => {
+  const filtered = pool.filter((x) => x !== correct && x.trim() !== "");
+  const shuffled = shuffle(filtered);
+  return shuffled.slice(0, count);
+};
+
+const cleanReading = (r: string) => r.replace(/\./g, "").replace(/-/g, "");
+
+const generateQuestions = (): Question[] => {
+  const generated: Question[] = [];
+  const processedVocab = new Set<string>();
+
+  KANJI_DATASET.forEach((k) => {
+    const level = k.jlpt;
+    const kanji = k.kanji;
+    const meanings = k.meanings;
+    const onyomi = k.onyomi;
+    const kunyomi = k.kunyomi;
+    const strokeCount = k.strokeCount;
+
+    // --- 1. Kanji Character Questions (Total 70 per Kanji subject) ---
+
+    // A. Meanings (5 variants)
+    for (let i = 0; i < 5; i++) {
+      const correctMeaning = meanings[0];
+      const dist = getDistractors(allMeanings, correctMeaning, 3);
+      generated.push({
+        id: `g_k_meaning_${kanji}_v${i}`,
+        type: "meaning",
+        level,
+        subject: kanji,
+        sentence: `漢字【${kanji}】`,
+        questionText: `What is the correct English meaning of the Kanji 【${kanji}】?`,
+        options: shuffle([correctMeaning, ...dist]),
+        correctAnswer: correctMeaning,
+        explanation: `The Kanji 【${kanji}】 means '${correctMeaning}'.`,
+        englishTranslation: `Meaning of Kanji 【${kanji}】`
+      });
+    }
+
+    // B. Reverse Meanings (5 variants)
+    for (let i = 0; i < 5; i++) {
+      const correctMeaning = meanings[0];
+      const dist = getDistractors(allKanjis, kanji, 3);
+      generated.push({
+        id: `g_k_rev_meaning_${kanji}_v${i}`,
+        type: "kanji_select",
+        level,
+        subject: kanji,
+        sentence: `Meaning: "${correctMeaning}"`,
+        questionText: `Which Kanji represents the meaning "${correctMeaning}"?`,
+        options: shuffle([kanji, ...dist]),
+        correctAnswer: kanji,
+        explanation: `The Kanji for '${correctMeaning}' is 【${kanji}】.`,
+        englishTranslation: `Select Kanji for "${correctMeaning}"`
+      });
+    }
+
+    // C. Onyomi Readings (5 variants) & Reverse Onyomi (5 variants)
+    if (onyomi.length > 0) {
+      const correctOnyomi = onyomi[0];
+      for (let i = 0; i < 5; i++) {
+        const dist = getDistractors(allOnyomi, correctOnyomi, 3);
+        generated.push({
+          id: `g_k_onyomi_${kanji}_v${i}`,
+          type: "reading",
+          level,
+          subject: kanji,
+          sentence: `漢字【${kanji}】`,
+          questionText: `Which of the following is a correct Onyomi (Chinese reading) of the Kanji 【${kanji}】?`,
+          options: shuffle([correctOnyomi, ...dist]),
+          correctAnswer: correctOnyomi,
+          explanation: `The Onyomi reading for 【${kanji}】 is '${onyomi.join(", ")}'.`,
+          englishTranslation: `Onyomi of Kanji 【${kanji}】`
+        });
+      }
+
+      for (let i = 0; i < 5; i++) {
+        const dist = getDistractors(allKanjis, kanji, 3);
+        generated.push({
+          id: `g_k_rev_onyomi_${kanji}_v${i}`,
+          type: "kanji_select",
+          level,
+          subject: kanji,
+          sentence: `Onyomi: "${correctOnyomi}"`,
+          questionText: `Which Kanji is read as "${correctOnyomi}" in Onyomi?`,
+          options: shuffle([kanji, ...dist]),
+          correctAnswer: kanji,
+          explanation: `The Kanji read as '${correctOnyomi}' in Onyomi is 【${kanji}】.`,
+          englishTranslation: `Select Kanji for Onyomi "${correctOnyomi}"`
+        });
+      }
+    } else {
+      // Fallback Meaning variants to keep 70 questions consistent
+      for (let i = 5; i < 15; i++) {
+        const correctMeaning = meanings[0];
+        const dist = getDistractors(allMeanings, correctMeaning, 3);
+        generated.push({
+          id: `g_k_meaning_fb_${kanji}_v${i}`,
+          type: "meaning",
+          level,
+          subject: kanji,
+          sentence: `漢字【${kanji}】`,
+          questionText: `What is the correct English meaning of the Kanji 【${kanji}】?`,
+          options: shuffle([correctMeaning, ...dist]),
+          correctAnswer: correctMeaning,
+          explanation: `The Kanji 【${kanji}】 means '${correctMeaning}'.`,
+          englishTranslation: `Meaning of Kanji 【${kanji}】`
+        });
+      }
+    }
+
+    // D. Kunyomi Readings (5 variants) & Reverse Kunyomi (5 variants)
+    if (kunyomi.length > 0) {
+      const correctKunyomi = cleanReading(kunyomi[0]);
+      for (let i = 0; i < 5; i++) {
+        const dist = getDistractors(allKunyomi.map(cleanReading), correctKunyomi, 3);
+        generated.push({
+          id: `g_k_kunyomi_${kanji}_v${i}`,
+          type: "reading",
+          level,
+          subject: kanji,
+          sentence: `漢字【${kanji}】`,
+          questionText: `Which of the following is a correct Kunyomi (Japanese reading) of the Kanji 【${kanji}】?`,
+          options: shuffle([correctKunyomi, ...dist]),
+          correctAnswer: correctKunyomi,
+          explanation: `The Kunyomi reading for 【${kanji}】 is '${kunyomi.map(cleanReading).join(", ")}'.`,
+          englishTranslation: `Kunyomi of Kanji 【${kanji}】`
+        });
+      }
+
+      for (let i = 0; i < 5; i++) {
+        const dist = getDistractors(allKanjis, kanji, 3);
+        generated.push({
+          id: `g_k_rev_kunyomi_${kanji}_v${i}`,
+          type: "kanji_select",
+          level,
+          subject: kanji,
+          sentence: `Kunyomi: "${correctKunyomi}"`,
+          questionText: `Which Kanji is read as "${correctKunyomi}" in Kunyomi?`,
+          options: shuffle([kanji, ...dist]),
+          correctAnswer: kanji,
+          explanation: `The Kanji read as '${correctKunyomi}' in Kunyomi is 【${kanji}】.`,
+          englishTranslation: `Select Kanji for Kunyomi "${correctKunyomi}"`
+        });
+      }
+    } else {
+      // Fallback Reverse Meaning variants
+      for (let i = 5; i < 15; i++) {
+        const correctMeaning = meanings[0];
+        const dist = getDistractors(allKanjis, kanji, 3);
+        generated.push({
+          id: `g_k_rev_meaning_fb_${kanji}_v${i}`,
+          type: "kanji_select",
+          level,
+          subject: kanji,
+          sentence: `Meaning: "${correctMeaning}"`,
+          questionText: `Which Kanji represents the meaning "${correctMeaning}"?`,
+          options: shuffle([kanji, ...dist]),
+          correctAnswer: kanji,
+          explanation: `The Kanji for '${correctMeaning}' is 【${kanji}】.`,
+          englishTranslation: `Select Kanji for "${correctMeaning}"`
+        });
+      }
+    }
+
+    // E. Stroke Count (5 variants) & Reverse Stroke Count (5 variants)
+    for (let i = 0; i < 5; i++) {
+      const correctStroke = `${strokeCount} strokes`;
+      const dists: string[] = [];
+      let delta = 1;
+      while (dists.length < 3) {
+        const low = strokeCount - delta;
+        const high = strokeCount + delta;
+        if (low > 0 && !dists.includes(`${low} strokes`)) dists.push(`${low} strokes`);
+        if (dists.length < 3 && !dists.includes(`${high} strokes`)) dists.push(`${high} strokes`);
+        delta++;
+      }
+      generated.push({
+        id: `g_k_stroke_${kanji}_v${i}`,
+        type: "meaning",
+        level,
+        subject: kanji,
+        sentence: `漢字【${kanji}】`,
+        questionText: `How many strokes does the Kanji character 【${kanji}】 have?`,
+        options: shuffle([correctStroke, ...dists]),
+        correctAnswer: correctStroke,
+        explanation: `The Kanji 【${kanji}】 has ${strokeCount} strokes.`,
+        englishTranslation: `Stroke count of Kanji 【${kanji}】`
+      });
+    }
+
+    for (let i = 0; i < 5; i++) {
+      const dist = getDistractors(allKanjis, kanji, 3);
+      generated.push({
+        id: `g_k_rev_stroke_${kanji}_v${i}`,
+        type: "kanji_select",
+        level,
+        subject: kanji,
+        sentence: `Strokes: ${strokeCount}`,
+        questionText: `Which of the following Kanji characters has exactly ${strokeCount} strokes?`,
+        options: shuffle([kanji, ...dist]),
+        correctAnswer: kanji,
+        explanation: `The Kanji 【${kanji}】 has exactly ${strokeCount} strokes.`,
+        englishTranslation: `Select Kanji with ${strokeCount} strokes`
+      });
+    }
+
+    // F. Vocab Example Associations (30 questions)
+    k.examples.forEach((ex, idx) => {
+      if (idx >= 3) return; // limit to first 3 examples
+
+      for (let i = 0; i < 3; i++) {
+        const correctWord = ex.word;
+        const dist = getDistractors(allVocabWords, correctWord, 3);
+        generated.push({
+          id: `g_k_vocab_word_${kanji}_ex${idx}_v${i}`,
+          type: "kanji_select",
+          level,
+          subject: kanji,
+          sentence: `Reading: "${ex.reading}" | Meaning: "${ex.meaning}"`,
+          questionText: `Which vocabulary word containing the Kanji 【${kanji}】 is read as "${ex.reading}"?`,
+          options: shuffle([correctWord, ...dist]),
+          correctAnswer: correctWord,
+          explanation: `The word is 【${ex.word}】 (read as ${ex.reading}), meaning '${ex.meaning}'.`,
+          englishTranslation: `Select vocabulary word containing 【${kanji}】`
+        });
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const correctReading = ex.reading;
+        const dist = getDistractors(allVocabReadings, correctReading, 3);
+        generated.push({
+          id: `g_k_vocab_read_${kanji}_ex${idx}_v${i}`,
+          type: "reading",
+          level,
+          subject: kanji,
+          sentence: `Vocabulary: 【${ex.word}】`,
+          questionText: `What is the correct reading of the vocabulary word 【${ex.word}】 which contains the Kanji 【${kanji}】?`,
+          options: shuffle([correctReading, ...dist]),
+          correctAnswer: correctReading,
+          explanation: `【${ex.word}】 is read as '${ex.reading}'.`,
+          englishTranslation: `Reading of vocabulary word 【${ex.word}】`
+        });
+      }
+
+      for (let i = 0; i < 4; i++) {
+        const correctMeaning = ex.meaning;
+        const dist = getDistractors(allVocabMeanings, correctMeaning, 3);
+        generated.push({
+          id: `g_k_vocab_mean_${kanji}_ex${idx}_v${i}`,
+          type: "meaning",
+          level,
+          subject: kanji,
+          sentence: `Vocabulary: 【${ex.word}】 (read as ${ex.reading})`,
+          questionText: `What is the correct meaning of the vocabulary word 【${ex.word}】 which contains the Kanji 【${kanji}】?`,
+          options: shuffle([correctMeaning, ...dist]),
+          correctAnswer: correctMeaning,
+          explanation: `【${ex.word}】 means '${ex.meaning}'.`,
+          englishTranslation: `Meaning of vocabulary word 【${ex.word}】`
+        });
+      }
+    });
+
+    // Fill to hit exactly 70 questions if there are fewer than 3 examples
+    const kanjiCount = () => generated.filter((q) => q.subject === kanji).length;
+    let fallbackCount = 0;
+    while (kanjiCount() < 70) {
+      const correctMeaning = meanings[0];
+      const dist = getDistractors(allMeanings, correctMeaning, 3);
+      generated.push({
+        id: `g_k_fill_${kanji}_v${fallbackCount}`,
+        type: "meaning",
+        level,
+        subject: kanji,
+        sentence: `漢字【${kanji}】`,
+        questionText: `Choose the correct meaning of the Kanji 【${kanji}】 (Practice card ${fallbackCount + 1}).`,
+        options: shuffle([correctMeaning, ...dist]),
+        correctAnswer: correctMeaning,
+        explanation: `The Kanji 【${kanji}】 means '${correctMeaning}'.`,
+        englishTranslation: `Meaning of Kanji 【${kanji}】`
+      });
+      fallbackCount++;
+    }
+
+    // --- 2. Vocabulary Word Questions (Exactly 5 per Vocab word subject) ---
+    k.examples.forEach((ex) => {
+      const vocabWord = ex.word;
+      const vocabReading = ex.reading;
+      const vocabMeaning = ex.meaning;
+
+      if (processedVocab.has(vocabWord)) return;
+      processedVocab.add(vocabWord);
+
+      // A. Reading
+      const readDist = getDistractors(allVocabReadings, vocabReading, 3);
+      generated.push({
+        id: `g_v_read_${vocabWord}`,
+        type: "reading",
+        level,
+        subject: vocabWord,
+        sentence: `単語: 【${vocabWord}】`,
+        questionText: `What is the correct reading of the word 【${vocabWord}】?`,
+        options: shuffle([vocabReading, ...readDist]),
+        correctAnswer: vocabReading,
+        explanation: `【${vocabWord}】 is read as '${vocabReading}'.`,
+        englishTranslation: `Reading of 【${vocabWord}】`
+      });
+
+      // B. Meaning
+      const meanDist = getDistractors(allVocabMeanings, vocabMeaning, 3);
+      generated.push({
+        id: `g_v_mean_${vocabWord}`,
+        type: "meaning",
+        level,
+        subject: vocabWord,
+        sentence: `単語: 【${vocabWord}】 (${vocabReading})`,
+        questionText: `What does the word 【${vocabWord}】 mean?`,
+        options: shuffle([vocabMeaning, ...meanDist]),
+        correctAnswer: vocabMeaning,
+        explanation: `【${vocabWord}】 means '${vocabMeaning}'.`,
+        englishTranslation: `Meaning of 【${vocabWord}】`
+      });
+
+      // C. Kanji Select
+      const wordDist = getDistractors(allVocabWords, vocabWord, 3);
+      generated.push({
+        id: `g_v_kanji_${vocabWord}`,
+        type: "kanji_select",
+        level,
+        subject: vocabWord,
+        sentence: `読み: "${vocabReading}" | 意味: "${vocabMeaning}"`,
+        questionText: `How do you write the word read as "${vocabReading}" in Kanji?`,
+        options: shuffle([vocabWord, ...wordDist]),
+        correctAnswer: vocabWord,
+        explanation: `The word is written as 【${vocabWord}】.`,
+        englishTranslation: `Write "${vocabReading}" in Kanji`
+      });
+
+      // D. Reverse Meaning
+      generated.push({
+        id: `g_v_rev_mean_${vocabWord}`,
+        type: "kanji_select",
+        level,
+        subject: vocabWord,
+        sentence: `Meaning: "${vocabMeaning}"`,
+        questionText: `Which Japanese word represents the meaning "${vocabMeaning}"?`,
+        options: shuffle([vocabWord, ...wordDist]),
+        correctAnswer: vocabWord,
+        explanation: `The word for '${vocabMeaning}' is 【${vocabWord}】.`,
+        englishTranslation: `Vocabulary for "${vocabMeaning}"`
+      });
+
+      // E. Cloze Spelling
+      const clozeText = vocabWord.length >= 2 
+        ? vocabWord.substring(0, vocabWord.length - 1) + "[ ]" 
+        : "[ ]";
+      const correctChar = vocabWord.length >= 2 
+        ? vocabWord.substring(vocabWord.length - 1) 
+        : vocabWord;
+      const charDist = getDistractors(allKanjis, correctChar, 3);
+      generated.push({
+        id: `g_v_cloze_${vocabWord}`,
+        type: "cloze",
+        level,
+        subject: vocabWord,
+        sentence: `単語: 【${clozeText}】 (read as: ${vocabReading}, meaning: ${vocabMeaning})`,
+        questionText: `Which Kanji character correctly completes the blank in 【${clozeText}】?`,
+        options: shuffle([correctChar, ...charDist]),
+        correctAnswer: correctChar,
+        explanation: `The word is written as 【${vocabWord}】.`,
+        englishTranslation: `Complete the word 【${vocabWord}】`
+      });
+    });
+  });
+
+  const MANUAL_ONLY_VOCAB: Record<string, { reading: string; meaning: string; level: 5 | 4 | 3 }> = {
+    会社: { reading: "かいしゃ", meaning: "company", level: 4 },
+    予定: { reading: "よてい", meaning: "plans / schedule", level: 3 },
+    自信: { reading: "じしん", meaning: "self-confidence", level: 3 },
+    会議: { reading: "かいぎ", meaning: "meeting", level: 3 },
+    新幹線: { reading: "しんかんせん", meaning: "bullet train", level: 3 },
+    帰国: { reading: "きこく", meaning: "return to one's country", level: 4 },
+    入り口: { reading: "いりぐち", meaning: "entrance", level: 4 },
+    紹介: { reading: "しょうかい", meaning: "introduction", level: 3 },
+    環境: { reading: "かんきょう", meaning: "environment", level: 3 },
+    議論: { reading: "ぎろん", meaning: "discussion / debate", level: 3 }
+  };
+
+  Object.entries(MANUAL_ONLY_VOCAB).forEach(([vocabWord, info]) => {
+    if (processedVocab.has(vocabWord)) return;
+    processedVocab.add(vocabWord);
+
+    const vocabReading = info.reading;
+    const vocabMeaning = info.meaning;
+    const level = info.level;
+
+    // A. Reading
+    const readDist = getDistractors(allVocabReadings, vocabReading, 3);
+    generated.push({
+      id: `g_v_read_${vocabWord}`,
+      type: "reading",
+      level,
+      subject: vocabWord,
+      sentence: `単語: 【${vocabWord}】`,
+      questionText: `What is the correct reading of the word 【${vocabWord}】?`,
+      options: shuffle([vocabReading, ...readDist]),
+      correctAnswer: vocabReading,
+      explanation: `【${vocabWord}】 is read as '${vocabReading}'.`,
+      englishTranslation: `Reading of 【${vocabWord}】`
+    });
+
+    // B. Meaning
+    const meanDist = getDistractors(allVocabMeanings, vocabMeaning, 3);
+    generated.push({
+      id: `g_v_mean_${vocabWord}`,
+      type: "meaning",
+      level,
+      subject: vocabWord,
+      sentence: `単語: 【${vocabWord}】 (${vocabReading})`,
+      questionText: `What does the word 【${vocabWord}】 mean?`,
+      options: shuffle([vocabMeaning, ...meanDist]),
+      correctAnswer: vocabMeaning,
+      explanation: `【${vocabWord}】 means '${vocabMeaning}'.`,
+      englishTranslation: `Meaning of 【${vocabWord}】`
+    });
+
+    // C. Kanji Select
+    const wordDist = getDistractors(allVocabWords, vocabWord, 3);
+    generated.push({
+      id: `g_v_kanji_${vocabWord}`,
+      type: "kanji_select",
+      level,
+      subject: vocabWord,
+      sentence: `読み: "${vocabReading}" | 意味: "${vocabMeaning}"`,
+      questionText: `How do you write the word read as "${vocabReading}" in Kanji?`,
+      options: shuffle([vocabWord, ...wordDist]),
+      correctAnswer: vocabWord,
+      explanation: `The word is written as 【${vocabWord}】.`,
+      englishTranslation: `Write "${vocabReading}" in Kanji`
+    });
+
+    // D. Reverse Meaning
+    generated.push({
+      id: `g_v_rev_mean_${vocabWord}`,
+      type: "kanji_select",
+      level,
+      subject: vocabWord,
+      sentence: `Meaning: "${vocabMeaning}"`,
+      questionText: `Which Japanese word represents the meaning "${vocabMeaning}"?`,
+      options: shuffle([vocabWord, ...wordDist]),
+      correctAnswer: vocabWord,
+      explanation: `The word for '${vocabMeaning}' is 【${vocabWord}】.`,
+      englishTranslation: `Vocabulary for "${vocabMeaning}"`
+    });
+
+    // E. Cloze Spelling
+    const clozeText = vocabWord.length >= 2 
+      ? vocabWord.substring(0, vocabWord.length - 1) + "[ ]" 
+      : "[ ]";
+    const correctChar = vocabWord.length >= 2 
+      ? vocabWord.substring(vocabWord.length - 1) 
+      : vocabWord;
+    const charDist = getDistractors(allKanjis, correctChar, 3);
+    generated.push({
+      id: `g_v_cloze_${vocabWord}`,
+      type: "cloze",
+      level,
+      subject: vocabWord,
+      sentence: `単語: 【${clozeText}】 (read as: ${vocabReading}, meaning: ${vocabMeaning})`,
+      questionText: `Which Kanji character correctly completes the blank in 【${clozeText}】?`,
+      options: shuffle([correctChar, ...charDist]),
+      correctAnswer: correctChar,
+      explanation: `The word is written as 【${vocabWord}】.`,
+      englishTranslation: `Complete the word 【${vocabWord}】`
+    });
+  });
+
+  return generated;
+};
+
+export const PRACTICE_QUESTIONS: Question[] = [
+  ...MANUAL_QUESTIONS,
+  ...generateQuestions()
 ];
