@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Plus, Trash2, Check, Sparkles, FolderOpen, Search, X } from "lucide-react";
-import { KANJI_DATASET, KanjiItem } from "../data/kanji";
-import { KanjiPreset } from "../hooks/usePresets";
-import { SRSProgress } from "../hooks/useSRS";
+import { KANJI_DATASET } from "../data/kanji";
+import type { KanjiItem } from "../data/kanji";
+import type { KanjiPreset } from "../hooks/usePresets";
+import type { SRSProgress } from "../hooks/useSRS";
 
 interface PresetsViewProps {
   presets: KanjiPreset[];
