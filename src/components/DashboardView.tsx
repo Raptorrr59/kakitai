@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap, FolderOpen } from "lucide-react";
+import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap, FolderOpen, Trash2 } from "lucide-react";
 import type { SRSStats } from "../hooks/useSRS";
 import type { VocabStats } from "../hooks/useVocabSRS";
 import { KANJI_DATASET } from "../data/kanji";
@@ -8,6 +8,7 @@ interface DashboardViewProps {
   stats: SRSStats;
   vocabStats: VocabStats;
   setView: (view: string) => void;
+  onClearQueue: () => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats, setView }) => {
@@ -201,6 +202,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
               <span className="box-stat-num">{stats.masteredCount}</span>
               <span className="box-stat-lbl">Box 5 (Mastered)</span>
             </div>
+          </div>
+          
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "24px", borderTop: "1px solid var(--color-border)", paddingTop: "16px" }}>
+            <button
+              type="button"
+              className="icon-btn danger-hover"
+              onClick={() => {
+                if (window.confirm("Are you sure you want to clear your entire active review queue? All Kanji and Vocabulary progress will be reset back to 'New'.")) {
+                  onClearQueue();
+                }
+              }}
+              title="Clear Review Queue"
+            >
+              <Trash2 size={14} />
+              <span>Clear Review Queue</span>
+            </button>
           </div>
         </div>
 

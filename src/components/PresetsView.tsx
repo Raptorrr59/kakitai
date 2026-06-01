@@ -9,8 +9,12 @@ interface PresetsViewProps {
   presets: KanjiPreset[];
   createPreset: (name: string, description: string, kanjiList: string[]) => void;
   deletePreset: (id: string) => void;
-  activatePreset: (id: string, startLearning: (kanji: string) => void) => number;
-  startLearning: (kanji: string) => void;
+  activatePreset: (
+    id: string,
+    startLearningMultiple: (kanjiList: string[]) => void,
+    getKanjiProgress: (kanji: string) => SRSProgress
+  ) => number;
+  startLearningMultiple: (kanjiList: string[]) => void;
   getKanjiProgress: (kanji: string) => SRSProgress;
 }
 
@@ -19,7 +23,7 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
   createPreset,
   deletePreset,
   activatePreset,
-  startLearning,
+  startLearningMultiple,
   getKanjiProgress
 }) => {
   const [selectedPresetId, setSelectedPresetId] = useState<string>(presets[0]?.id || "");
@@ -37,7 +41,7 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
   const selectedPreset = presets.find((p) => p.id === selectedPresetId);
 
   const handleActivate = (id: string) => {
-    const addedCount = activatePreset(id, startLearning);
+    const addedCount = activatePreset(id, startLearningMultiple, getKanjiProgress);
     triggerToast(`Added ${addedCount} Kanji from "${selectedPreset?.name}" to your reviews!`);
   };
 

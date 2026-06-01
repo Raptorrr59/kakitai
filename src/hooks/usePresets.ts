@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { KANJI_DATASET } from "../data/kanji";
+import type { SRSProgress } from "./useSRS";
 
 export interface KanjiPreset {
   id: string;
@@ -109,19 +110,19 @@ export function usePresets() {
     saveCustomPresets(updated);
   };
 
-  // Activate a preset: loops through its kanji and calls startLearning
-  const activatePreset = (id: string, startLearning: (kanji: string) => void): number => {
+  // Activate a preset: loops through its kanji and calls startLearningMultiple
+  const activatePreset = (
+    id: string, 
+    startLearningMultiple: (kanjiList: string[]) => void,
+    getKanjiProgress: (kanji: string) => SRSProgress
+  ): number => {
     const preset = allPresets.find((p) => p.id === id);
     if (!preset) return 0;
 
-    let addedCount = 0;
-    preset.kanjiList.forEach((char) => {
-      // startLearning handles checks (only starts if box === 0)
-      startLearning(char);
-      addedCount++;
-    });
+    const newKanjiList = preset.kanjiList.filter((char) => getKanjiProgress(char).box === 0);
+    startLearningMultiple(newKanjiList);
 
-    return addedCount;
+    return newKanjiList.length;
   };
 
   return {

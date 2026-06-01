@@ -19,6 +19,7 @@ function App() {
     getKanjiProgress,
     gradeKanji,
     startLearning,
+    startLearningMultiple,
     isDue: isKanjiDue,
     getStats: getKanjiStats,
     resetAllProgress: resetKanjiProgress
@@ -82,6 +83,7 @@ function App() {
             stats={stats} 
             vocabStats={vocabStats} 
             setView={setView} 
+            onClearQueue={handleResetAll}
           />
         )}
         {view === "bank" && (
@@ -116,7 +118,7 @@ function App() {
             createPreset={createPreset}
             deletePreset={deletePreset}
             activatePreset={activatePreset}
-            startLearning={startLearning}
+            startLearningMultiple={startLearningMultiple}
             getKanjiProgress={getKanjiProgress}
           />
         )}

@@ -129,6 +129,31 @@ export function useSRS() {
     saveProgress(updated);
   };
 
+  // Helper to mark multiple kanjis as "learning" in a single state update
+  const startLearningMultiple = (kanjiList: string[]) => {
+    let hasUpdates = false;
+    const updated = { ...progress };
+
+    kanjiList.forEach((kanji) => {
+      const current = getKanjiProgress(kanji);
+      if (current.box === 0) {
+        updated[kanji] = {
+          kanji,
+          repetitions: 0,
+          interval: 0,
+          easeFactor: 2.5,
+          nextReviewDate: new Date().toISOString(),
+          box: 1
+        };
+        hasUpdates = true;
+      }
+    });
+
+    if (hasUpdates) {
+      saveProgress(updated);
+    }
+  };
+
   // Check if a Kanji is due for review
   const isDue = (kanji: string): boolean => {
     const p = progress[kanji];
@@ -188,6 +213,7 @@ export function useSRS() {
     getKanjiProgress,
     gradeKanji,
     startLearning,
+    startLearningMultiple,
     isDue,
     getStats,
     resetAllProgress
