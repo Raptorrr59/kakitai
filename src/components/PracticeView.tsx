@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Award, Volume2, ArrowRight, CheckCircle2, XCircle, RotateCcw, Home, Eye, EyeOff } from "lucide-react";
 import { PRACTICE_QUESTIONS } from "../data/questions";
 import type { Question } from "../data/questions";
+import { usePracticeProgress } from "../hooks/usePracticeProgress";
 
 interface PracticeViewProps {
   setView: (view: string) => void;
