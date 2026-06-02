@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Trash2, RotateCcw, Eye, EyeOff, Sparkles } from "lucide-react";
+import { Trash2, RotateCcw, Eye, EyeOff } from "lucide-react";
 
 interface CanvasPadProps {
   kanji: string;

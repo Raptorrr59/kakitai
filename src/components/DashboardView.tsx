@@ -11,7 +11,7 @@ interface DashboardViewProps {
   onClearQueue: () => void;
 }
 
-export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats, setView }) => {
+export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats, setView, onClearQueue }) => {
   const totalKanji = KANJI_DATASET.length;
   const learnedCount = totalKanji - stats.newCount;
   const learningPercentage = Math.round((learnedCount / totalKanji) * 100);
@@ -180,6 +180,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
               </div>
               <div className="progress-bar-bg" style={{ backgroundColor: "var(--color-bg-surface-hover)" }}>
                 <div className="progress-bar-fg" style={{ width: `${masteryPercentage}%`, background: "var(--color-success)" }} />
+              </div>
+            </div>
+
+            {/* Vocab Mastery */}
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", fontSize: "14px" }}>
+                <span style={{ fontWeight: 600 }}>Vocabulary Mastery Ratio (Box 5)</span>
+                <span style={{ color: "var(--color-success)", fontWeight: 700 }}>
+                  {vocabStats.masteredCount} / {totalUnlockedVocab} Words ({vocabMasteryPercentage}%)
+                </span>
+              </div>
+              <div className="progress-bar-bg" style={{ backgroundColor: "var(--color-bg-surface-hover)" }}>
+                <div className="progress-bar-fg" style={{ width: `${vocabMasteryPercentage}%`, background: "var(--color-success)" }} />
               </div>
             </div>
           </div>

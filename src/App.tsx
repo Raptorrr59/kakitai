@@ -110,7 +110,6 @@ function App() {
             activeVocabList={getActiveVocab()}
             gradeVocab={gradeVocab}
             startLearningVocab={startLearningVocab}
-            vocabStats={vocabStats}
           />
         )}
         {view === "presets" && (

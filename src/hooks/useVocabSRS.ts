@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { KANJI_DATASET } from "../data/kanji";
-import type { VocabularyExample } from "../data/kanji";
 import type { SRSProgress } from "./useSRS";
 
 export interface VocabSRSProgress {

@@ -481,7 +481,6 @@ const MANUAL_QUESTIONS: Question[] = [
     level: 3,
     subject: "必要",
     sentence: "パスポートを申請{しんせい}するには写真{しゃしん}が**必要{ひつよう}**です。",
-    targetWord: "必要",
     questionText: "What does the bolded word mean in this sentence?",
     options: ["Necessary", "Dangerous", "Convenient", "Useless"],
     correctAnswer: "Necessary",
@@ -494,7 +493,6 @@ const MANUAL_QUESTIONS: Question[] = [
     level: 3,
     subject: "環境",
     sentence: "地球{ちきゅう}の**環境{かんきょう}**を守{まも}ることは大切{たいせつ}です。",
-    targetWord: "環境",
     questionText: "What is the correct reading of the bolded word?",
     options: ["かんきょう", "かんけい", "かんこう", "かんじょう"],
     correctAnswer: "かんきょう",
@@ -507,7 +505,6 @@ const MANUAL_QUESTIONS: Question[] = [
     level: 3,
     subject: "経験",
     sentence: "仕事{しごと}には**けいけん**が必要{ひつよう}です。",
-    targetWord: "けいけん",
     questionText: "Choose the correct Kanji spelling for the bolded word.",
     options: ["経験", "計画", "実験", "決定"],
     correctAnswer: "経験",
@@ -520,7 +517,6 @@ const MANUAL_QUESTIONS: Question[] = [
     level: 3,
     subject: "経済",
     sentence: "国の**経済{けいざい}**が急速{きゅうそく}に成長{せいちょう}しています。",
-    targetWord: "経済",
     questionText: "What is the correct reading of the bolded word?",
     options: ["けいざい", "けいさつ", "せいじ", "ほうりつ"],
     correctAnswer: "けいざい",
@@ -533,7 +529,6 @@ const MANUAL_QUESTIONS: Question[] = [
     level: 3,
     subject: "技術",
     sentence: "この会社は新しい**技術{ぎじゅつ}**を開発{かいはつ}しました。",
-    targetWord: "技術",
     questionText: "What does the bolded word mean in this sentence?",
     options: ["Technology", "Rule", "Tradition", "Mistake"],
     correctAnswer: "Technology",
@@ -558,12 +553,331 @@ const MANUAL_QUESTIONS: Question[] = [
     level: 3,
     subject: "関係",
     sentence: "二つの事件{じけん}には深{ふか}い**関係{かんけい}**があります。",
-    targetWord: "関係",
     questionText: "What is the correct reading of the bolded word?",
     options: ["かんけい", "かんきょう", "かんしん", "かんじょう"],
     correctAnswer: "かんけい",
     explanation: "関係 (かんけい - kankei) means 'relationship / connection'.",
     englishTranslation: "There is a deep connection between the two incidents."
+  }
+];
+
+export const stripFurigana = (text: string): string => {
+  return text.replace(/\{[^}]*\}/g, "");
+};
+
+// === SENTENCE TEMPLATES FOR COMPREHENSION & TRANSLATION ===
+export interface SentenceTemplate {
+  subject: string;
+  sentence: string;
+  englishTranslation: string;
+  level: 5 | 4 | 3;
+}
+
+export const SENTENCE_TEMPLATES: SentenceTemplate[] = [
+  // === N5 (18 templates) ===
+  {
+    subject: "先生",
+    sentence: "あの**先生{せんせい}**はとても親切{しんせつ}です。",
+    englishTranslation: "That teacher is very kind.",
+    level: 5
+  },
+  {
+    subject: "日本",
+    sentence: "私{わたし}たちは来週{らいしゅう}、**日本{にほん}**に行{い}きます。",
+    englishTranslation: "We will go to Japan next week.",
+    level: 5
+  },
+  {
+    subject: "女の子",
+    sentence: "あそこにかわいい**女の子{おんなのこ}**がいます。",
+    englishTranslation: "There is a cute girl over there.",
+    level: 5
+  },
+  {
+    subject: "雨",
+    sentence: "**雨{あめ}**が降{ふ}っていますから、急{いそ}いで帰り{かえり}ましょう。",
+    englishTranslation: "Since it is raining, let's hurry home.",
+    level: 5
+  },
+  {
+    subject: "天気",
+    sentence: "今日{きょう}はとてもいい**天気{てんき}**ですね。",
+    englishTranslation: "Today is very good weather, isn't it?",
+    level: 5
+  },
+  {
+    subject: "水",
+    sentence: "毎朝{まいあさ}、冷{つめ}たい**水{みず}**を飲{の}みます。",
+    englishTranslation: "I drink cold water every morning.",
+    level: 5
+  },
+  {
+    subject: "友達",
+    sentence: "私{わたし}の**友達{ともだち}**はとても親切{しんせつ}です。",
+    englishTranslation: "My friend is very kind.",
+    level: 5
+  },
+  {
+    subject: "学生",
+    sentence: "あの**学生{がくせい}**は日本語{にほんご}が上手{じょうず}です。",
+    englishTranslation: "That student is good at Japanese.",
+    level: 5
+  },
+  {
+    subject: "本",
+    sentence: "図書館{としょかん}で面白{おもしろ}い**本{ほん}**を借{か}りました。",
+    englishTranslation: "I borrowed an interesting book at the library.",
+    level: 5
+  },
+  {
+    subject: "車",
+    sentence: "駅{えき}の前{まえ}に黒{くろ}い**車{くるま}**があります。",
+    englishTranslation: "There is a black car in front of the station.",
+    level: 5
+  },
+  {
+    subject: "料理",
+    sentence: "母{はは}は美味しい**料理{りょうり}**を作{つく}ってくれました。",
+    englishTranslation: "My mother made a delicious meal for me.",
+    level: 5
+  },
+  {
+    subject: "勉強",
+    sentence: "図書館{としょかん}で日本語{にほんご}を**勉強{べんきょう}**します。",
+    englishTranslation: "I study Japanese in the library.",
+    level: 5
+  },
+  {
+    subject: "図書館",
+    sentence: "私{わたし}はよく静{しず}かな**図書館{としょかん}**へ行{い}きます。",
+    englishTranslation: "I often go to the quiet library.",
+    level: 5
+  },
+  {
+    subject: "時計",
+    sentence: "父{ちち}から新しい**時計{とけい}**を買{か}ってもらいました。",
+    englishTranslation: "My father bought me a new watch.",
+    level: 5
+  },
+  {
+    subject: "辞書",
+    sentence: "わからない言葉{ことば}は**辞書{じしょ}**で調{しら}べます。",
+    englishTranslation: "I look up words I don't understand in the dictionary.",
+    level: 5
+  },
+  {
+    subject: "音楽",
+    sentence: "部屋{へや}で静{しず}かな**音楽{おんがく}**を聞{き}きます。",
+    englishTranslation: "I listen to quiet music in my room.",
+    level: 5
+  },
+  {
+    subject: "家族",
+    sentence: "私{わたし}の**家族{かぞく}**はみんな元気{げんき}です。",
+    englishTranslation: "My family is all healthy and doing well.",
+    level: 5
+  },
+  {
+    subject: "部屋",
+    sentence: "私{わたし}の**部屋{へや}**は狭{せま}いですが、きれいです。",
+    englishTranslation: "My room is narrow but clean.",
+    level: 5
+  },
+
+  // === N4 (16 templates) ===
+  {
+    subject: "電車",
+    sentence: "私{わたし}たちは**電車{でんしゃ}**に乗{の}って行{い}きます。",
+    englishTranslation: "We will go by train.",
+    level: 4
+  },
+  {
+    subject: "新聞",
+    sentence: "祖父{そふ}は毎朝{まいあさ}、**新聞{しんぶん}**を読{よ}みます。",
+    englishTranslation: "My grandfather reads the newspaper every morning.",
+    level: 4
+  },
+  {
+    subject: "会社",
+    sentence: "私{わたし}は明日{あした}、新しい**会社{かいしゃ}**に行{い}きます。",
+    englishTranslation: "I am going to the new company tomorrow.",
+    level: 4
+  },
+  {
+    subject: "帰国",
+    sentence: "彼{かれ}は来週{らいしゅう}の金曜日に**帰国{きこく}**します。",
+    englishTranslation: "He is going to return to his country next Friday.",
+    level: 4
+  },
+  {
+    subject: "入り口",
+    sentence: "駅{えき}の西口の**入り口{いりぐち}**に電話{でんわ}があります。",
+    englishTranslation: "There is a telephone at the station's west entrance.",
+    level: 4
+  },
+  {
+    subject: "試験",
+    sentence: "明日{あした}は日本語{にほんご}の**試験{しけん}**があります。",
+    englishTranslation: "There is a Japanese exam tomorrow.",
+    level: 4
+  },
+  {
+    subject: "自転車",
+    sentence: "学校{がっこう}まで**自転車{じてんしゃ}**で三十分{さんじゅっぷん}かかります。",
+    englishTranslation: "It takes thirty minutes to school by bicycle.",
+    level: 4
+  },
+  {
+    subject: "医者",
+    sentence: "頭{あたま}が痛{いた}いので**医者{いしゃ}**に行{い}きました。",
+    englishTranslation: "Because my head hurts, I went to see a doctor.",
+    level: 4
+  },
+  {
+    subject: "空港",
+    sentence: "あの国際{こくさい}**空港{くうこう}**は広{ひろ}くて新{あたら}しいです。",
+    englishTranslation: "That international airport is spacious and new.",
+    level: 4
+  },
+  {
+    subject: "台所",
+    sentence: "日曜日に**台所{だいどころ}**で料理{りょうり}を作{つく}りました。",
+    englishTranslation: "I cooked in the kitchen on Sunday.",
+    level: 4
+  },
+  {
+    subject: "働く",
+    sentence: "私{わたし}たちはこの工場{こうじょう}で朝から晩まで**働{はたら}く**つもりです。",
+    englishTranslation: "We intend to work at this factory from morning till night.",
+    level: 4
+  },
+  {
+    subject: "手紙",
+    sentence: "彼女{かのじょ}から長{なが}い**手紙{てがみ}**が届{とど}きました。",
+    englishTranslation: "A long letter arrived from her.",
+    level: 4
+  },
+  {
+    subject: "食堂",
+    sentence: "大学{だいがく}の新しい**食堂{しょくどう}**は安{やす}くて美味しいです。",
+    englishTranslation: "The university's new cafeteria is cheap and delicious.",
+    level: 4
+  },
+  {
+    subject: "携帯",
+    sentence: "仕事{しごと}のために新しい**携帯{けいたい}**を使{つか}っています。",
+    englishTranslation: "I am using a new mobile phone for work.",
+    level: 4
+  },
+  {
+    subject: "運動",
+    sentence: "健康{けんこう}のために毎週**運動{うんどう}**をしています。",
+    englishTranslation: "I exercise every week for my health.",
+    level: 4
+  },
+  {
+    subject: "日記",
+    sentence: "私{わたし}は毎日、日本語で**日記{にっき}**を書{か}いています。",
+    englishTranslation: "I write a diary in Japanese every day.",
+    level: 4
+  },
+
+  // === N3 (16 templates) ===
+  {
+    subject: "最近",
+    sentence: "彼{かれ}は**最近{さいきん}**、引{ひ}っ越{こ}しをして忙{いそが}しいです。",
+    englishTranslation: "He has been busy recently due to moving.",
+    level: 3
+  },
+  {
+    subject: "予定",
+    sentence: "来週{らいしゅう}のテストの**予定{よてい}**をカレンダーに書{か}きました。",
+    englishTranslation: "I wrote the schedule for next week's test on the calendar.",
+    level: 3
+  },
+  {
+    subject: "自信",
+    sentence: "私{わたし}は自分{じぶん}の能力{のうりょく}に**自信{じしん}**を持{も}っています。",
+    englishTranslation: "I have self-confidence in my own abilities.",
+    level: 3
+  },
+  {
+    subject: "会議",
+    sentence: "会社{かいしゃ}の重要な**会議{かいぎ}**に出席{しゅっせき}します。",
+    englishTranslation: "I will attend the company's important meeting.",
+    level: 3
+  },
+  {
+    subject: "新幹線",
+    sentence: "京都{きょうと}まで速{はや}い**新幹線{しんかんせん}**で行{い}きました。",
+    englishTranslation: "I went to Kyoto by the fast bullet train.",
+    level: 3
+  },
+  {
+    subject: "信じる",
+    sentence: "私{わたし}は彼{かれ}の言{い}うことを全部{ぜんぶ}**信{しん}じます**。",
+    englishTranslation: "I believe everything he says.",
+    level: 3
+  },
+  {
+    subject: "準備",
+    sentence: "明日{あした}からの旅行{りょこう}の**準備{じゅんび}**をしましょう。",
+    englishTranslation: "Let's prepare for the trip starting tomorrow.",
+    level: 3
+  },
+  {
+    subject: "紹介",
+    sentence: "新{あたら}しく来{き}た先生をみんなに**紹介{しょうかい}**しました。",
+    englishTranslation: "I introduced the newly arrived teacher to everyone.",
+    level: 3
+  },
+  {
+    subject: "必要",
+    sentence: "ビザの申請{しんせい}にはパスポートが**必要{ひつよう}**です。",
+    englishTranslation: "A passport is necessary to apply for a visa.",
+    level: 3
+  },
+  {
+    subject: "環境",
+    sentence: "子育{こそだ}てには良{よ}い**環境{かんきょう}**が大切{たいせつ}です。",
+    englishTranslation: "A good environment is important for raising children.",
+    level: 3
+  },
+  {
+    subject: "経験",
+    sentence: "彼{かれ}は海外{かいがい}で仕事{しごと}をした**経験{けいけん}**があります。",
+    englishTranslation: "He has experience working abroad.",
+    level: 3
+  },
+  {
+    subject: "経済",
+    sentence: "世界{せかい}の**経済{けいざい}**は複雑{ふくざつ}に変化{へんか}しています。",
+    englishTranslation: "The world's economy is changing in complex ways.",
+    level: 3
+  },
+  {
+    subject: "技術",
+    sentence: "この会社は新しい医療{いりょう}**技術{ぎじゅつ}**を開発{かいはつ}しました。",
+    englishTranslation: "This company developed new medical technology.",
+    level: 3
+  },
+  {
+    subject: "議論",
+    sentence: "私たちは環境問題について何時間も**議論{ぎろん}**しました。",
+    englishTranslation: "We debated about environmental issues for hours.",
+    level: 3
+  },
+  {
+    subject: "関係",
+    sentence: "その二つの事件{じけん}には何{なに}か**関係{かんけい}**がありますか。",
+    englishTranslation: "Is there any connection between those two incidents?",
+    level: 3
+  },
+  {
+    subject: "解決",
+    sentence: "みんなの協力でこの難しい問題を**解決{かいけつ}**しました。",
+    englishTranslation: "We resolved this difficult problem with everyone's cooperation.",
+    level: 3
   }
 ];
 
@@ -595,7 +909,7 @@ const generateQuestions = (): Question[] => {
   const processedVocab = new Set<string>();
 
   KANJI_DATASET.forEach((k) => {
-    const level = k.jlpt;
+    const level = k.jlpt as 5 | 4 | 3;
     const kanji = k.kanji;
     const meanings = k.meanings;
     const onyomi = k.onyomi;
@@ -836,7 +1150,7 @@ const generateQuestions = (): Question[] => {
           type: "meaning",
           level,
           subject: kanji,
-          sentence: `Vocabulary: 【${ex.word}】 (read as ${ex.reading})`,
+          sentence: `Vocabulary: 【${ex.word}】 (read as: ${ex.reading})`,
           questionText: `What is the correct meaning of the vocabulary word 【${ex.word}】 which contains the Kanji 【${kanji}】?`,
           options: shuffle([correctMeaning, ...dist]),
           correctAnswer: correctMeaning,
@@ -968,7 +1282,8 @@ const generateQuestions = (): Question[] => {
     入り口: { reading: "いりぐち", meaning: "entrance", level: 4 },
     紹介: { reading: "しょうかい", meaning: "introduction", level: 3 },
     環境: { reading: "かんきょう", meaning: "environment", level: 3 },
-    議論: { reading: "ぎろん", meaning: "discussion / debate", level: 3 }
+    議論: { reading: "ぎろん", meaning: "discussion / debate", level: 3 },
+    解決: { reading: "かいけつ", meaning: "resolution / solving", level: 3 }
   };
 
   Object.entries(MANUAL_ONLY_VOCAB).forEach(([vocabWord, info]) => {
@@ -1057,6 +1372,72 @@ const generateQuestions = (): Question[] => {
       correctAnswer: correctChar,
       explanation: `The word is written as 【${vocabWord}】.`,
       englishTranslation: `Complete the word 【${vocabWord}】`
+    });
+  });
+
+  // --- 3. Dynamic Sentence-Level Cloze & Translation Questions ---
+  SENTENCE_TEMPLATES.forEach((temp, index) => {
+    const subject = temp.subject;
+    const cleanJp = temp.sentence.replace(/\*\*([^*]+)\*\?/g, "$1").replace(/\*\*([^*]+)\*\*/g, "$1"); // strip bold markers
+    const clozeJp = temp.sentence.replace(/\*\*([^*]+)\*\?/g, "[ ]").replace(/\*\*([^*]+)\*\*/g, "[ ]"); // replace bold with blank [ ]
+    const level = temp.level;
+
+    // Distractors for JP -> EN translation (other English translations from the pool)
+    const enDist = getDistractors(
+      SENTENCE_TEMPLATES.map((t) => t.englishTranslation),
+      temp.englishTranslation,
+      3
+    );
+
+    // Distractors for EN -> JP translation (other clean Japanese sentences from the pool with furigana stripped)
+    const cleanJpList = SENTENCE_TEMPLATES.map((t) => stripFurigana(t.sentence.replace(/\*\*([^*]+)\*\*/g, "$1")));
+    const correctCleanJp = stripFurigana(cleanJp);
+    const jpDist = getDistractors(cleanJpList, correctCleanJp, 3);
+
+    // Distractors for sentence cloze: other vocabulary words
+    const allSubjects = Array.from(new Set(SENTENCE_TEMPLATES.map((t) => t.subject)));
+    const clozeDist = getDistractors(allSubjects, subject, 3);
+
+    // A. JP -> EN Translation (Hard)
+    generated.push({
+      id: `g_s_tr_jp_en_${index}_${subject}`,
+      type: "translate_jp_en",
+      level,
+      subject,
+      sentence: cleanJp,
+      questionText: "Choose the correct English translation for this Japanese sentence.",
+      options: shuffle([temp.englishTranslation, ...enDist]),
+      correctAnswer: temp.englishTranslation,
+      explanation: `The sentence translates to: "${temp.englishTranslation}". Key word: 【${subject}】.`,
+      englishTranslation: temp.englishTranslation
+    });
+
+    // B. EN -> JP Translation (Expert)
+    generated.push({
+      id: `g_s_tr_en_jp_${index}_${subject}`,
+      type: "translate_en_jp",
+      level,
+      subject,
+      sentence: temp.englishTranslation,
+      questionText: "Choose the correct Japanese translation for this English sentence.",
+      options: shuffle([correctCleanJp, ...jpDist]),
+      correctAnswer: correctCleanJp,
+      explanation: `The English sentence translates to Japanese as: "${correctCleanJp}". Key word: 【${subject}】.`,
+      englishTranslation: temp.englishTranslation
+    });
+
+    // C. Sentence Cloze (Hard)
+    generated.push({
+      id: `g_s_cloze_${index}_${subject}`,
+      type: "cloze",
+      level,
+      subject,
+      sentence: clozeJp,
+      questionText: "Which word best completes the blank in the sentence?",
+      options: shuffle([subject, ...clozeDist]),
+      correctAnswer: subject,
+      explanation: `The sentence is: "${cleanJp}" (translates to: "${temp.englishTranslation}"). The correct word is 【${subject}】.`,
+      englishTranslation: temp.englishTranslation
     });
   });
 

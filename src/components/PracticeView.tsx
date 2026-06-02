@@ -27,24 +27,69 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     resetProgress: resetPracticeProgress
   } = usePracticeProgress();
 
+  // Define difficulty tiers based on practice score
+  const getDifficultyForScore = (score: number): "easy" | "medium" | "hard" | "expert" => {
+    if (score < 4) return "easy";      // Score 0-3
+    if (score < 8) return "medium";    // Score 4-7
+    if (score < 12) return "hard";     // Score 8-11
+    return "expert";                   // Score 12-20
+  };
+
+  // Select a question of appropriate difficulty for the subject
+  const getQuestionForSubject = (subject: string, score: number): Question => {
+    const allForSubject = PRACTICE_QUESTIONS.filter((q) => q.subject === subject);
+    if (allForSubject.length === 0) {
+      // Fallback
+      return PRACTICE_QUESTIONS[Math.floor(Math.random() * PRACTICE_QUESTIONS.length)];
+    }
+
+    const difficulty = getDifficultyForScore(score);
+
+    // Group questions by tier
+    const easy = allForSubject.filter((q) => q.type === "meaning" || q.type === "reading");
+    const medium = allForSubject.filter((q) => 
+      q.type === "kanji_select" || 
+      (q.type === "cloze" && q.sentence.includes("【"))
+    );
+    const hard = allForSubject.filter((q) => 
+      q.type === "translate_jp_en" || 
+      (q.type === "cloze" && !q.sentence.includes("【"))
+    );
+    const expert = allForSubject.filter((q) => q.type === "translate_en_jp");
+
+    let pool: Question[] = [];
+    if (difficulty === "easy") {
+      pool = easy.length > 0 ? easy : (medium.length > 0 ? medium : allForSubject);
+    } else if (difficulty === "medium") {
+      pool = medium.length > 0 ? medium : (easy.length > 0 ? easy : allForSubject);
+    } else if (difficulty === "hard") {
+      pool = hard.length > 0 ? hard : (medium.length > 0 ? medium : allForSubject);
+    } else { // expert
+      pool = expert.length > 0 ? expert : (hard.length > 0 ? hard : allForSubject);
+    }
+
+    return pool[Math.floor(Math.random() * pool.length)];
+  };
+
   // Weighted sampling of questions based on learned status
   const getWeightedQuestions = (count: number): Question[] => {
-    const weighted = PRACTICE_QUESTIONS.map((q) => {
-      const currentScore = scores[q.subject] || 0;
+    const allSubjects = Array.from(new Set(PRACTICE_QUESTIONS.map((q) => q.subject)));
+    const weighted = allSubjects.map((sub) => {
+      const currentScore = scores[sub] || 0;
       const learned = currentScore >= 10;
       // Learned items appear much less frequently (weight 0.15 vs 1.0)
       const weight = learned ? 0.15 : 1.0;
-      return { q, weight };
+      return { subject: sub, weight };
     });
 
-    const selected: Question[] = [];
+    const selectedSubjects: string[] = [];
     const pool = [...weighted];
 
     for (let i = 0; i < count && pool.length > 0; i++) {
       const totalWeight = pool.reduce((sum, item) => sum + item.weight, 0);
       if (totalWeight === 0) {
         const idx = Math.floor(Math.random() * pool.length);
-        selected.push(pool[idx].q);
+        selectedSubjects.push(pool[idx].subject);
         pool.splice(idx, 1);
         continue;
       }
@@ -59,11 +104,14 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
         }
       }
 
-      selected.push(pool[selectedIdx].q);
+      selectedSubjects.push(pool[selectedIdx].subject);
       pool.splice(selectedIdx, 1);
     }
 
-    return selected;
+    return selectedSubjects.map((sub) => {
+      const currentScore = scores[sub] || 0;
+      return getQuestionForSubject(sub, currentScore);
+    });
   };
 
   // Helper to Speak Japanese sentences
@@ -84,6 +132,17 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     }
     window.speechSynthesis.speak(utterance);
   };
+
+  // Auto toggle furigana based on question difficulty when index or question changes
+  const currentQuestion = questions[currentIndex];
+  React.useEffect(() => {
+    if (sessionActive && currentQuestion) {
+      const score = scores[currentQuestion.subject] || 0;
+      const difficulty = getDifficultyForScore(score);
+      // Hide furigana for hard/expert questions by default
+      setShowFurigana(difficulty === "easy" || difficulty === "medium");
+    }
+  }, [currentIndex, currentQuestion, sessionActive, scores]);
 
   const startSession = () => {
     // Perform weighted sampling based on Practice Arena scores
@@ -135,8 +194,9 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     setCurrentIndex((prev) => prev + 1);
   };
 
-  const currentQuestion = questions[currentIndex];
   const finished = sessionActive && currentIndex >= questions.length;
+  const subjectScore = currentQuestion ? (scores[currentQuestion.subject] || 0) : 0;
+  const currentDifficulty = getDifficultyForScore(subjectScore);
 
   // Render question text in styled Japanese (support bold markdown blocks and furigana tags)
   const formatSentence = (sentenceText: string, forceHideFurigana: boolean = false) => {
@@ -174,7 +234,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     <div className="practice-view animate-fade-in">
       {!sessionActive && (
         <div className="practice-container" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-          <div className="glass-card" style={{ textGrid: "center", padding: "40px" }}>
+          <div className="glass-card" style={{ textAlign: "center", padding: "40px" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
               <div className="stat-icon-wrapper purple" style={{ width: "64px", height: "64px", borderRadius: "50%" }}>
                 <Award size={32} />
@@ -269,6 +329,29 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                 ) : (
                   <span className="tag" style={{ backgroundColor: "var(--color-bg-surface-hover)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)" }}>📈 Score: {getScore(currentQuestion.subject)}/10</span>
                 )}
+                <span className="tag" style={{
+                  backgroundColor: currentDifficulty === "easy" ? "rgba(59, 130, 246, 0.12)" :
+                                   currentDifficulty === "medium" ? "rgba(245, 158, 11, 0.12)" :
+                                   currentDifficulty === "hard" ? "rgba(239, 68, 68, 0.12)" :
+                                   "rgba(139, 92, 246, 0.12)",
+                  color: currentDifficulty === "easy" ? "#3b82f6" :
+                         currentDifficulty === "medium" ? "#f59e0b" :
+                         currentDifficulty === "hard" ? "#ef4444" :
+                         "#8b5cf6",
+                  border: currentDifficulty === "easy" ? "1px solid rgba(59, 130, 246, 0.25)" :
+                          currentDifficulty === "medium" ? "1px solid rgba(245, 158, 11, 0.25)" :
+                          currentDifficulty === "hard" ? "1px solid rgba(239, 68, 68, 0.25)" :
+                          "1px solid rgba(139, 92, 246, 0.25)",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  padding: "2px 8px",
+                  borderRadius: "6px"
+                }}>
+                  {currentDifficulty === "easy" ? "🐣 Novice" :
+                   currentDifficulty === "medium" ? "⚡ Intermediate" :
+                   currentDifficulty === "hard" ? "🔥 Advanced" :
+                   "🏆 Master"}
+                </span>
                 <span className="label" style={{ fontSize: "12px" }}>
                   {currentQuestion.type === "kanji_select" ? "Kanji Selection" :
                    currentQuestion.type === "cloze" ? "Cloze Sentence" :
@@ -410,7 +493,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
               Accuracy: {Math.round((score / questions.length) * 100)}%
             </div>
 
-            <p style={{ fontSize: "15px", color: "var(--color-text-secondary)", marginBottom: "36px", maxW: "500px", margin: "0 auto 36px auto" }}>
+            <p style={{ fontSize: "15px", color: "var(--color-text-secondary)", marginBottom: "36px", maxWidth: "500px", margin: "0 auto 36px auto" }}>
               {score === questions.length
                 ? "Incredible work! A perfect score. You have fully internalized these Kanji spellings and vocabulary meanings."
                 : score >= 7

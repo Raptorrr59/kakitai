@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Search, X, Volume2, Plus, Check, GraduationCap } from "lucide-react";
+import { Search, X, Volume2, Plus, Check } from "lucide-react";
 import { KANJI_DATASET } from "../data/kanji";
 import type { KanjiItem } from "../data/kanji";
-import type { SRSProgress, SRSStats } from "../hooks/useSRS";
+import type { SRSProgress } from "../hooks/useSRS";
 import { CanvasPad } from "./CanvasPad";
 
 interface KanjiBankViewProps {

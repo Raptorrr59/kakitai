@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { CheckCircle2, AlertCircle, Volume2, Sparkles, HelpCircle, ArrowRight } from "lucide-react";
-import type { VocabSRSProgress, VocabStats } from "../hooks/useVocabSRS";
+import { AlertCircle, Volume2, Sparkles, HelpCircle, ArrowRight } from "lucide-react";
+import type { VocabSRSProgress } from "../hooks/useVocabSRS";
 
 interface VocabViewProps {
   activeVocabList: VocabSRSProgress[];
   gradeVocab: (word: string, score: number) => void;
   startLearningVocab: (word: string) => void;
-  vocabStats: VocabStats;
 }
 
 export const VocabView: React.FC<VocabViewProps> = ({
   activeVocabList,
   gradeVocab,
-  startLearningVocab,
-  vocabStats
+  startLearningVocab
 }) => {
   const [selectedVocab, setSelectedVocab] = useState<VocabSRSProgress | null>(null);
   const [isFlipped, setIsFlipped] = useState(false);
