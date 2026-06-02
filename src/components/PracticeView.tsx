@@ -4,6 +4,9 @@ import { PRACTICE_QUESTIONS } from "../data/questions";
 import type { Question } from "../data/questions";
 import { usePracticeProgress } from "../hooks/usePracticeProgress";
 import { KANJI_DATASET } from "../data/kanji";
+import n5Vocab from "../data/n5-vocab.json";
+import n4Vocab from "../data/n4-vocab.json";
+import n3Vocab from "../data/n3-vocab.json";
 
 interface PracticeViewProps {
   setView: (view: string) => void;
@@ -268,7 +271,48 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
       }
     }
 
-    // 3. Fallback to manual dictionary lookup
+    // Helper to normalize strings for robust lookup
+    const normalize = (str: string) => str.replace(/[・\s・]/g, "");
+
+    // Load vocab lists from JSON datasets
+    const allVocabWords = [
+      ...n5Vocab.words,
+      ...n4Vocab.words,
+      ...n3Vocab.words
+    ];
+
+    // 3. Search vocab databases for match
+    // Try 1: Exact normalized match
+    let match = allVocabWords.find((v) => normalize(v.word) === normalize(subject));
+    
+    // Try 2: StartsWith match (e.g. matching dictionary base forms to conjugations)
+    if (!match) {
+      match = allVocabWords.find((v) => {
+        const nv = normalize(v.word);
+        const ns = normalize(subject);
+        return nv.startsWith(ns) || ns.startsWith(nv);
+      });
+    }
+
+    // Try 3: Substring includes match
+    if (!match) {
+      match = allVocabWords.find((v) => {
+        const nv = normalize(v.word);
+        const ns = normalize(subject);
+        return nv.includes(ns) || ns.includes(nv);
+      });
+    }
+
+    if (match) {
+      return {
+        type: "vocab" as const,
+        word: subject,
+        reading: (match.furigana || match.word).replace(/・/g, ""),
+        meaning: match.meaning
+      };
+    }
+
+    // 4. Fallback to manual dictionary lookup
     const manualVocab: Record<string, { reading: string; meaning: string }> = {
       会社: { reading: "かいしゃ", meaning: "company" },
       予定: { reading: "よてい", meaning: "plans / schedule" },
