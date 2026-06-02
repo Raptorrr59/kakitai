@@ -873,10 +873,397 @@ export const SENTENCE_TEMPLATES: SentenceTemplate[] = [
     englishTranslation: "Is there any connection between those two incidents?",
     level: 3
   },
+  // --- Additional N5 templates ---
   {
-    subject: "解決",
-    sentence: "みんなの協力でこの難しい問題を**解決{かいけつ}**しました。",
-    englishTranslation: "We resolved this difficult problem with everyone's cooperation.",
+    subject: "お茶",
+    sentence: "冷{つめ}たい**お茶{ちゃ}**を飲{の}みましょう。",
+    englishTranslation: "Let's drink some cold green tea.",
+    level: 5
+  },
+  {
+    subject: "お風呂",
+    sentence: "毎日{まいにち}、温{あたた}かい**お風呂{ふろ}**に入{はい}ります。",
+    englishTranslation: "I take a warm bath every day.",
+    level: 5
+  },
+  {
+    subject: "切符",
+    sentence: "駅{えき}で電車{でんしゃ}の**切符{きっぷ}**を買{か}いました。",
+    englishTranslation: "I bought a train ticket at the station.",
+    level: 5
+  },
+  {
+    subject: "宿題",
+    sentence: "夕飯{ゆうはん}の前に今日{きょう}の**宿題{しゅくだい}**をします。",
+    englishTranslation: "I do today's homework before dinner.",
+    level: 5
+  },
+  {
+    subject: "洗濯",
+    sentence: "晴{は}れた日に家族{かぞく}の**洗濯{せんたく}**をします。",
+    englishTranslation: "I do the family laundry on sunny days.",
+    level: 5
+  },
+  {
+    subject: "掃除",
+    sentence: "土曜日に自分{じぶん}の部屋{へや}の**掃除{そうじ}**をします。",
+    englishTranslation: "I clean my own room on Saturdays.",
+    level: 5
+  },
+  {
+    subject: "散歩",
+    sentence: "夕方{ゆうがた}、犬と静{しず}かな公園{こうえん}を**散歩{さんぽ}**します。",
+    englishTranslation: "I take a walk with my dog in the quiet park in the evening.",
+    level: 5
+  },
+  {
+    subject: "果物",
+    sentence: "毎朝{まいあさ}、甘{あま}くて新鮮{しんせん}な**果物{くだもの}**を食べます。",
+    englishTranslation: "I eat sweet and fresh fruit every morning.",
+    level: 5
+  },
+  {
+    subject: "野菜",
+    sentence: "健康{けんこう}のために**野菜{やさい}**をたくさん食べるようにしています。",
+    englishTranslation: "I try to eat a lot of vegetables for my health.",
+    level: 5
+  },
+  {
+    subject: "牛乳",
+    sentence: "朝ご飯{あさごはん}の時に冷{つめ}たい**牛乳{ぎゅうにゅう}**を飲みます。",
+    englishTranslation: "I drink cold milk at breakfast time.",
+    level: 5
+  },
+  {
+    subject: "食堂",
+    sentence: "お昼休みには大学{だいがく}の**食堂{しょくどう}**に行きます。",
+    englishTranslation: "I go to the university cafeteria during lunch break.",
+    level: 5
+  },
+  {
+    subject: "銀行",
+    sentence: "お金を下ろすために駅{えき}の前{まえ}の**銀行{ぎんこう}**に行きました。",
+    englishTranslation: "I went to the bank in front of the station to withdraw money.",
+    level: 5
+  },
+  {
+    subject: "病院",
+    sentence: "ひどい風邪{かぜ}をひいたので朝一番に**病院{びょういん}**へ行きました。",
+    englishTranslation: "I went to the hospital first thing in the morning because I caught a bad cold.",
+    level: 5
+  },
+  {
+    subject: "学校",
+    sentence: "毎朝{まいあさ}八時半に**学校{がっこう}**へ向{む}かいます。",
+    englishTranslation: "I head to school at 8:30 every morning.",
+    level: 5
+  },
+  {
+    subject: "教室",
+    sentence: "日本語の授業{じゅぎょう}は三階の**教室{きょうしつ}**で行われます。",
+    englishTranslation: "The Japanese lesson is held in the classroom on the third floor.",
+    level: 5
+  },
+  {
+    subject: "授業",
+    sentence: "今日{きょう}の歴史{れきし}の**授業{じゅぎょう}**はとても面白かったです。",
+    englishTranslation: "Today's history class was very interesting.",
+    level: 5
+  },
+  {
+    subject: "夏休み",
+    sentence: "**夏休み{なつやすみ}**には友達と一緒{いっしょ}に沖縄の海へ行く予定です。",
+    englishTranslation: "I plan to go to the sea in Okinawa with my friends during summer vacation.",
+    level: 5
+  },
+  {
+    subject: "冬休み",
+    sentence: "**冬休み{ふゆやすみ}**に家族{かぞく}でスキー旅行に行きたいです。",
+    englishTranslation: "I want to go on a ski trip with my family during winter vacation.",
+    level: 5
+  },
+  {
+    subject: "誕生日",
+    sentence: "私の**誕生日{たんじょうび}**に友達が集{あつ}まってお祝いしてくれました。",
+    englishTranslation: "My friends gathered and celebrated on my birthday.",
+    level: 5
+  },
+  {
+    subject: "英語",
+    sentence: "彼は毎日ラジオで**英語{えいご}**を熱心{ねっしん}に勉強しています。",
+    englishTranslation: "He is studying English eagerly on the radio every day.",
+    level: 5
+  },
+  {
+    subject: "地図",
+    sentence: "スマホで近くの美味しいレストランの**地図{ちず}**を見ました。",
+    englishTranslation: "I looked at the map of nearby delicious restaurants on my smartphone.",
+    level: 5
+  },
+  {
+    subject: "日記",
+    sentence: "日本語の練習{れんしゅう}のために毎日**日記{にっき}**を書いています。",
+    englishTranslation: "I write a diary every day to practice Japanese.",
+    level: 5
+  },
+  {
+    subject: "電話",
+    sentence: "昨日、遠く{とおく}に住んでいる母に**電話{でんわ}**をかけました。",
+    englishTranslation: "Yesterday, I made a phone call to my mother who lives far away.",
+    level: 5
+  },
+  {
+    subject: "切手",
+    sentence: "手紙{てがみ}を出すために郵便局{ゆうびんきょく}で**切手{きって}**を買いました。",
+    englishTranslation: "I bought stamps at the post office to send a letter.",
+    level: 5
+  },
+  {
+    subject: "葉書",
+    sentence: "旅行先{りょこうさき}から友達に綺麗な**葉書{はがき}**を送りました。",
+    englishTranslation: "I sent a beautiful postcard to my friend from my travel destination.",
+    level: 5
+  },
+  // --- Additional N4 templates ---
+  {
+    subject: "安全",
+    sentence: "この公園{こうえん}は夜でも明るくてとても**安全{あんぜん}**です。",
+    englishTranslation: "This park is bright and very safe even at night.",
+    level: 4
+  },
+  {
+    subject: "急行",
+    sentence: "私の最寄り駅{えき}には**急行{きゅうこう}**電車が止まりません。",
+    englishTranslation: "The express train does not stop at my nearest station.",
+    level: 4
+  },
+  {
+    subject: "会社員",
+    sentence: "大学を卒業{そつぎょう}した後、貿易会社の**会社員{かいしゃいん}**になりました。",
+    englishTranslation: "After graduating from university, I became an employee at a trading company.",
+    level: 4
+  },
+  {
+    subject: "交通",
+    sentence: "この都市{とし}は電車とバスの**交通{こうつう}**の便が良いです。",
+    englishTranslation: "This city has good train and bus transportation services.",
+    level: 4
+  },
+  {
+    subject: "反対",
+    sentence: "計画の変更{へんこう}に対して多くの人が**反対{はんたい}**しました。",
+    englishTranslation: "Many people opposed the changes to the plan.",
+    level: 4
+  },
+  {
+    subject: "賛成",
+    sentence: "私は彼の提案{ていあん}に心から**賛成{さんせい}**します。",
+    englishTranslation: "I sincerely agree with his proposal.",
+    level: 4
+  },
+  {
+    subject: "事故",
+    sentence: "昨日の夕方、駅の前{まえ}で交通事故{じこ}がありました。",
+    englishTranslation: "There was a traffic accident in front of the station yesterday evening.",
+    level: 4
+  },
+  {
+    subject: "注意",
+    sentence: "暗い道を歩く時は足元に十分に**注意{ちゅうい}**してください。",
+    englishTranslation: "Please pay close attention to your feet when walking on a dark road.",
+    level: 4
+  },
+  {
+    subject: "相談",
+    sentence: "将来の仕事{しごと}について親や先生に**相談{そうだん}**しました。",
+    englishTranslation: "I consulted with my parents and teachers about my future career.",
+    level: 4
+  },
+  {
+    subject: "連絡",
+    sentence: "もし遅刻{ちこく}しそうな時は、事前に**連絡{れんらく}**をください。",
+    englishTranslation: "Please contact us in advance if you are likely to be late.",
+    level: 4
+  },
+  {
+    subject: "生活",
+    sentence: "一人暮らしを始めてから、規則正しい**生活{せいかつ}**を心がけています。",
+    englishTranslation: "Since I started living alone, I try to lead a regular life.",
+    level: 4
+  },
+  {
+    subject: "都合",
+    sentence: "申し訳ありませんが、来週の木曜日は少し**都合{つごう}**が悪いです。",
+    englishTranslation: "I am sorry, but next Thursday is a bit inconvenient.",
+    level: 4
+  },
+  {
+    subject: "約束",
+    sentence: "週末に図書館で一緒に勉強する**約束{やくそく}**をしました。",
+    englishTranslation: "We promised to study together at the library over the weekend.",
+    level: 4
+  },
+  {
+    subject: "発表",
+    sentence: "来週の月曜日に、大学のゼミで研究の結果を**発表{はっぴょう}**します。",
+    englishTranslation: "Next Monday, I will present my research results in the university seminar.",
+    level: 4
+  },
+  {
+    subject: "案内",
+    sentence: "新しく日本に来た留学生に東京の観光地を**案内{あんない}**しました。",
+    englishTranslation: "I guided the newly arrived international student around Tokyo's tourist spots.",
+    level: 4
+  },
+  {
+    subject: "用事",
+    sentence: "今日は少し**用事{ようじ}**があるので、お先に失礼します。",
+    englishTranslation: "I will excuse myself now because I have some errands to run today.",
+    level: 4
+  },
+  {
+    subject: "趣味",
+    sentence: "私の**趣味{しゅみ}**は世界各地のカメラを集めることです。",
+    englishTranslation: "My hobby is collecting cameras from all over the world.",
+    level: 4
+  },
+  {
+    subject: "理由",
+    sentence: "会社を辞{や}める決断{けつだん}をした**理由{りゆう}**を話しました。",
+    englishTranslation: "I spoke about the reason why I made the decision to quit the company.",
+    level: 4
+  },
+  {
+    subject: "将来",
+    sentence: "私の**将来{しょうらい}**の夢は、海外で日本語を教えることです。",
+    englishTranslation: "My future dream is to teach Japanese abroad.",
+    level: 4
+  },
+  {
+    subject: "興味",
+    sentence: "私は日本の伝統的{でんとうてき}な文化にとても**興味{きょうみ}**があります。",
+    englishTranslation: "I have a strong interest in traditional Japanese culture.",
+    level: 4
+  },
+  {
+    subject: "意見",
+    sentence: "他人の意見を聞くだけでなく、自分の**意見{いけん}**も発信すべきです。",
+    englishTranslation: "You should not only listen to other people's opinions but also express your own.",
+    level: 4
+  },
+  // --- Additional N3 templates ---
+  {
+    subject: "決定",
+    sentence: "来期のリーダーを誰にするか、会議でついに**決定{けってい}**しました。",
+    englishTranslation: "At the meeting, we finally decided who would be the leader for the next term.",
+    level: 3
+  },
+  {
+    subject: "理解",
+    sentence: "何度も説明を読んで、ようやくこの文法のルールを**理解{りかい}**しました。",
+    englishTranslation: "After reading the explanation many times, I finally understood this grammar rule.",
+    level: 3
+  },
+  {
+    subject: "変化",
+    sentence: "季節の**変化{へんか}**に合わせて、部屋の模様替えをしました。",
+    englishTranslation: "I rearranged the room layout according to the changes of the seasons.",
+    level: 3
+  },
+  {
+    subject: "成長",
+    sentence: "この植物{しょくぶつ}は毎日水を与えることで、急速に**成長{せいちょう}**します。",
+    englishTranslation: "This plant grows rapidly by giving it water every day.",
+    level: 3
+  },
+  {
+    subject: "複雑",
+    sentence: "この数学の問題は非常に**複雑{ふくざつ}**で、解くのに時間がかかります。",
+    englishTranslation: "This mathematics problem is very complex, taking time to solve.",
+    level: 3
+  },
+  {
+    subject: "簡単",
+    sentence: "初心者のために、できるだけ**簡単{かんたん}**な表現を使って話しました。",
+    englishTranslation: "For beginners, I spoke using expressions that are as simple as possible.",
+    level: 3
+  },
+  {
+    subject: "集中",
+    sentence: "静かな環境で作業すると、仕事にしっかりと**集中{しゅうちゅう}**できます。",
+    englishTranslation: "Working in a quiet environment allows me to concentrate fully on my job.",
+    level: 3
+  },
+  {
+    subject: "緊張",
+    sentence: "たくさんの人の前でスピーチをするのは、とても**緊張{きんちょう}**します。",
+    englishTranslation: "Giving a speech in front of many people makes me very nervous.",
+    level: 3
+  },
+  {
+    subject: "感謝",
+    sentence: "困っている時に助けてくれた親友に、心から**感謝{かんしゃ}**しています。",
+    englishTranslation: "I sincerely thank my close friend who helped me when I was in trouble.",
+    level: 3
+  },
+  {
+    subject: "応援",
+    sentence: "スタジアムに行って、地元のプロチームを一生懸命に**応援{おうえん}**しました。",
+    englishTranslation: "I went to the stadium and cheered hard for my local professional team.",
+    level: 3
+  },
+  {
+    subject: "想像",
+    sentence: "百年後の未来の乗り物がどうなっているか、**想像{そうぞう}**してみてください。",
+    englishTranslation: "Please try to imagine what vehicles will be like a hundred years in the future.",
+    level: 3
+  },
+  {
+    subject: "判断",
+    sentence: "他人の意見に流されず、事実に基づいて自分で**判断{はんだん}**してください。",
+    englishTranslation: "Do not be swayed by others' opinions; judge for yourself based on facts.",
+    level: 3
+  },
+  {
+    subject: "比較",
+    sentence: "いくつかの旅行プランを**比較{ひかく}**して、一番お得なものを選びました。",
+    englishTranslation: "I compared several travel plans and selected the most economical one.",
+    level: 3
+  },
+  {
+    subject: "共通",
+    sentence: "彼と私には、海外旅行が好きだという**共通{きょうつう}**の趣味があります。",
+    englishTranslation: "He and I have a common hobby of liking traveling abroad.",
+    level: 3
+  },
+  {
+    subject: "科学",
+    sentence: "AIの開発により、現代の**科学{かがく}**技術は新しい時代を迎えました。",
+    englishTranslation: "Modern science and technology has entered a new era due to the development of AI.",
+    level: 3
+  },
+  {
+    subject: "効果",
+    sentence: "このトレーニングを続けると、ダイエットに高い**効果{こうか}**が現れます。",
+    englishTranslation: "Continuing this training will show a high effect on weight loss.",
+    level: 3
+  },
+  {
+    subject: "期待",
+    sentence: "多くのファンが、彼の新しいアルバムの発売を強く**期待{きたい}**しています。",
+    englishTranslation: "Many fans highly expect the release of his new album.",
+    level: 3
+  },
+  {
+    subject: "目標",
+    sentence: "JLPT試験に合格することを**目標{もくひょう}**にして、毎日勉強しています。",
+    englishTranslation: "I study every day with the goal of passing the JLPT exam.",
+    level: 3
+  },
+  {
+    subject: "選択",
+    sentence: "自分の信じる道を進むか、安定を選ぶか、重大な**選択{せんたく}**を迫られました。",
+    englishTranslation: "I was forced to make a major choice between going down the path I believe in or choosing stability.",
     level: 3
   }
 ];

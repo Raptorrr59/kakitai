@@ -71,9 +71,31 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     return pool[Math.floor(Math.random() * pool.length)];
   };
 
-  // Weighted sampling of questions based on learned status
+  // Weighted sampling of questions based on learned status and JLPT progression
   const getWeightedQuestions = (count: number): Question[] => {
-    const allSubjects = Array.from(new Set(PRACTICE_QUESTIONS.map((q) => q.subject)));
+    // Determine which levels are unlocked
+    const unlockedLevels: number[] = [5]; // N5 is always unlocked
+
+    const n5Subjects = Array.from(new Set(PRACTICE_QUESTIONS.filter((q) => q.level === 5).map((q) => q.subject)));
+    const n5LearnedCount = n5Subjects.filter((sub) => (scores[sub] || 0) >= 6).length;
+
+    if (n5LearnedCount >= 6) {
+      unlockedLevels.push(4); // Unlock N4
+
+      const n4Subjects = Array.from(new Set(PRACTICE_QUESTIONS.filter((q) => q.level === 4).map((q) => q.subject)));
+      const n4LearnedCount = n4Subjects.filter((sub) => (scores[sub] || 0) >= 6).length;
+
+      if (n4LearnedCount >= 6) {
+        unlockedLevels.push(3); // Unlock N3
+      }
+    }
+
+    // Filter questions to only those in unlocked levels
+    const allowedQuestions = PRACTICE_QUESTIONS.filter((q) => unlockedLevels.includes(q.level));
+
+    // Get unique subjects in these allowed questions
+    const allSubjects = Array.from(new Set(allowedQuestions.map((q) => q.subject)));
+
     const weighted = allSubjects.map((sub) => {
       const currentScore = scores[sub] || 0;
       const learned = currentScore >= 10;
@@ -198,6 +220,24 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   const subjectScore = currentQuestion ? (scores[currentQuestion.subject] || 0) : 0;
   const currentDifficulty = getDifficultyForScore(subjectScore);
 
+  // Calculate JLPT progression states
+  const getSubjectsByLevel = (level: 5 | 4 | 3): string[] => {
+    return Array.from(new Set(
+      PRACTICE_QUESTIONS.filter((q) => q.level === level).map((q) => q.subject)
+    ));
+  };
+
+  const n5Subjects = getSubjectsByLevel(5);
+  const n4Subjects = getSubjectsByLevel(4);
+  const n3Subjects = getSubjectsByLevel(3);
+
+  const n5Learned = n5Subjects.filter((sub) => (scores[sub] || 0) >= 6).length;
+  const n4Learned = n4Subjects.filter((sub) => (scores[sub] || 0) >= 6).length;
+  const n3Learned = n3Subjects.filter((sub) => (scores[sub] || 0) >= 6).length;
+
+  const n4Unlocked = n5Learned >= 6;
+  const n3Unlocked = n4Unlocked && n4Learned >= 6;
+
   // Render question text in styled Japanese (support bold markdown blocks and furigana tags)
   const formatSentence = (sentenceText: string, forceHideFurigana: boolean = false) => {
     const boldParts = sentenceText.split("**");
@@ -292,6 +332,74 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                 </button>
               </div>
             )}
+
+            {/* JLPT Progression Gating */}
+            <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", padding: "20px", marginBottom: "28px", textAlign: "left" }}>
+              <h3 style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "8px", fontSize: "15px" }}>
+                🔑 JLPT Progression Board
+              </h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {/* N5 Level */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--color-border)", paddingBottom: "8px" }}>
+                  <div>
+                    <strong style={{ fontSize: "14px" }}>JLPT N5</strong>
+                    <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Basic Kanji & Vocabulary</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <span className="tag" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                      🔓 Unlocked
+                    </span>
+                    <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
+                      {n5Learned} items learned
+                    </div>
+                  </div>
+                </div>
+
+                {/* N4 Level */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--color-border)", paddingBottom: "8px" }}>
+                  <div>
+                    <strong style={{ fontSize: "14px" }}>JLPT N4</strong>
+                    <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Intermediate Kanji & Sentences</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    {n4Unlocked ? (
+                      <span className="tag" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                        🔓 Unlocked
+                      </span>
+                    ) : (
+                      <span className="tag" style={{ backgroundColor: "rgba(239, 68, 68, 0.15)", color: "#ef4444", border: "1px solid rgba(239, 68, 68, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                        🔒 Locked
+                      </span>
+                    )}
+                    <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
+                      {n4Unlocked ? `${n4Learned} items learned` : `Requires 6 N5 learned (${n5Learned}/6)`}
+                    </div>
+                  </div>
+                </div>
+
+                {/* N3 Level */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <strong style={{ fontSize: "14px" }}>JLPT N3</strong>
+                    <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Advanced Sentences & Grammar</div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    {n3Unlocked ? (
+                      <span className="tag" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                        🔓 Unlocked
+                      </span>
+                    ) : (
+                      <span className="tag" style={{ backgroundColor: "rgba(239, 68, 68, 0.15)", color: "#ef4444", border: "1px solid rgba(239, 68, 68, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                        🔒 Locked
+                      </span>
+                    )}
+                    <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
+                      {n3Unlocked ? `${n3Learned} items learned` : !n4Unlocked ? "Unlock N4 first" : `Requires 6 N4 learned (${n4Learned}/6)`}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <button
               type="button"
