@@ -3,6 +3,7 @@ import { Award, Volume2, ArrowRight, CheckCircle2, XCircle, RotateCcw, Home, Eye
 import { PRACTICE_QUESTIONS } from "../data/questions";
 import type { Question } from "../data/questions";
 import { usePracticeProgress } from "../hooks/usePracticeProgress";
+import { KANJI_DATASET } from "../data/kanji";
 
 interface PracticeViewProps {
   setView: (view: string) => void;
@@ -237,6 +238,159 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
 
   const n4Unlocked = n5Learned >= 6;
   const n3Unlocked = n4Unlocked && n4Learned >= 6;
+
+  // Retrieve dictionary details for the subject
+  const getSubjectDetails = (subject: string) => {
+    // 1. Check if subject is a Kanji character
+    const kanjiMatch = KANJI_DATASET.find((k) => k.kanji === subject);
+    if (kanjiMatch) {
+      return {
+        type: "kanji" as const,
+        word: subject,
+        meanings: kanjiMatch.meanings,
+        onyomi: kanjiMatch.onyomi,
+        kunyomi: kanjiMatch.kunyomi,
+        strokeCount: kanjiMatch.strokeCount
+      };
+    }
+
+    // 2. Check if subject is a vocabulary word in KANJI_DATASET examples
+    for (const k of KANJI_DATASET) {
+      const ex = k.examples.find((e) => e.word === subject);
+      if (ex) {
+        return {
+          type: "vocab" as const,
+          word: ex.word,
+          reading: ex.reading,
+          meaning: ex.meaning,
+          kanjiRef: k.kanji
+        };
+      }
+    }
+
+    // 3. Fallback to manual dictionary lookup
+    const manualVocab: Record<string, { reading: string; meaning: string }> = {
+      会社: { reading: "かいしゃ", meaning: "company" },
+      予定: { reading: "よてい", meaning: "plans / schedule" },
+      自信: { reading: "じしん", meaning: "self-confidence" },
+      会議: { reading: "かいぎ", meaning: "meeting" },
+      新幹線: { reading: "しんかんせん", meaning: "bullet train" },
+      帰国: { reading: "きこく", meaning: "return to one's country" },
+      入り口: { reading: "いりぐち", meaning: "entrance" },
+      紹介: { reading: "しょうかい", meaning: "introduction" },
+      環境: { reading: "かんきょう", meaning: "environment" },
+      議論: { reading: "ぎろん", meaning: "discussion / debate" },
+      解決: { reading: "かいけつ", meaning: "resolution / solving" },
+      女の子: { reading: "おんなのこ", meaning: "girl" },
+      友達: { reading: "ともだち", meaning: "friend" },
+      携帯: { reading: "けいたい", meaning: "mobile phone" },
+      運動: { reading: "うんどう", meaning: "exercise" },
+      日記: { reading: "にっき", meaning: "diary" },
+      天気: { reading: "てんき", meaning: "weather" },
+      お茶: { reading: "おちゃ", meaning: "tea" },
+      お風呂: { reading: "おふろ", meaning: "bath" },
+      切符: { reading: "きっぷ", meaning: "ticket" },
+      宿題: { reading: "しゅくだい", meaning: "homework" },
+      洗濯: { reading: "せんたく", meaning: "laundry" },
+      掃除: { reading: "そうじ", meaning: "cleaning" },
+      散歩: { reading: "さんぽ", meaning: "walk" },
+      果物: { reading: "くだもの", meaning: "fruit" },
+      野菜: { reading: "やさい", meaning: "vegetable" },
+      牛乳: { reading: "ぎゅうにゅう", meaning: "milk" },
+      食堂: { reading: "しょくどう", meaning: "cafeteria" },
+      銀行: { reading: "ぎんこう", meaning: "bank" },
+      病院: { reading: "びょういん", meaning: "hospital" },
+      学校: { reading: "がっこう", meaning: "school" },
+      教室: { reading: "きょうしつ", meaning: "classroom" },
+      授業: { reading: "じゅぎょう", meaning: "lesson" },
+      夏休み: { reading: "なつやすみ", meaning: "summer vacation" },
+      冬休み: { reading: "ふゆやすみ", meaning: "winter vacation" },
+      誕生日: { reading: "たんじょうび", meaning: "birthday" },
+      英語: { reading: "えいご", meaning: "English" },
+      地図: { reading: "ちず", meaning: "map" },
+      電話: { reading: "でんわ", meaning: "phone" },
+      切手: { reading: "きって", meaning: "stamp" },
+      葉書: { reading: "はがき", meaning: "postcard" }
+    };
+    
+    const mv = manualVocab[subject];
+    if (mv) {
+      return {
+        type: "vocab" as const,
+        word: subject,
+        reading: mv.reading,
+        meaning: mv.meaning
+      };
+    }
+
+    return null;
+  };
+
+  const renderSubjectExplanation = (subject: string) => {
+    const details = getSubjectDetails(subject);
+    if (!details) {
+      return <p style={{ fontSize: "13px", color: "var(--color-text-muted)", margin: 0 }}>No additional details found for this subject.</p>;
+    }
+
+    if (details.type === "kanji") {
+      return (
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px" }}>
+          <div>
+            <strong style={{ color: "var(--color-text-muted)" }}>Meanings: </strong>
+            <span style={{ fontWeight: 600 }}>{details.meanings.join(", ")}</span>
+          </div>
+          {details.onyomi.length > 0 && (
+            <div>
+              <strong style={{ color: "var(--color-text-muted)" }}>Onyomi: </strong>
+              <span style={{ color: "var(--color-onyomi)", fontWeight: 500 }}>{details.onyomi.join(", ")}</span>
+            </div>
+          )}
+          {details.kunyomi.length > 0 && (
+            <div>
+              <strong style={{ color: "var(--color-text-muted)" }}>Kunyomi: </strong>
+              <span style={{ color: "var(--color-kunyomi)", fontWeight: 500 }}>{details.kunyomi.join(", ")}</span>
+            </div>
+          )}
+          <div>
+            <strong style={{ color: "var(--color-text-muted)" }}>Strokes: </strong>
+            <span>{details.strokeCount}</span>
+          </div>
+        </div>
+      );
+    } else {
+      const kanjiChars = Array.from(details.word).filter((char) => 
+        /[\u4e00-\u9faf]/.test(char)
+      );
+
+      return (
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "13px" }}>
+          <div>
+            <strong style={{ color: "var(--color-text-muted)" }}>Reading: </strong>
+            <span style={{ color: "var(--color-primary)", fontWeight: 600 }}>{details.reading}</span>
+          </div>
+          <div>
+            <strong style={{ color: "var(--color-text-muted)" }}>Meaning: </strong>
+            <span style={{ fontWeight: 600 }}>{details.meaning}</span>
+          </div>
+          {kanjiChars.length > 0 && (
+            <div style={{ marginTop: "6px", borderTop: "1px dashed var(--color-border)", paddingTop: "6px" }}>
+              <div style={{ fontWeight: 600, fontSize: "12px", color: "var(--color-text-secondary)", marginBottom: "4px" }}>Kanji Breakdown:</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                {kanjiChars.map((char) => {
+                  const km = KANJI_DATASET.find((k) => k.kanji === char);
+                  return (
+                    <div key={char} className="tag" style={{ backgroundColor: "var(--color-bg-surface-hover)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)", display: "flex", gap: "4px", padding: "2px 6px", fontSize: "11px" }}>
+                      <strong style={{ color: "var(--color-primary)" }}>{char}</strong>: <span>{km ? km.meanings[0] : "unknown"}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+  };
 
   // Render question text in styled Japanese (support bold markdown blocks and furigana tags)
   const formatSentence = (sentenceText: string, forceHideFurigana: boolean = false) => {
@@ -565,6 +719,14 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                 <p className="feedback-translation">
                   <strong>English:</strong> "{currentQuestion.englishTranslation}"
                 </p>
+
+                {/* Subject Details Explanation Card */}
+                <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", padding: "16px", marginTop: "16px", marginBottom: "16px", border: "1px solid var(--color-border)", textAlign: "left" }}>
+                  <h5 style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", marginTop: 0, marginBottom: "10px", borderBottom: "1px dashed var(--color-border)", paddingBottom: "6px", color: "var(--color-text)" }}>
+                    📚 Subject Focus: <strong style={{ fontSize: "15px", color: "var(--color-primary)" }}>{currentQuestion.subject}</strong>
+                  </h5>
+                  {renderSubjectExplanation(currentQuestion.subject)}
+                </div>
 
                 <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px" }}>
                   <button
