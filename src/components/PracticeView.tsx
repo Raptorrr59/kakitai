@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Award, Volume2, ArrowRight, CheckCircle2, XCircle, RotateCcw, Home, Eye, EyeOff } from "lucide-react";
-import { PRACTICE_QUESTIONS } from "../data/questions";
+import React, { useState, useEffect } from "react";
+import { Award, Volume2, ArrowRight, CheckCircle2, XCircle, RotateCcw, Home, Eye, EyeOff, Loader2 } from "lucide-react";
 import type { Question } from "../data/questions";
 import { usePracticeProgress } from "../hooks/usePracticeProgress";
 import { KANJI_DATASET } from "../data/kanji";
@@ -21,6 +20,21 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, { answer: string; isCorrect: boolean }>>({});
   const [showFurigana, setShowFurigana] = useState(true);
+  const [questionsPool, setQuestionsPool] = useState<Question[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Dynamically load the large compiled questions dataset
+    import("../data/questions.json")
+      .then((m) => {
+        setQuestionsPool(m.default as Question[]);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to dynamically import Practice Arena questions:", err);
+        setLoading(false);
+      });
+  }, []);
 
   const {
     scores,
@@ -41,10 +55,10 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
 
   // Select a question of appropriate difficulty for the subject
   const getQuestionForSubject = (subject: string, score: number): Question => {
-    const allForSubject = PRACTICE_QUESTIONS.filter((q) => q.subject === subject);
+    const allForSubject = questionsPool.filter((q) => q.subject === subject);
     if (allForSubject.length === 0) {
       // Fallback
-      return PRACTICE_QUESTIONS[Math.floor(Math.random() * PRACTICE_QUESTIONS.length)];
+      return questionsPool[Math.floor(Math.random() * questionsPool.length)];
     }
 
     const difficulty = getDifficultyForScore(score);
@@ -80,13 +94,13 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     // Determine which levels are unlocked
     const unlockedLevels: number[] = [5]; // N5 is always unlocked
 
-    const n5Subjects = Array.from(new Set(PRACTICE_QUESTIONS.filter((q) => q.level === 5).map((q) => q.subject)));
+    const n5Subjects = Array.from(new Set(questionsPool.filter((q) => q.level === 5).map((q) => q.subject)));
     const n5LearnedCount = n5Subjects.filter((sub) => (scores[sub] || 0) >= 6).length;
 
     if (n5LearnedCount >= 6) {
       unlockedLevels.push(4); // Unlock N4
 
-      const n4Subjects = Array.from(new Set(PRACTICE_QUESTIONS.filter((q) => q.level === 4).map((q) => q.subject)));
+      const n4Subjects = Array.from(new Set(questionsPool.filter((q) => q.level === 4).map((q) => q.subject)));
       const n4LearnedCount = n4Subjects.filter((sub) => (scores[sub] || 0) >= 6).length;
 
       if (n4LearnedCount >= 6) {
@@ -95,7 +109,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     }
 
     // Filter questions to only those in unlocked levels
-    const allowedQuestions = PRACTICE_QUESTIONS.filter((q) => unlockedLevels.includes(q.level));
+    const allowedQuestions = questionsPool.filter((q) => unlockedLevels.includes(q.level));
 
     // Get unique subjects in these allowed questions
     const allSubjects = Array.from(new Set(allowedQuestions.map((q) => q.subject)));
@@ -227,7 +241,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   // Calculate JLPT progression states
   const getSubjectsByLevel = (level: 5 | 4 | 3): string[] => {
     return Array.from(new Set(
-      PRACTICE_QUESTIONS.filter((q) => q.level === level).map((q) => q.subject)
+      questionsPool.filter((q) => q.level === level).map((q) => q.subject)
     ));
   };
 
@@ -467,6 +481,15 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
       return isBold ? <strong key={index}>{renderedPart}</strong> : <span key={index}>{renderedPart}</span>;
     });
   };
+
+  if (loading) {
+    return (
+      <div className="practice-view animate-fade-in" style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "60vh", flexDirection: "column", gap: "16px" }}>
+        <Loader2 className="animate-spin" size={36} style={{ color: "var(--color-primary)" }} />
+        <p style={{ color: "var(--color-text-muted)", fontSize: "14px" }}>Loading Practice Questions...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="practice-view animate-fade-in">
