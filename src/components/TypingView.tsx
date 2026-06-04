@@ -580,7 +580,7 @@ export const TypingView: React.FC<TypingViewProps> = ({
                     id="kanji-input"
                     ref={inputRef}
                     type="text"
-                    className="preset-name-input"
+                    className="search-input"
                     placeholder="Type the matching Japanese Kanji..."
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
@@ -595,7 +595,8 @@ export const TypingView: React.FC<TypingViewProps> = ({
                       padding: "10px 14px",
                       background: "rgba(0,0,0,0.15)",
                       borderColor: inputValue.trim() ? "var(--color-primary)" : "var(--color-border)",
-                      textAlign: "center"
+                      textAlign: "center",
+                      color: "var(--color-text-primary)"
                     }}
                   />
                 </div>
