@@ -53,7 +53,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     const easy = allForSubject.filter((q) => q.type === "meaning" || q.type === "reading");
     const medium = allForSubject.filter((q) => 
       q.type === "kanji_select" || 
-      (q.type === "cloze" && q.sentence.includes("【"))
+      q.type === "cloze"
     );
     const hard = allForSubject.filter((q) => 
       q.type === "translate_jp_en" || 
