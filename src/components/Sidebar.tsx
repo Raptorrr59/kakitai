@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, LayoutDashboard, Award, Edit3, Moon, Sun, RefreshCw, GraduationCap, FolderOpen } from "lucide-react";
+import { BookOpen, LayoutDashboard, Award, Edit3, Moon, Sun, RefreshCw, GraduationCap, FolderOpen, Keyboard } from "lucide-react";
 
 interface SidebarProps {
   currentView: string;
@@ -69,6 +69,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <Edit3 size={18} />
             <span>Writing Studio</span>
+            {dueCount > 0 && (
+              <span 
+                className="tag tag-kunyomi" 
+                style={{ marginLeft: "auto", fontSize: "10px", padding: "2px 6px" }}
+              >
+                {dueCount} Due
+              </span>
+            )}
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            type="button"
+            className={`nav-button ${currentView === "typing" ? "active" : ""}`}
+            onClick={() => setView("typing")}
+          >
+            <Keyboard size={18} />
+            <span>Keyboard Trainer</span>
             {dueCount > 0 && (
               <span 
                 className="tag tag-kunyomi" 

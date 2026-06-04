@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap, FolderOpen, Trash2 } from "lucide-react";
+import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap, FolderOpen, Trash2, Keyboard } from "lucide-react";
 import type { SRSStats } from "../hooks/useSRS";
 import type { VocabStats } from "../hooks/useVocabSRS";
 import { KANJI_DATASET } from "../data/kanji";
@@ -58,16 +58,27 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
               {vocabStats.dueCount > 0 && <strong>{vocabStats.dueCount} Vocabulary words</strong>} due for review today.
             </p>
           </div>
-          <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+          <div style={{ display: "flex", gap: "10px", flexShrink: 0, flexWrap: "wrap" }}>
             {stats.dueCount > 0 && (
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => setView("writing")}
-              >
-                <Edit3 size={16} />
-                <span>Review Kanji</span>
-              </button>
+              <>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setView("writing")}
+                >
+                  <Edit3 size={16} />
+                  <span>Draw Kanji</span>
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setView("typing")}
+                  style={{ background: "var(--color-primary)", boxShadow: "0 4px 12px var(--color-primary-glow)" }}
+                >
+                  <Keyboard size={16} />
+                  <span>Type Kanji</span>
+                </button>
+              </>
             )}
             {vocabStats.dueCount > 0 && (
               <button

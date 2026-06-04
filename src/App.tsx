@@ -4,6 +4,7 @@ import { DashboardView } from "./components/DashboardView";
 import { KanjiBankView } from "./components/KanjiBankView";
 import { PracticeView } from "./components/PracticeView";
 import { WritingView } from "./components/WritingView";
+import { TypingView } from "./components/TypingView";
 import { VocabView } from "./components/VocabView";
 import { useSRS } from "./hooks/useSRS";
 import { useVocabSRS } from "./hooks/useVocabSRS";
@@ -103,6 +104,15 @@ function App() {
             gradeKanji={gradeKanji}
             startLearning={startLearning}
             isDue={isKanjiDue}
+          />
+        )}
+        {view === "typing" && (
+          <TypingView
+            getKanjiProgress={getKanjiProgress}
+            gradeKanji={gradeKanji}
+            isDue={isKanjiDue}
+            presets={presets}
+            setView={setView}
           />
         )}
         {view === "vocab" && (
