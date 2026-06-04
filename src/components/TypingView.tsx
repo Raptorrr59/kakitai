@@ -693,6 +693,26 @@ export const TypingView: React.FC<TypingViewProps> = ({
                   )}
                 </div>
 
+                {!isCorrectAnswer && (
+                  <div className="glass-card" style={{ display: "flex", justifyContent: "space-around", alignItems: "center", padding: "16px", background: "rgba(239, 68, 68, 0.03)", borderColor: "rgba(239, 68, 68, 0.15)", margin: "8px 0" }}>
+                    <div style={{ textAlign: "center" }}>
+                      <span style={{ fontSize: "11px", color: "var(--color-text-muted)", textTransform: "uppercase", display: "block", marginBottom: "4px" }}>Your Answer</span>
+                      <span className="kanji-text" style={{ fontSize: "48px", color: "var(--color-danger)", display: "block", minHeight: "58px", lineHeight: "58px" }}>
+                        {inputValue}
+                      </span>
+                    </div>
+                    <div style={{ fontSize: "18px", color: "var(--color-text-muted)", fontWeight: "bold" }}>
+                      vs
+                    </div>
+                    <div style={{ textAlign: "center" }}>
+                      <span style={{ fontSize: "11px", color: "var(--color-text-muted)", textTransform: "uppercase", display: "block", marginBottom: "4px" }}>Correct Kanji</span>
+                      <span className="kanji-text" style={{ fontSize: "48px", color: "var(--color-success)", display: "block", minHeight: "58px", lineHeight: "58px" }}>
+                        {currentItem.kanji}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
                 {/* Show details since answer is submitted */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
