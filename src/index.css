@@ -77,35 +77,35 @@
 
   /* Traditional Ukiyo-e Light Color Palette */
   --color-bg-base: #f5f2eb; /* Warm Washi mulberry paper background */
-  --color-bg-surface: rgba(251, 249, 243, 0.85); /* Tinted paper cards */
-  --color-bg-surface-solid: #fbf9f3;
-  --color-bg-surface-hover: #f1ebd9;
-  --color-border: #e2dbcd; /* Subtle beige woodblock line */
+  --color-bg-surface: #dde7ea; /* Ocean depth wave-teal wood block */
+  --color-bg-surface-solid: #dde7ea;
+  --color-bg-surface-hover: #ccdce0;
+  --color-border: #cbd5d8; /* Matching teal shadow line */
   --color-border-active: #cc5a37; /* Cinnabar seal Vermilion */
   
-  --color-text-primary: #0f2537; /* Prussian Blue Ink */
-  --color-text-secondary: #3a506b; /* Faded Indigo Ink */
-  --color-text-muted: #708090;
+  --color-text-primary: #0c2233; /* Prussian Blue Ink */
+  --color-text-secondary: #2a4054; /* Faded Indigo Ink */
+  --color-text-muted: #50667a;
   
   /* Primary Accent: Mt. Fuji sunset Vermilion */
   --color-primary: #cc5a37;
   --color-primary-glow: rgba(204, 90, 55, 0.08);
   
   --color-onyomi: #cc5a37; /* Vermilion Seal */
-  --color-onyomi-bg: rgba(204, 90, 55, 0.1);
+  --color-onyomi-bg: rgba(204, 90, 55, 0.12);
   --color-kunyomi: #2d6a78; /* Wave Prussian Teal */
-  --color-kunyomi-bg: rgba(45, 106, 120, 0.1);
+  --color-kunyomi-bg: rgba(45, 106, 120, 0.12);
   
   --color-success: #5f8a75; /* Faded Sage green */
-  --color-success-bg: rgba(95, 138, 117, 0.08);
+  --color-success-bg: rgba(95, 138, 117, 0.1);
   --color-warning: #d9a05b; /* Ochre earth */
-  --color-warning-bg: rgba(217, 160, 91, 0.08);
+  --color-warning-bg: rgba(217, 160, 91, 0.1);
   --color-danger: #c24d4d; /* Red Lacquer */
-  --color-danger-bg: rgba(194, 77, 77, 0.08);
+  --color-danger-bg: rgba(194, 77, 77, 0.1);
   
-  --shadow-sm: 0 2px 8px rgba(15, 37, 55, 0.05);
-  --shadow-md: 0 8px 24px rgba(15, 37, 55, 0.08);
-  --shadow-lg: 0 16px 40px rgba(15, 37, 55, 0.12);
+  --shadow-sm: 0 2px 8px rgba(12, 34, 51, 0.06);
+  --shadow-md: 0 8px 24px rgba(12, 34, 51, 0.09);
+  --shadow-lg: 0 16px 40px rgba(12, 34, 51, 0.13);
 }
 
 /* Custom Hokusai Wave Theme Styling Overrides */
@@ -119,7 +119,7 @@
 }
 
 [data-theme="hokusai"] .sidebar {
-  /* Traditional seigaiha (waves) woodblock print pattern on washi paper sidebar */
+  /* Traditional seigaiha (waves) woodblock print pattern on warm sand/clay sidebar background */
   background-image: 
     radial-gradient(circle at 100% 150%, transparent 24%, rgba(204, 90, 55, 0.015) 24%, rgba(204, 90, 55, 0.015) 28%, transparent 28%, transparent),
     radial-gradient(circle at 0% 150%, transparent 24%, rgba(204, 90, 55, 0.015) 24%, rgba(204, 90, 55, 0.015) 28%, transparent 28%, transparent),
@@ -128,11 +128,12 @@
     radial-gradient(circle at 0% 50%, transparent 24%, rgba(204, 90, 55, 0.015) 24%, rgba(204, 90, 55, 0.015) 28%, transparent 28%, transparent),
     radial-gradient(circle at 50% 0%, transparent 40%, rgba(45, 106, 120, 0.02) 40%, rgba(45, 106, 120, 0.02) 44%, transparent 44%, transparent);
   background-size: 50px 25px;
-  background-color: #faf7f0;
+  background-color: #eae1cf; /* Warm sand/clay woodblock block */
+  border-right: 1.5px solid #d4cbb8;
 }
 
 [data-theme="hokusai"] .sidebar-footer {
-  border-top: 1px dashed rgba(15, 37, 55, 0.1);
+  border-top: 1px dashed rgba(12, 34, 51, 0.15);
 }
 
 [data-theme="hokusai"] .logo-icon {
@@ -161,8 +162,16 @@
 
 [data-theme="hokusai"] .nav-button.active {
   border-left: 3px solid var(--color-primary);
-  background: rgba(204, 90, 55, 0.06);
-  color: var(--color-text-primary);
+  background: rgba(204, 90, 55, 0.08);
+  color: #cc5a37;
+}
+
+[data-theme="hokusai"] .sidebar .nav-button:hover {
+  background-color: #dfd6c4;
+}
+
+[data-theme="hokusai"] .sidebar .theme-toggle-btn:hover {
+  background-color: #dfd6c4;
 }
 
 [data-theme="hokusai"] .tag {
