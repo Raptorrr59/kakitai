@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   /* Fonts */
@@ -67,6 +67,106 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
   --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* Japanese Art (Hokusai Wave) Theme overrides */
+[data-theme="hokusai"] {
+  /* Font overrides for a classic woodblock print style */
+  --font-sans: 'Outfit', 'Noto Serif JP', 'Georgia', serif;
+  --font-japanese: 'Noto Serif JP', 'Sawarabi Mincho', 'MS Mincho', serif;
+
+  /* Traditional Ukiyo-e Color Palette */
+  --color-bg-base: #0a1424; /* Deep Ocean Indigo / Prussian Blue */
+  --color-bg-surface: rgba(18, 30, 54, 0.75); /* Deep Sea Blue */
+  --color-bg-surface-solid: #121e35;
+  --color-bg-surface-hover: rgba(26, 42, 74, 0.85);
+  --color-border: rgba(235, 219, 195, 0.15); /* Warm sand paper border */
+  --color-border-active: #e07a5f; /* Hokusai Mount Fuji sun Vermilion */
+  
+  --color-text-primary: #f4eccf; /* Washi Warm Cream Paper */
+  --color-text-secondary: #90a6c0; /* Sea Mist Blue */
+  --color-text-muted: #627793;
+  
+  /* Primary Accent: Sun Vermilion */
+  --color-primary: #e07a5f;
+  --color-primary-glow: rgba(224, 122, 95, 0.18);
+  
+  --color-onyomi: #e07a5f; /* Vermilion Seal */
+  --color-onyomi-bg: rgba(224, 122, 95, 0.12);
+  --color-kunyomi: #488b9c; /* Wave Teal */
+  --color-kunyomi-bg: rgba(72, 139, 156, 0.15);
+  
+  --color-success: #81b29a; /* Sage Seafoam */
+  --color-success-bg: rgba(129, 178, 154, 0.12);
+  --color-warning: #f4a261; /* Sandy Sand */
+  --color-warning-bg: rgba(244, 162, 97, 0.12);
+  --color-danger: #e76f51; /* Cinnabar Red */
+  --color-danger-bg: rgba(231, 111, 81, 0.12);
+  
+  --shadow-sm: 0 2px 8px rgba(6, 12, 22, 0.4);
+  --shadow-md: 0 8px 24px rgba(6, 12, 22, 0.55);
+  --shadow-lg: 0 16px 40px rgba(4, 8, 15, 0.7);
+}
+
+/* Custom Hokusai Wave Theme Styling Overrides */
+[data-theme="hokusai"] body {
+  /* Radial gradients simulating a sunset glow behind Prussian blue waves */
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(224, 122, 95, 0.05) 0px, transparent 40%),
+    radial-gradient(at 100% 100%, rgba(72, 139, 156, 0.05) 0px, transparent 45%),
+    linear-gradient(180deg, #0a1424 0%, #060b14 100%);
+  background-attachment: fixed;
+}
+
+[data-theme="hokusai"] .sidebar {
+  /* Japanese seigaiha (waves) traditional print pattern in sidebar background */
+  background-image: 
+    radial-gradient(circle at 100% 150%, transparent 24%, rgba(235, 219, 195, 0.02) 24%, rgba(235, 219, 195, 0.02) 28%, transparent 28%, transparent),
+    radial-gradient(circle at 0% 150%, transparent 24%, rgba(235, 219, 195, 0.02) 24%, rgba(235, 219, 195, 0.02) 28%, transparent 28%, transparent),
+    radial-gradient(circle at 50% 100%, transparent 40%, rgba(72, 139, 156, 0.03) 40%, rgba(72, 139, 156, 0.03) 44%, transparent 44%, transparent),
+    radial-gradient(circle at 100% 50%, transparent 24%, rgba(235, 219, 195, 0.02) 24%, rgba(235, 219, 195, 0.02) 28%, transparent 28%, transparent),
+    radial-gradient(circle at 0% 50%, transparent 24%, rgba(235, 219, 195, 0.02) 24%, rgba(235, 219, 195, 0.02) 28%, transparent 28%, transparent),
+    radial-gradient(circle at 50% 0%, transparent 40%, rgba(72, 139, 156, 0.03) 40%, rgba(72, 139, 156, 0.03) 44%, transparent 44%, transparent);
+  background-size: 50px 25px;
+  background-color: #121e35;
+}
+
+[data-theme="hokusai"] .sidebar-footer {
+  border-top: 1px dashed rgba(235, 219, 195, 0.15);
+}
+
+[data-theme="hokusai"] .logo-icon {
+  background: linear-gradient(135deg, #e07a5f 0%, #488b9c 100%);
+  box-shadow: 0 4px 14px rgba(224, 122, 95, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="hokusai"] .logo-title {
+  font-family: 'Noto Serif JP', 'Sawarabi Mincho', serif;
+  font-weight: 700;
+}
+
+[data-theme="hokusai"] .review-alert-banner {
+  /* Sun vermilion/teal background for alerts */
+  background: linear-gradient(135deg, rgba(224, 122, 95, 0.12) 0%, rgba(72, 139, 156, 0.12) 100%);
+  border-color: rgba(224, 122, 95, 0.3);
+  box-shadow: inset 0 0 12px rgba(224, 122, 95, 0.05);
+}
+
+[data-theme="hokusai"] .glass-card {
+  border-width: 1.5px;
+  box-shadow: var(--shadow-sm);
+  background: var(--color-bg-surface);
+}
+
+[data-theme="hokusai"] .nav-button.active {
+  border-left: 3px solid var(--color-primary);
+  background: var(--color-primary-glow);
+  color: var(--color-text-primary);
+}
+
+[data-theme="hokusai"] .tag {
+  border: 1px solid currentColor;
 }
 
 /* Core Reset */

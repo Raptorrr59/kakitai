@@ -13,7 +13,7 @@ import { PresetsView } from "./components/PresetsView";
 
 function App() {
   const [view, setView] = useState<string>("dashboard");
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light" | "hokusai">("dark");
   
   const {
     progress: kanjiProgress,
@@ -46,7 +46,7 @@ function App() {
 
   // Load and apply user theme
   useEffect(() => {
-    const savedTheme = localStorage.getItem("app_theme") as "dark" | "light" | null;
+    const savedTheme = localStorage.getItem("app_theme") as "dark" | "light" | "hokusai" | null;
     if (savedTheme) {
       setTheme(savedTheme);
     }
@@ -58,7 +58,11 @@ function App() {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+    setTheme((prev) => {
+      if (prev === "dark") return "light";
+      if (prev === "light") return "hokusai";
+      return "dark";
+    });
   };
 
   const handleResetAll = () => {
