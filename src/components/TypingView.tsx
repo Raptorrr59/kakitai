@@ -83,7 +83,11 @@ const KanjiCanvas: React.FC<KanjiCanvasProps> = ({ kanji }) => {
     ctx.strokeRect(0, 0, size, size);
 
     // Draw the Kanji large
-    ctx.font = "bold 95px 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif";
+    const isHokusai = document.documentElement.getAttribute("data-theme") === "hokusai";
+    const fontStr = isHokusai 
+      ? "bold 95px 'Noto Serif JP', 'Sawarabi Mincho', 'MS Mincho', serif"
+      : "bold 95px 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif";
+    ctx.font = fontStr;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = textColor;
