@@ -1,5 +1,3 @@
-import questionsJson from "./questions.json";
-
 export type QuestionType = "cloze" | "reading" | "kanji_select" | "meaning" | "translate_jp_en" | "translate_en_jp";
 
 export interface Question {
@@ -15,5 +13,3 @@ export interface Question {
   explanation: string; // Explanation of why it's correct
   englishTranslation: string; // English translation context
 }
-
-export const PRACTICE_QUESTIONS = questionsJson as Question[];
