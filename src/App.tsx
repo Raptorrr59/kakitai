@@ -3,6 +3,7 @@ import { Sidebar } from "./components/Sidebar";
 import { DashboardView } from "./components/DashboardView";
 import { KanjiBankView } from "./components/KanjiBankView";
 import { PracticeView } from "./components/PracticeView";
+import { JLPTView } from "./components/JLPTView";
 import { WritingView } from "./components/WritingView";
 import { TypingView } from "./components/TypingView";
 import { VocabView } from "./components/VocabView";
@@ -101,6 +102,9 @@ function App() {
         )}
         {view === "practice" && (
           <PracticeView setView={setView} />
+        )}
+        {view === "jlpt" && (
+          <JLPTView setView={setView} />
         )}
         {view === "writing" && (
           <WritingView

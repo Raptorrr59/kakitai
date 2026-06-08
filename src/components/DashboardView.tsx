@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap, FolderOpen, Trash2, Keyboard } from "lucide-react";
+import { BookOpen, Award, CheckCircle2, AlertCircle, Edit3, Calendar, GraduationCap, FolderOpen, Trash2, Keyboard, ClipboardCheck } from "lucide-react";
 import type { SRSStats } from "../hooks/useSRS";
 import type { VocabStats } from "../hooks/useVocabSRS";
 import { KANJI_DATASET } from "../data/kanji";
@@ -285,12 +285,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
 
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-secondary"
               onClick={() => setView("practice")}
               style={{ justifyContent: "flex-start", width: "100%" }}
             >
               <Award size={16} />
-              <span>Practice TOEIC Quizzes</span>
+              <span>Practice Arena (with Hints)</span>
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => setView("jlpt")}
+              style={{ justifyContent: "flex-start", width: "100%", background: "#3b82f6", boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)" }}
+            >
+              <ClipboardCheck size={16} />
+              <span>JLPT Mock Exam Simulator</span>
             </button>
           </div>
 

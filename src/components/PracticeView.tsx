@@ -20,6 +20,9 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   const [score, setScore] = useState(0);
   const [userAnswers, setUserAnswers] = useState<Record<string, { answer: string; isCorrect: boolean }>>({});
   const [showFurigana, setShowFurigana] = useState(true);
+  const [showTranslationHint, setShowTranslationHint] = useState(false);
+  const [eliminatedOptions, setEliminatedOptions] = useState<string[]>([]);
+  const [forceShowFurigana, setForceShowFurigana] = useState(false);
   const [questionsPool, setQuestionsPool] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -173,16 +176,23 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
     window.speechSynthesis.speak(utterance);
   };
 
-  // Auto toggle furigana based on question difficulty when index or question changes
   const currentQuestion = questions[currentIndex];
+
+  // Reset hints when switching questions
+  React.useEffect(() => {
+    setShowTranslationHint(false);
+    setEliminatedOptions([]);
+  }, [currentIndex]);
+
+  // Auto toggle furigana based on question difficulty when index or question changes
   React.useEffect(() => {
     if (sessionActive && currentQuestion) {
       const score = scores[currentQuestion.subject] || 0;
       const difficulty = getDifficultyForScore(score);
-      // Hide furigana for hard/expert questions by default
-      setShowFurigana(difficulty === "easy" || difficulty === "medium");
+      // Hide furigana for hard/expert questions by default, unless forced
+      setShowFurigana(forceShowFurigana || difficulty === "easy" || difficulty === "medium");
     }
-  }, [currentIndex, currentQuestion, sessionActive, scores]);
+  }, [currentIndex, currentQuestion, sessionActive, scores, forceShowFurigana]);
 
   const startSession = () => {
     // Perform weighted sampling based on Practice Arena scores
@@ -738,10 +748,74 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
               {currentQuestion.questionText}
             </p>
 
+            {/* Help & Hints panel */}
+            <div className="hints-panel" style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+              padding: "16px",
+              borderRadius: "12px",
+              backgroundColor: "var(--color-bg-surface-solid)",
+              border: "1px solid var(--color-border)",
+              marginBottom: "20px"
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
+                <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--color-text-secondary)" }}>💡 Learning Hints</span>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setShowTranslationHint(true)}
+                    disabled={showTranslationHint || isAnswered}
+                    style={{ padding: "4px 8px", fontSize: "12px", display: "flex", alignItems: "center", gap: "4px" }}
+                  >
+                    <span>🔍 English Hint</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      if (isAnswered || eliminatedOptions.length > 0) return;
+                      const incorrect = currentQuestion.options.filter(opt => opt !== currentQuestion.correctAnswer);
+                      const shuffled = [...incorrect].sort(() => 0.5 - Math.random());
+                      setEliminatedOptions(shuffled.slice(0, 2));
+                    }}
+                    disabled={eliminatedOptions.length > 0 || isAnswered}
+                    style={{ padding: "4px 8px", fontSize: "12px", display: "flex", alignItems: "center", gap: "4px" }}
+                  >
+                    <span>✂️ 50/50</span>
+                  </button>
+                  <button
+                    type="button"
+                    className={`btn ${forceShowFurigana ? "btn-primary" : "btn-secondary"}`}
+                    onClick={() => setForceShowFurigana(prev => !prev)}
+                    style={{ padding: "4px 8px", fontSize: "12px", display: "flex", alignItems: "center", gap: "4px" }}
+                  >
+                    <span>📖 Force Furigana</span>
+                  </button>
+                </div>
+              </div>
+
+              {showTranslationHint && (
+                <div className="hint-text animate-fade-in" style={{
+                  fontSize: "13px",
+                  color: "var(--color-text-secondary)",
+                  backgroundColor: "rgba(var(--color-primary-rgb), 0.05)",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  borderLeft: "4px solid var(--color-primary)",
+                  textAlign: "left"
+                }}>
+                  <strong>Sentence Context Hint:</strong> "{currentQuestion.englishTranslation}"
+                </div>
+              )}
+            </div>
+
             <div className="options-grid">
               {currentQuestion.options.map((option, idx) => {
                 const isSelected = selectedAnswer === option;
                 const isCorrect = option === currentQuestion.correctAnswer;
+                const isEliminated = eliminatedOptions.includes(option);
                 
                 let btnClass = "";
                 if (isAnswered) {
@@ -755,7 +829,8 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                     type="button"
                     className={`option-button ${btnClass}`}
                     onClick={() => handleSelectOption(option)}
-                    disabled={isAnswered}
+                    disabled={isAnswered || isEliminated}
+                    style={isEliminated ? { opacity: 0.35, textDecoration: "line-through", cursor: "not-allowed" } : {}}
                   >
                     <span className="option-badge">
                       {String.fromCharCode(65 + idx)}

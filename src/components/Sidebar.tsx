@@ -1,5 +1,5 @@
 import React from "react";
-import { BookOpen, LayoutDashboard, Award, Edit3, Moon, Sun, RefreshCw, GraduationCap, FolderOpen, Keyboard, Waves } from "lucide-react";
+import { BookOpen, LayoutDashboard, Award, Edit3, Moon, Sun, RefreshCw, GraduationCap, FolderOpen, Keyboard, Waves, ClipboardCheck } from "lucide-react";
 
 interface SidebarProps {
   currentView: string;
@@ -59,6 +59,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <Award size={18} />
             <span>Practice Arena</span>
+          </button>
+        </li>
+        <li className="nav-item">
+          <button
+            type="button"
+            className={`nav-button ${currentView === "jlpt" ? "active" : ""}`}
+            onClick={() => setView("jlpt")}
+          >
+            <ClipboardCheck size={18} />
+            <span>JLPT Trainer</span>
           </button>
         </li>
         <li className="nav-item">
