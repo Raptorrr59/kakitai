@@ -1,4 +1,26 @@
 import { KANJI_DATASET } from "./kanji";
+import n5VocabJson from "./n5-vocab.json";
+import n4VocabJson from "./n4-vocab.json";
+import n3VocabJson from "./n3-vocab.json";
+
+interface VocabItem {
+  word: string;
+  meaning: string;
+  furigana: string;
+  romaji: string;
+  level: number;
+}
+
+interface VocabJsonType {
+  total: number;
+  offset: number;
+  limit: number;
+  words: VocabItem[];
+}
+
+const n5Vocab: VocabJsonType = n5VocabJson as any;
+const n4Vocab: VocabJsonType = n4VocabJson as any;
+const n3Vocab: VocabJsonType = n3VocabJson as any;
 
 export type QuestionType = "cloze" | "reading" | "kanji_select" | "meaning" | "translate_jp_en" | "translate_en_jp";
 
@@ -525,30 +547,6 @@ export const MANUAL_QUESTIONS: Question[] = [
   },
   {
     id: "q38",
-    type: "meaning",
-    level: 3,
-    subject: "技術",
-    sentence: "この会社は新しい**技術{ぎじゅつ}**を開発{かいはつ}しました。",
-    questionText: "What does the bolded word mean in this sentence?",
-    options: ["Technology", "Rule", "Tradition", "Mistake"],
-    correctAnswer: "Technology",
-    explanation: "技術 (ぎじゅつ - gijutsu) means 'technology / skill'.",
-    englishTranslation: "This company developed new technology."
-  },
-  {
-    id: "q39",
-    type: "cloze",
-    level: 3,
-    subject: "議論",
-    sentence: "彼らはその問題{もんだい}について何回{なんかい}も[ ]しました。",
-    questionText: "Which word completes the sentence to mean 'They debated/discussed that issue many times'?",
-    options: ["議論", "決定", "準備", "紹介"],
-    correctAnswer: "議論",
-    explanation: "議論 (ぎろん - giron) means 'discussion / debate'.",
-    englishTranslation: "They debated that issue many times."
-  },
-  {
-    id: "q40",
     type: "reading",
     level: 3,
     subject: "関係",
@@ -558,12 +556,345 @@ export const MANUAL_QUESTIONS: Question[] = [
     correctAnswer: "かんけい",
     explanation: "関係 (かんけい - kankei) means 'relationship / connection'.",
     englishTranslation: "There is a deep connection between the two incidents."
+  },
+  // === N5 Hiragana-only Vocabulary & Reading Questions ===
+  {
+    id: "n5_hira_vocab_1",
+    type: "cloze",
+    level: 5,
+    subject: "あめ",
+    sentence: "きのうは　[ ]が　たくさん　ふりました。",
+    questionText: "Choose the word in Hiragana that best completes the sentence.",
+    options: ["あめ", "かぜ", "ゆき", "くも"],
+    correctAnswer: "あめ",
+    explanation: "あめ (ame) means 'rain'. ゆき (yuki) is snow, かぜ (kaze) is wind, and くも (kumo) is cloud. 降る (ふります) is used for rain or snow falling.",
+    englishTranslation: "Yesterday, it rained a lot."
+  },
+  {
+    id: "n5_hira_vocab_2",
+    type: "cloze",
+    level: 5,
+    subject: "まいあさ",
+    sentence: "わたしは　[ ]　おちゃを　のみます。",
+    questionText: "Choose the word in Hiragana that best completes the sentence.",
+    options: ["まいあさ", "まいねん", "きのう", "おととい"],
+    correctAnswer: "まいあさ",
+    explanation: "まいあさ (maiasa) means 'every morning'. まいねん is every year, きのう is yesterday, and おととい is the day before yesterday.",
+    englishTranslation: "I drink green tea every morning."
+  },
+  {
+    id: "n5_hira_vocab_3",
+    type: "cloze",
+    level: 5,
+    subject: "にほん",
+    sentence: "つくえの　うえに　えんぴつが　[ ]　あります。",
+    questionText: "Choose the correct counter for pencils.",
+    options: ["にほん", "にまい", "にさつ", "にだい"],
+    correctAnswer: "にほん",
+    explanation: "〜ほん (hon/pon/bon) is the counter for long, cylindrical objects like pencils (えんぴつ). 〜まい is for flat objects, 〜さつ for books, and 〜だい for machines/vehicles.",
+    englishTranslation: "There are two pencils on the desk."
+  },
+  {
+    id: "n5_hira_vocab_4",
+    type: "cloze",
+    level: 5,
+    subject: "かり",
+    sentence: "としょかんで　ほんを　[ ]ました。",
+    questionText: "Choose the verb stem in Hiragana that best completes the sentence.",
+    options: ["かり", "かし", "おき", "ふり"],
+    correctAnswer: "かり",
+    explanation: "借りる (かりる - kariru) means 'to borrow'. 貸す (かす) is to lend, 起きる (おきる) is to wake up, and 降る (ふる) is to fall (rain/snow).",
+    englishTranslation: "I borrowed a book at the library."
+  },
+  {
+    id: "n5_hira_vocab_5",
+    type: "cloze",
+    level: 5,
+    subject: "あらいます",
+    sentence: "あさ　おきてから、　かおを　[ ]。",
+    questionText: "Choose the verb in Hiragana that best completes the sentence.",
+    options: ["あらいます", "みがきます", "しめます", "あけます"],
+    correctAnswer: "あらいます",
+    explanation: "洗う (あらう - arau) means 'to wash'. 顔 (かお - kao) means 'face'. みがきます is to brush/polish, しめます is to close, and あけます is to open.",
+    englishTranslation: "I wash my face after waking up in the morning."
+  },
+  {
+    id: "n5_hira_vocab_6",
+    type: "cloze",
+    level: 5,
+    subject: "あつい",
+    sentence: "きょうは　てんと　[ ]から、　プールに　いきたいです。",
+    questionText: "Choose the adjective in Hiragana that best completes the sentence.",
+    options: ["あつい", "さむい", "やすい", "くらい"],
+    correctAnswer: "あつい",
+    explanation: "暑い (あつい - atsui) means 'hot' (weather). さむい is cold, やすい is cheap, and くらい is dark.",
+    englishTranslation: "Since it is very hot today, I want to go to the pool."
+  },
+  {
+    id: "n5_hira_vocab_7",
+    type: "cloze",
+    level: 5,
+    subject: "こうえん",
+    sentence: "あした　ともだちと　[ ]で　さんぽを　します。",
+    questionText: "Choose the place in Hiragana that best completes the sentence.",
+    options: ["こうえん", "きっさてん", "びょういん", "れいぞうこ"],
+    correctAnswer: "こうえん",
+    explanation: "公園 (こうえん - kōen) means 'park'. 喫茶店 (きっさてん) is coffee shop, 病院 (びょういん) is hospital, and 冷蔵庫 (れいぞうこ) is refrigerator.",
+    englishTranslation: "Tomorrow, I will take a walk in the park with my friend."
+  },
+  {
+    id: "n5_hira_vocab_8",
+    type: "cloze",
+    level: 5,
+    subject: "はがき",
+    sentence: "ゆうびんきょくで　きってと　[ ]を　かいました。",
+    questionText: "Choose the noun in Hiragana that best completes the sentence.",
+    options: ["はがき", "はこ", "はし", "はな"],
+    correctAnswer: "はがき",
+    explanation: "葉書 (はがき - hagaki) means 'postcard'. 切手 (きって) means 'stamps'. はこ is box, はし is chopsticks/bridge, and はな is flower/nose.",
+    englishTranslation: "I bought stamps and postcards at the post office."
+  },
+  {
+    id: "n5_hira_vocab_9",
+    type: "cloze",
+    level: 5,
+    subject: "みがきます",
+    sentence: "ごはんを　たべてから、　はを　[ ]。",
+    questionText: "Choose the verb in Hiragana that best completes the sentence.",
+    options: ["みがきます", "あびます", "ぬぎます", "おきます"],
+    correctAnswer: "みがきます",
+    explanation: "磨く (みがく - migaku) means 'to brush/polish'. 歯 (は - ha) means 'teeth'. あびます is to take a shower, ぬぎます is to take off clothes, and おきます is to put/wake up.",
+    englishTranslation: "I brush my teeth after eating my meal."
+  },
+  {
+    id: "n5_hira_vocab_10",
+    type: "cloze",
+    level: 5,
+    subject: "おくさん",
+    sentence: "やまださんの　[ ]は　とても　きれいな　ひとです。",
+    questionText: "Choose the word in Hiragana that best completes the sentence.",
+    options: ["おくさん", "おねえさん", "おとうと", "おじいさん"],
+    correctAnswer: "おくさん",
+    explanation: "奥さん (おくさん - okusan) means 'someone else's wife'. おねえさん is older sister, おとうと is younger brother, and おじいさん is grandfather.",
+    englishTranslation: "Mr. Yamada's wife is a very beautiful person."
+  },
+  {
+    id: "n5_hira_vocab_11",
+    type: "cloze",
+    level: 5,
+    subject: "こうちゃ",
+    sentence: "きっさてんで　コーヒーと　[ ]を　ちゅうもんしました。",
+    questionText: "Choose the drink in Hiragana that best completes the sentence.",
+    options: ["こうちゃ", "ごはん", "しお", "さとう"],
+    correctAnswer: "こうちゃ",
+    explanation: "紅茶 (こうちゃ - kōcha) means 'black tea'. ごはん is cooked rice, しお is salt, and さとう is sugar.",
+    englishTranslation: "I ordered coffee and black tea at the coffee shop."
+  },
+  {
+    id: "n5_hira_vocab_12",
+    type: "cloze",
+    level: 5,
+    subject: "しずか",
+    sentence: "よる of としょかんは　とても　[ ]です。",
+    questionText: "Choose the adjective in Hiragana that best completes the sentence.",
+    options: ["しずか", "にぎやか", "ひま", "じょうぶ"],
+    correctAnswer: "しずか",
+    explanation: "静か (しずか - shizuka) means 'quiet'. にぎやか is bustling/lively, ひま is free/idle, and じょうぶ is durable/strong.",
+    englishTranslation: "The library at night is very quiet."
+  },
+  {
+    id: "n5_hira_vocab_13",
+    type: "cloze",
+    level: 5,
+    subject: "おとうと",
+    sentence: "わたしの　[ ]は　しょうがっこうの　せいとです。",
+    questionText: "Choose the family relation in Hiragana that best completes the sentence.",
+    options: ["おとうと", "おとうさん", "おじさん", "おばあさん"],
+    correctAnswer: "おとうと",
+    explanation: "弟 (おとうと - otōto) means 'younger brother'. おとうさん is father, おじさん is uncle, and おばあさん is grandmother.",
+    englishTranslation: "My younger brother is an elementary school student."
+  },
+  {
+    id: "n5_hira_vocab_14",
+    type: "cloze",
+    level: 5,
+    subject: "やすみ",
+    sentence: "らいしゅうの　きんようびは　がっこうの　[ ]です。",
+    questionText: "Choose the noun in Hiragana that best completes the sentence.",
+    options: ["やすみ", "じゅぎょう", "へや", "しゅくだい"],
+    correctAnswer: "やすみ",
+    explanation: "休み (やすみ - yasumi) means 'holiday/break'. 授業 (じゅぎょう) is lesson, へや is room, and 宿題 (しゅくだい) is homework.",
+    englishTranslation: "Next week's Friday is a school holiday."
+  },
+  {
+    id: "n5_hira_vocab_15",
+    type: "cloze",
+    level: 5,
+    subject: "きっぷ",
+    sentence: "えきで　でんしゃの　[ ]を　かいました。",
+    questionText: "Choose the noun in Hiragana that best completes the sentence.",
+    options: ["きっぷ", "さいふ", "てがみ", "ちず"],
+    correctAnswer: "きっぷ",
+    explanation: "切符 (きっぷ - kippu) means 'ticket'. さいふ is wallet, てがみ is letter, and ちず is map.",
+    englishTranslation: "I bought a train ticket at the station."
+  },
+  {
+    id: "n5_hira_vocab_16",
+    type: "cloze",
+    level: 5,
+    subject: "あびます",
+    sentence: "おきてから、　シャワーを　[ ]。",
+    questionText: "Choose the verb in Hiragana that best completes the sentence.",
+    options: ["あびます", "のみます", "よみます", "はきます"],
+    correctAnswer: "あびます",
+    explanation: "浴びる (あびる - abiru) means 'to bathe/pour over oneself'. シャワーをあびる is the phrase for taking a shower. はきます is to wear on lower body.",
+    englishTranslation: "After waking up, I take a shower."
+  },
+  {
+    id: "n5_hira_vocab_17",
+    type: "cloze",
+    level: 5,
+    subject: "くらい",
+    sentence: "この　へやは　でんきが　ありませんから　[ ]です。",
+    questionText: "Choose the adjective in Hiragana that best completes the sentence.",
+    options: ["くらい", "あかるい", "ひろい", "あつい"],
+    correctAnswer: "くらい",
+    explanation: "暗い (くらい - kurai) means 'dark'. Bright is あかるい, spacious is ひろい, and hot is あつい.",
+    englishTranslation: "Because this room has no electric lights, it is dark."
+  },
+  {
+    id: "n5_hira_vocab_18",
+    type: "cloze",
+    level: 5,
+    subject: "おそく",
+    sentence: "きのうの　よるは　[ ]まで　べんきょうしました。",
+    questionText: "Choose the adverb in Hiragana that best completes the sentence.",
+    options: ["おそく", "はやく", "ゆっくり", "まっすぐ"],
+    correctAnswer: "おそく",
+    explanation: "遅く (おそく - osoku) means 'late'. 遅くまで means 'until late'. はやく is early/fast,ゆっくり is slowly, and まっすぐ is straight.",
+    englishTranslation: "Yesterday night, I studied until late."
+  },
+  {
+    id: "n5_hira_vocab_19",
+    type: "cloze",
+    level: 5,
+    subject: "あかるく",
+    sentence: "まどを　あけると、　へやが　[ ]　なります。",
+    questionText: "Choose the adverb in Hiragana that best completes the sentence.",
+    options: ["あかるく", "おもく", "きたなく", "かるく"],
+    correctAnswer: "あかるく",
+    explanation: "明るい (あかるい - akarui) means 'bright'. Adjective + なる (to become) takes the adverbial form: 明るく (あかるく). おもく is heavy, きたなく is dirty, and かるく is light.",
+    englishTranslation: "When you open the window, the room becomes bright."
+  },
+  {
+    id: "n5_hira_vocab_20",
+    type: "cloze",
+    level: 5,
+    subject: "かぜ",
+    sentence: "つよい　[ ]が　ふいていますから、　さむいです。",
+    questionText: "Choose the noun in Hiragana that best completes the sentence.",
+    options: ["かぜ", "はな", "あめ", "とび"],
+    correctAnswer: "かぜ",
+    explanation: "風 (かぜ - kaze) means 'wind'. 吹く (ふく - fuku) is the verb used for wind blowing. あめ is rain, はな is flower, and とび is jump/kite.",
+    englishTranslation: "Because a strong wind is blowing, it is cold."
+  },
+  {
+    id: "n5_hira_vocab_21",
+    type: "cloze",
+    level: 5,
+    subject: "かいます",
+    sentence: "スーパーで　りんごと　バナナを　[ ]。",
+    questionText: "Choose the verb in Hiragana that best completes the sentence.",
+    options: ["かいます", "かきます", "あいます", "ききます"],
+    correctAnswer: "かいます",
+    explanation: "買う (かう - kau) means 'to buy'. 書く (かく) is to write, 会う (あう) is to meet, and 聞く (きく) is to listen.",
+    englishTranslation: "I buy apples and bananas at the supermarket."
+  },
+  {
+    id: "n5_hira_vocab_22",
+    type: "cloze",
+    level: 5,
+    subject: "はきます",
+    sentence: "あたらしくて　くろい　ズボンを　[ ]。",
+    questionText: "Choose the verb in Hiragana that best completes the sentence.",
+    options: ["はきます", "きます", "かぶります", "つけます"],
+    correctAnswer: "はきます",
+    explanation: "穿く (はきます - hakimasu) is used for wearing garments on the lower body (like trousers, skirts, socks). 着る (きます) is for upper body, かぶります is for hats, and つけます is for accessories/turning on.",
+    englishTranslation: "I put on new black trousers."
+  },
+  {
+    id: "n5_hira_vocab_23",
+    type: "cloze",
+    level: 5,
+    subject: "おなか",
+    sentence: "[ ]が　すきましたから、　なにか　たべたいです。",
+    questionText: "Choose the noun in Hiragana that best completes the sentence.",
+    options: ["おなか", "あたま", "こえ", "みみ"],
+    correctAnswer: "おなか",
+    explanation: "おなか (onaka) means 'stomach'. おなかがすく is the set phrase for 'to become hungry'. あたま is head, こえ is voice, andみみ is ear.",
+    englishTranslation: "Because I am hungry, I want to eat something."
+  },
+  {
+    id: "n5_hira_vocab_24",
+    type: "cloze",
+    level: 5,
+    subject: "きっさてん",
+    sentence: "ともだちと　[ ]で　コーヒーを　のみながら　はなしました。",
+    questionText: "Choose the place in Hiragana that best completes the sentence.",
+    options: ["きっさてん", "ようか", "たいしかん", "としょかん"],
+    correctAnswer: "きっさてん",
+    explanation: "喫茶店 (きっさてん - kissaten) means 'coffee lounge/shop'. ようか is 8th day, 大使館 (たいしかん) is embassy, and 図書館 (としょかん) is library.",
+    englishTranslation: "I talked with my friend while drinking coffee at the coffee lounge."
+  },
+  {
+    id: "n5_hira_vocab_25",
+    type: "cloze",
+    level: 5,
+    subject: "へや",
+    sentence: "わたしの　[ ]は　せまいですが　とても　きれいです。",
+    questionText: "Choose the noun in Hiragana that best completes the sentence.",
+    options: ["へや", "いえ", "にわ", "はこ"],
+    correctAnswer: "へや",
+    explanation: "部屋 (へや - heya) means 'room'. 家 (いえ) is house, 庭 (にわ) is garden, and 箱 (はこ) is box.",
+    englishTranslation: "My room is narrow but very clean."
   }
 ];
 
 export const stripFurigana = (text: string): string => {
   return text.replace(/\{[^}]*\}/g, "");
 };
+
+export const convertToHiraganaOnly = (text: string): string => {
+  // Replace base{reading} with spaced reading
+  let result = text.replace(/([^{}\s]+)\{([^}]+)\}/g, " $2 ");
+  
+  // Clean up bold markers
+  result = result.replace(/\*\*/g, "");
+  
+  // Add space around Japanese punctuation
+  result = result
+    .replace(/、/g, "、 ")
+    .replace(/。/g, "。 ")
+    .replace(/？/g, "？ ")
+    .replace(/！/g, "！ ");
+  
+  // Replace full-width and half-width spaces with standard spaces, clean up double spaces
+  result = result
+    .replace(/[\s　]+/g, " ")
+    .trim();
+    
+  return result;
+};
+
+export const getReadingForSubjectInSentence = (sentence: string, subject: string): string => {
+  const regex = new RegExp(`${subject}\\{([^}]+)\\}`);
+  const match = regex.exec(sentence);
+  if (match) {
+    return match[1];
+  }
+  return subject; // Fallback if no furigana annotation found
+};
+
 
 // === SENTENCE TEMPLATES FOR COMPREHENSION & TRANSLATION ===
 export interface SentenceTemplate {
@@ -1768,6 +2099,118 @@ export const generateQuestions = (): Question[] => {
       correctAnswer: subject,
       explanation: `The sentence is: "${cleanJp}" (translates to: "${temp.englishTranslation}"). The correct word is 【${subject}】.`,
       englishTranslation: temp.englishTranslation
+    });
+
+    // D. N5 Hiragana-only Cloze Question (mimicking real N5 exam style)
+    if (level === 5) {
+      const hiraSubject = getReadingForSubjectInSentence(temp.sentence, subject);
+      // Generate spaced Hiragana version of the sentence, but keep the [ ] blank intact
+      const spacedHiraSentence = convertToHiraganaOnly(clozeJp);
+      
+      // Get distractors in Hiragana
+      const hiraClozeDist = clozeDist.map(dist => {
+        const foundTemplate = SENTENCE_TEMPLATES.find(t => t.subject === dist);
+        return getReadingForSubjectInSentence(foundTemplate ? foundTemplate.sentence : "", dist);
+      });
+
+      generated.push({
+        id: `g_s_hira_cloze_${index}_${subject}`,
+        type: "cloze",
+        level: 5,
+        subject,
+        sentence: spacedHiraSentence,
+        questionText: "Choose the word in Hiragana that best completes the sentence.",
+        options: shuffle([hiraSubject, ...hiraClozeDist]),
+        correctAnswer: hiraSubject,
+        explanation: `The sentence in Hiragana is: "${convertToHiraganaOnly(temp.sentence)}" (meaning: "${temp.englishTranslation}"). The correct word is 【${hiraSubject}】.`,
+        englishTranslation: temp.englishTranslation
+      });
+    }
+  });
+
+  // --- 4. Vocabulary questions from vocab JSON lists (N5, N4, N3) for words not already processed ---
+  const allVocabWordsList = [
+    ...allVocabWords,
+    ...n5Vocab.words.map(w => w.word),
+    ...n4Vocab.words.map(w => w.word),
+    ...n3Vocab.words.map(w => w.word),
+  ];
+  const allVocabReadingsList = [
+    ...allVocabReadings,
+    ...n5Vocab.words.map(w => w.furigana || w.word),
+    ...n4Vocab.words.map(w => w.furigana || w.word),
+    ...n3Vocab.words.map(w => w.furigana || w.word),
+  ];
+  const allVocabMeaningsList = [
+    ...allVocabMeanings,
+    ...n5Vocab.words.map(w => w.meaning),
+    ...n4Vocab.words.map(w => w.meaning),
+    ...n3Vocab.words.map(w => w.meaning),
+  ];
+
+  const allVocabs = [
+    ...n5Vocab.words,
+    ...n4Vocab.words,
+    ...n3Vocab.words
+  ];
+
+  allVocabs.forEach((vocabItem) => {
+    const vocabWord = vocabItem.word;
+    const vocabReading = vocabItem.furigana || vocabItem.word;
+    const vocabMeaning = vocabItem.meaning;
+    const level = vocabItem.level as 5 | 4 | 3;
+
+    if (processedVocab.has(vocabWord)) return;
+    processedVocab.add(vocabWord);
+
+    // Only generate Kanji Select and Reading if the word actually has Kanji
+    const hasKanji = vocabWord !== vocabReading && !!vocabWord.match(/[\u4e00-\u9faf]/);
+
+    if (hasKanji) {
+      // A. Reading
+      const readDist = getDistractors(allVocabReadingsList, vocabReading, 3);
+      generated.push({
+        id: `g_v_json_read_${vocabWord}`,
+        type: "reading",
+        level,
+        subject: vocabWord,
+        sentence: `単語: 【${vocabWord}】`,
+        questionText: `What is the correct reading of the word 【${vocabWord}】?`,
+        options: shuffle([vocabReading, ...readDist]),
+        correctAnswer: vocabReading,
+        explanation: `【${vocabWord}】 is read as '${vocabReading}'.`,
+        englishTranslation: `Reading of 【${vocabWord}】`
+      });
+
+      // B. Kanji Select
+      const wordDist = getDistractors(allVocabWordsList, vocabWord, 3);
+      generated.push({
+        id: `g_v_json_kanji_${vocabWord}`,
+        type: "kanji_select",
+        level,
+        subject: vocabWord,
+        sentence: `読み: "${vocabReading}" | 意味: "${vocabMeaning}"`,
+        questionText: `How do you write the word read as "${vocabReading}" in Kanji?`,
+        options: shuffle([vocabWord, ...wordDist]),
+        correctAnswer: vocabWord,
+        explanation: `The word is written as 【${vocabWord}】.`,
+        englishTranslation: `Write "${vocabReading}" in Kanji`
+      });
+    }
+
+    // C. Meaning (Always generate this)
+    const meanDist = getDistractors(allVocabMeaningsList, vocabMeaning, 3);
+    generated.push({
+      id: `g_v_json_mean_${vocabWord}`,
+      type: "meaning",
+      level,
+      subject: vocabWord,
+      sentence: hasKanji ? `単語: 【${vocabWord}】 (${vocabReading})` : `単語: 【${vocabWord}】`,
+      questionText: `What does the word 【${vocabWord}】 mean?`,
+      options: shuffle([vocabMeaning, ...meanDist]),
+      correctAnswer: vocabMeaning,
+      explanation: `【${vocabWord}】 means '${vocabMeaning}'.`,
+      englishTranslation: `Meaning of 【${vocabWord}】`
     });
   });
 
