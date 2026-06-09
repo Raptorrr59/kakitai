@@ -1170,6 +1170,101 @@ h1 {
   color: rgba(0, 0, 0, 0.06);
 }
 
+.kanji-svg-guide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.3s ease;
+}
+
+.kanji-path-guide {
+  fill: none;
+  stroke: var(--color-text-muted);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.15;
+  transition: stroke 0.3s, opacity 0.3s, stroke-width 0.3s;
+}
+
+[data-theme="light"] .kanji-path-guide {
+  stroke: #000000;
+  opacity: 0.08;
+}
+
+[data-theme="hokusai"] .kanji-path-guide {
+  stroke: var(--color-text-muted);
+  opacity: 0.18;
+}
+
+.kanji-path-guide.animating {
+  stroke: var(--color-kunyomi);
+  opacity: 0.85;
+  stroke-width: 4.5;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw-stroke-animation 1.2s linear forwards;
+}
+
+.kanji-number-text {
+  font-size: 7.5px;
+  font-weight: 700;
+  fill: var(--color-onyomi);
+  opacity: 0.65;
+  font-family: var(--font-sans);
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="light"] .kanji-number-text {
+  fill: #0056b3;
+  opacity: 0.75;
+}
+
+[data-theme="hokusai"] .kanji-number-text {
+  fill: var(--color-onyomi);
+  opacity: 0.8;
+}
+
+.stroke-count-badge {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: all 0.3s ease;
+}
+
+.stroke-count-badge.match {
+  color: var(--color-success) !important;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  animation: pulse-success-animation 1.5s infinite ease-in-out;
+}
+
+@keyframes draw-stroke-animation {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pulse-success-animation {
+  0%, 100% {
+    transform: scale(1);
+    text-shadow: 0 0 0px rgba(16, 185, 129, 0);
+  }
+  50% {
+    transform: scale(1.05);
+    text-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+  }
+}
+
 .canvas-footer {
   display: flex;
   justify-content: space-between;

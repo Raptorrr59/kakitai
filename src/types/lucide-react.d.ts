@@ -1,0 +1,43 @@
+declare module 'lucide-react' {
+  import React from 'react';
+  
+  export const Trash2: React.ComponentType<any>;
+  export const RotateCcw: React.ComponentType<any>;
+  export const RotateCw: React.ComponentType<any>;
+  export const Eye: React.ComponentType<any>;
+  export const EyeOff: React.ComponentType<any>;
+  export const Play: React.ComponentType<any>;
+  export const Pause: React.ComponentType<any>;
+  export const Check: React.ComponentType<any>;
+  export const CheckCircle2: React.ComponentType<any>;
+  export const AlertCircle: React.ComponentType<any>;
+  export const Volume2: React.ComponentType<any>;
+  export const Sparkles: React.ComponentType<any>;
+  export const BookOpen: React.ComponentType<any>;
+  export const Award: React.ComponentType<any>;
+  export const Edit3: React.ComponentType<any>;
+  export const Calendar: React.ComponentType<any>;
+  export const GraduationCap: React.ComponentType<any>;
+  export const FolderOpen: React.ComponentType<any>;
+  export const Keyboard: React.ComponentType<any>;
+  export const ClipboardCheck: React.ComponentType<any>;
+  export const Home: React.ComponentType<any>;
+  export const ArrowRight: React.ComponentType<any>;
+  export const XCircle: React.ComponentType<any>;
+  export const Loader2: React.ComponentType<any>;
+
+  export const Clock: React.ComponentType<any>;
+  export const ArrowLeft: React.ComponentType<any>;
+  export const Flag: React.ComponentType<any>;
+  export const Timer: React.ComponentType<any>;
+  export const Search: React.ComponentType<any>;
+  export const X: React.ComponentType<any>;
+  export const Plus: React.ComponentType<any>;
+  export const LayoutDashboard: React.ComponentType<any>;
+  export const Moon: React.ComponentType<any>;
+  export const Sun: React.ComponentType<any>;
+  export const RefreshCw: React.ComponentType<any>;
+  export const Waves: React.ComponentType<any>;
+  export const Info: React.ComponentType<any>;
+  export const HelpCircle: React.ComponentType<any>;
+}

@@ -250,7 +250,7 @@ export const WritingView: React.FC<WritingViewProps> = ({
 
           <div className="writing-view-canvas-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
             {/* Canvas Panel */}
-            <CanvasPad kanji={selectedKanji.kanji} />
+            <CanvasPad kanji={selectedKanji.kanji} strokeCount={selectedKanji.strokeCount} />
 
             {/* Guide Instructions & Vocab */}
             <div className="glass-card" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>

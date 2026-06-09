@@ -202,7 +202,7 @@ export const KanjiBankView: React.FC<KanjiBankViewProps> = ({
                   </div>
 
                   {/* Tracing Canvas */}
-                  <CanvasPad kanji={activeKanji.kanji} />
+                  <CanvasPad kanji={activeKanji.kanji} strokeCount={activeKanji.strokeCount} />
                 </div>
 
                 {/* Right Side: Readings, Vocabulary, & SRS Actions */}
