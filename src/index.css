@@ -7,6 +7,7 @@
   --font-japanese: 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
 
   /* Theme: Dark (Sumi ink) — flat, restrained ink + vermilion palette */
+  color-scheme: dark; /* native controls (selects, options, inputs, scrollbars) follow dark */
   --color-bg-base: #100f12;
   --color-bg-surface: #17161a;
   --color-bg-surface-solid: #17161a;
@@ -44,11 +45,17 @@
   --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
   --transition-fast: 0.15s ease;
   --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Writing canvas — ink slate in dark mode */
+  --canvas-bg: #14120f;
+  --canvas-grid: rgba(243, 240, 236, 0.10);
+  --canvas-trace: rgba(243, 240, 236, 0.06);
 }
 
 /* Japanese Art (Hokusai Wave) Theme overrides — the light mode */
 [data-theme="hokusai"] {
   /* Japanese ink display headings; Mincho serif for kanji */
+  color-scheme: light; /* native controls follow the light washi mode */
   --font-japanese: 'Noto Serif JP', 'Sawarabi Mincho', 'MS Mincho', serif;
 
   /* Washi paper light palette — flat panels, hairline borders */
@@ -79,6 +86,11 @@
   --color-danger-bg: rgba(194, 77, 77, 0.10);
 
   --shadow-lg: 0 12px 32px rgba(20, 32, 43, 0.12);
+
+  /* Writing canvas — washi paper in the light mode (sumi ink on paper) */
+  --canvas-bg: #f1ede3;
+  --canvas-grid: rgba(20, 32, 43, 0.08);
+  --canvas-trace: rgba(20, 32, 43, 0.06);
 }
 
 [data-theme="hokusai"] body {
@@ -435,10 +447,16 @@ h1 {
   cursor: not-allowed;
 }
 
+.icon-btn.active {
+  background: var(--color-primary-glow);
+  border-color: color-mix(in srgb, var(--color-primary) 35%, transparent);
+  color: var(--color-primary);
+}
+
 .icon-btn.danger-hover:hover {
   background-color: var(--color-danger-bg);
   color: var(--color-danger);
-  border-color: rgba(239, 68, 68, 0.3);
+  border-color: color-mix(in srgb, var(--color-danger) 30%, transparent);
 }
 
 /* Tag Styles */
@@ -826,6 +844,13 @@ h1 {
   border-color: var(--color-primary);
 }
 
+/* Explicitly theme native dropdown option lists (belt-and-suspenders with color-scheme) */
+.filter-select option,
+select option {
+  background-color: var(--color-bg-surface-solid);
+  color: var(--color-text-primary);
+}
+
 .kanji-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -1088,9 +1113,11 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 16px;
+  padding: 10px 14px;
   background-color: var(--color-bg-surface);
   border-bottom: 1px solid var(--color-border);
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .canvas-title {
@@ -1101,13 +1128,24 @@ h1 {
 
 .canvas-controls {
   display: flex;
-  gap: 6px;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Compact icon-only toolbar — the canvas is narrow; labels live in the button title tooltips */
+.canvas-controls .icon-btn {
+  padding: 7px;
+}
+
+.canvas-controls .icon-btn span {
+  display: none;
 }
 
 .canvas-wrapper {
   position: relative;
   height: 250px;
-  background-color: #0d121f; /* slightly darker for drawing depth */
+  background-color: var(--canvas-bg); /* ink slate (dark) / washi paper (hokusai) */
   overflow: hidden;
   cursor: crosshair;
 }
@@ -1133,7 +1171,7 @@ h1 {
 
 .grid-line {
   position: absolute;
-  background: radial-gradient(circle, var(--color-border) 20%, transparent 20%);
+  background: radial-gradient(circle, var(--canvas-grid) 20%, transparent 20%);
   background-size: 8px 8px;
 }
 
@@ -1142,7 +1180,7 @@ h1 {
   height: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-left: 1px dashed rgba(255, 255, 255, 0.15);
+  border-left: 1px dashed var(--canvas-grid);
 }
 
 .grid-line.horizontal {
@@ -1150,7 +1188,7 @@ h1 {
   width: 100%;
   top: 50%;
   transform: translateY(-50%);
-  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  border-top: 1px dashed var(--canvas-grid);
 }
 
 .canvas-guide-kanji {
@@ -1160,14 +1198,10 @@ h1 {
   transform: translate(-50%, -50%);
   font-family: var(--font-japanese);
   font-size: 140px;
-  color: rgba(255, 255, 255, 0.05); /* very light trace */
+  color: var(--canvas-trace); /* faint traceable character */
   user-select: none;
   pointer-events: none;
   z-index: 2;
-}
-
-[data-theme="light"] .canvas-guide-kanji {
-  color: rgba(0, 0, 0, 0.06);
 }
 
 .kanji-svg-guide {
@@ -1188,23 +1222,13 @@ h1 {
   stroke-width: 3;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.15;
+  opacity: 0.22;
   transition: stroke 0.3s, opacity 0.3s, stroke-width 0.3s;
 }
 
-[data-theme="light"] .kanji-path-guide {
-  stroke: #000000;
-  opacity: 0.08;
-}
-
-[data-theme="hokusai"] .kanji-path-guide {
-  stroke: var(--color-text-muted);
-  opacity: 0.18;
-}
-
 .kanji-path-guide.animating {
-  stroke: var(--color-kunyomi);
-  opacity: 0.85;
+  stroke: var(--color-primary);
+  opacity: 0.9;
   stroke-width: 4.5;
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
@@ -1215,53 +1239,31 @@ h1 {
   font-size: 7.5px;
   font-weight: 700;
   fill: var(--color-onyomi);
-  opacity: 0.65;
+  opacity: 0.7;
   font-family: var(--font-sans);
   user-select: none;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
-[data-theme="light"] .kanji-number-text {
-  fill: #0056b3;
-  opacity: 0.75;
-}
-
-[data-theme="hokusai"] .kanji-number-text {
-  fill: var(--color-onyomi);
-  opacity: 0.8;
-}
-
 .stroke-count-badge {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
-  color: var(--color-text-secondary);
-  transition: all 0.3s ease;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
 }
 
 .stroke-count-badge.match {
-  color: var(--color-success) !important;
-  font-weight: 700;
+  color: var(--color-success);
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  animation: pulse-success-animation 1.5s infinite ease-in-out;
 }
 
 @keyframes draw-stroke-animation {
   to {
     stroke-dashoffset: 0;
-  }
-}
-
-@keyframes pulse-success-animation {
-  0%, 100% {
-    transform: scale(1);
-    text-shadow: 0 0 0px rgba(16, 185, 129, 0);
-  }
-  50% {
-    transform: scale(1.05);
-    text-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
   }
 }
 
@@ -1286,7 +1288,7 @@ h1 {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--color-border);
   cursor: pointer;
   transition: transform var(--transition-fast);
 }

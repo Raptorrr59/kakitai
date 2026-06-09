@@ -485,7 +485,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
               <div style={{ display: "flex", justifyContent: "center", color: isWarningTime ? "var(--color-danger)" : "var(--color-text-secondary)", marginBottom: "8px" }}>
                 <Timer size={32} className={isWarningTime ? "animate-pulse" : ""} />
               </div>
-              <div style={{ fontSize: "28px", fontWeight: "bold", fontFamily: "monospace", color: isWarningTime ? "var(--color-danger)" : "var(--color-text)" }}>
+              <div style={{ fontSize: "28px", fontWeight: "bold", fontFamily: "monospace", color: isWarningTime ? "var(--color-danger)" : "var(--color-text-primary)" }}>
                 {formatTime(timeRemaining)}
               </div>
               <div style={{ fontSize: "11px", color: "var(--color-text-muted)", textTransform: "uppercase", fontWeight: 600, marginTop: "4px" }}>
@@ -661,7 +661,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
               </div>
             </div>
             <div style={{ textAlign: "center", borderLeft: "1px dashed var(--color-border)", paddingLeft: "30px" }}>
-              <div style={{ fontSize: "56px", fontWeight: "bold", color: "var(--color-text)" }}>
+              <div style={{ fontSize: "56px", fontWeight: "bold", color: "var(--color-text-primary)" }}>
                 {correctCount} / {totalQuestions}
               </div>
               <div style={{ fontSize: "13px", color: "var(--color-text-muted)", textTransform: "uppercase", fontWeight: 600 }}>
@@ -733,15 +733,15 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
 
                     let border = "1px solid var(--color-border)";
                     let bg = "transparent";
-                    let color = "var(--color-text)";
+                    let color = "var(--color-text-primary)";
 
                     if (isCorrectOption) {
-                      border = "1px solid rgba(16, 185, 129, 0.4)";
-                      bg = "rgba(16, 185, 129, 0.08)";
+                      border = "1px solid color-mix(in srgb, var(--color-success) 40%, transparent)";
+                      bg = "var(--color-success-bg)";
                       color = "var(--color-success)";
                     } else if (isSelected && !isCorrect) {
-                      border = "1px solid rgba(239, 68, 68, 0.4)";
-                      bg = "rgba(239, 68, 68, 0.08)";
+                      border = "1px solid color-mix(in srgb, var(--color-danger) 40%, transparent)";
+                      bg = "var(--color-danger-bg)";
                       color = "var(--color-danger)";
                     }
 
@@ -798,7 +798,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
 
                 {/* Subject Focus detail card */}
                 <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", padding: "14px", marginTop: "12px", border: "1px solid var(--color-border)", fontSize: "12px" }}>
-                  <div style={{ fontWeight: 600, color: "var(--color-text)", marginBottom: "6px", borderBottom: "1px dashed var(--color-border)", paddingBottom: "4px" }}>
+                  <div style={{ fontWeight: 600, color: "var(--color-text-primary)", marginBottom: "6px", borderBottom: "1px dashed var(--color-border)", paddingBottom: "4px" }}>
                     Subject Focus: <strong style={{ color: "var(--color-primary)" }}>{q.subject}</strong>
                   </div>
                   {renderSubjectExplanation(q.subject)}

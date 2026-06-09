@@ -13,7 +13,7 @@ export const CanvasPad: React.FC<CanvasPadProps> = ({ kanji, strokeCount, onStro
   const [isDrawing, setIsDrawing] = useState(false);
   const [showGuide, setShowGuide] = useState(true);
   const [brushSize, setBrushSize] = useState(6);
-  const [brushColor, setBrushColor] = useState("#20C997"); // Teal glow accent
+  const [brushColor, setBrushColor] = useState("#D65A3C"); // Vermilion ink (default)
   const [history, setHistory] = useState<string[]>([]); // Saves dataURLs for undo
   const [redoHistory, setRedoHistory] = useState<string[]>([]); // Saves dataURLs for redo
 
@@ -452,7 +452,7 @@ export const CanvasPad: React.FC<CanvasPadProps> = ({ kanji, strokeCount, onStro
       <div className="canvas-footer">
         <div className="color-presets">
           <span className="label">Ink Color:</span>
-          {["#20C997", "#FF6B6B", "#4D96FF", "#ECEFF4"].map((color) => (
+          {["#D65A3C", "#2D6A78", "#C79A4E", "#5F8A75"].map((color) => (
             <button
               key={color}
               type="button"

@@ -868,7 +868,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
 
                 {/* Subject Details Explanation Card */}
                 <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", padding: "16px", marginTop: "16px", marginBottom: "16px", border: "1px solid var(--color-border)", textAlign: "left" }}>
-                  <h5 style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", marginTop: 0, marginBottom: "10px", borderBottom: "1px dashed var(--color-border)", paddingBottom: "6px", color: "var(--color-text)" }}>
+                  <h5 style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", marginTop: 0, marginBottom: "10px", borderBottom: "1px dashed var(--color-border)", paddingBottom: "6px", color: "var(--color-text-primary)" }}>
                     Subject Focus: <strong style={{ fontSize: "15px", color: "var(--color-primary)" }}>{currentQuestion.subject}</strong>
                   </h5>
                   {renderSubjectExplanation(currentQuestion.subject)}

@@ -34,6 +34,18 @@ interface KanjiCanvasProps {
 
 const KanjiCanvas: React.FC<KanjiCanvasProps> = ({ kanji }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Track the active theme so the baked canvas pixels redraw with the right ink on theme change
+  const [theme, setTheme] = useState<string>(
+    () => document.documentElement.getAttribute("data-theme") || "dark"
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setTheme(document.documentElement.getAttribute("data-theme") || "dark");
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -41,11 +53,13 @@ const KanjiCanvas: React.FC<KanjiCanvasProps> = ({ kanji }) => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Retrieve theme colors dynamically
+    const isHokusai = theme === "hokusai";
+
+    // Retrieve theme colors dynamically (re-read whenever the theme changes)
     const computed = window.getComputedStyle(canvas);
-    const textColor = computed.getPropertyValue("--color-text-primary") || "#f8fafc";
-    const bgColor = computed.getPropertyValue("--color-bg-surface-solid") || "#121826";
-    const borderColor = computed.getPropertyValue("--color-border") || "rgba(255, 255, 255, 0.08)";
+    const textColor = computed.getPropertyValue("--color-text-primary").trim() || "#f3f0ec";
+    const bgColor = computed.getPropertyValue("--color-bg-surface-solid").trim() || "#17161a";
+    const borderColor = computed.getPropertyValue("--color-border").trim() || "rgba(243, 240, 236, 0.1)";
 
     const size = 180;
     canvas.width = size;
@@ -55,12 +69,8 @@ const KanjiCanvas: React.FC<KanjiCanvasProps> = ({ kanji }) => {
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, size, size);
 
-    // Traditional genkouyoushi dashed grid lines
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
-    // If background is very light, adjust grid contrast
-    if (textColor.includes("0") || textColor.includes("15") || textColor === "#0f172a") {
-      ctx.strokeStyle = "rgba(0, 0, 0, 0.05)";
-    }
+    // Traditional genkouyoushi dashed grid lines (theme-aware)
+    ctx.strokeStyle = isHokusai ? "rgba(20, 32, 43, 0.10)" : "rgba(243, 240, 236, 0.07)";
     ctx.lineWidth = 1.5;
     ctx.setLineDash([5, 5]);
 
@@ -83,23 +93,22 @@ const KanjiCanvas: React.FC<KanjiCanvasProps> = ({ kanji }) => {
     ctx.strokeRect(0, 0, size, size);
 
     // Draw the Kanji large
-    const isHokusai = document.documentElement.getAttribute("data-theme") === "hokusai";
-    const fontStr = isHokusai 
+    const fontStr = isHokusai
       ? "bold 95px 'Noto Serif JP', 'Sawarabi Mincho', 'MS Mincho', serif"
       : "bold 95px 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif";
     ctx.font = fontStr;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = textColor;
-    
-    // Draw shadows to give a tactile, brush-like feel
+
+    // Subtle depth shadow behind the stroke
     ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
     ctx.shadowBlur = 4;
     ctx.shadowOffsetX = 1;
     ctx.shadowOffsetY = 2;
 
     ctx.fillText(kanji, size / 2, size / 2 + 5);
-  }, [kanji]);
+  }, [kanji, theme]);
 
   return (
     <canvas
@@ -440,8 +449,8 @@ export const TypingView: React.FC<TypingViewProps> = ({
                     alignItems: "center",
                     padding: "12px 16px",
                     gap: "16px",
-                    borderColor: result.isCorrect ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.15)",
-                    backgroundColor: "rgba(255, 255, 255, 0.01)"
+                    borderColor: result.isCorrect ? "color-mix(in srgb, var(--color-success) 30%, transparent)" : "color-mix(in srgb, var(--color-danger) 30%, transparent)",
+                    backgroundColor: "transparent"
                   }}
                 >
                   <div style={{ fontSize: "28px", fontWeight: "bold", fontFamily: "var(--font-japanese)" }}>
@@ -675,7 +684,7 @@ export const TypingView: React.FC<TypingViewProps> = ({
                     padding: "12px 16px",
                     borderRadius: "var(--radius-md)",
                     backgroundColor: isCorrectAnswer ? "var(--color-success-bg)" : "var(--color-danger-bg)",
-                    border: `1px solid ${isCorrectAnswer ? "rgba(16, 185, 129, 0.2)" : "rgba(239, 68, 68, 0.2)"}`
+                    border: `1px solid ${isCorrectAnswer ? "color-mix(in srgb, var(--color-success) 30%, transparent)" : "color-mix(in srgb, var(--color-danger) 30%, transparent)"}`
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -698,7 +707,7 @@ export const TypingView: React.FC<TypingViewProps> = ({
                 </div>
 
                 {!isCorrectAnswer && (
-                  <div className="glass-card" style={{ display: "flex", justifyContent: "space-around", alignItems: "center", padding: "16px", background: "rgba(239, 68, 68, 0.03)", borderColor: "rgba(239, 68, 68, 0.15)", margin: "8px 0" }}>
+                  <div className="glass-card" style={{ display: "flex", justifyContent: "space-around", alignItems: "center", padding: "16px", background: "var(--color-danger-bg)", borderColor: "color-mix(in srgb, var(--color-danger) 25%, transparent)", margin: "8px 0" }}>
                     <div style={{ textAlign: "center" }}>
                       <span style={{ fontSize: "11px", color: "var(--color-text-muted)", textTransform: "uppercase", display: "block", marginBottom: "4px" }}>Your Answer</span>
                       <span className="kanji-text" style={{ fontSize: "48px", color: "var(--color-danger)", display: "block", minHeight: "58px", lineHeight: "58px" }}>
