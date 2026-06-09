@@ -502,53 +502,129 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
   }
 
   return (
-    <div className="practice-view animate-fade-in">
+    <div className="practice-view practice-arena animate-fade-in">
       {!sessionActive && (
-        <div className="practice-container" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-          <div className="glass-card" style={{ textAlign: "center", padding: "40px" }}>
-            <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-              <div className="stat-icon-wrapper purple" style={{ width: "64px", height: "64px", borderRadius: "50%" }}>
-                <Award size={32} />
+        <div className="practice-container" style={{ maxWidth: "1040px" }}>
+          <div className="glass-card" style={{ padding: "32px", textAlign: "left" }}>
+            {/* Compact hero */}
+            <div className="practice-setup-hero">
+              <div className="stat-icon-wrapper purple" style={{ width: "56px", height: "56px", borderRadius: "50%", flexShrink: 0 }}>
+                <Award size={28} />
               </div>
-            </div>
-            <h1 style={{ textAlign: "center", marginBottom: "12px" }}>Kakitai Practice Arena</h1>
-            <p style={{ color: "var(--color-text-secondary)", textAlign: "center", lineHeight: 1.6, marginBottom: "28px" }}>
-              Test your writing comprehension, reading context, and sentence vocabulary. 
-              Each session contains 10 randomized multiple-choice questions assessing readings, meanings, and spelling context.
-            </p>
-
-            <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", border: "1px dashed var(--color-border)", marginBottom: "28px" }}>
-              <h3 style={{ marginBottom: "10px" }}>Quiz Layout:</h3>
-              <ul style={{ fontSize: "14px", color: "var(--color-text-secondary)", marginLeft: "20px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                <li>📚 <strong>Reading Comprehension:</strong> Identify correct furigana readings.</li>
-                <li>📝 <strong>Cloze Sentence:</strong> Fill in blanks with contextually correct Kanji.</li>
-                <li>✏️ <strong>Kanji Selection:</strong> Match Hiragana writing with proper Kanji spellings.</li>
-                <li>🗣️ <strong>Listening Prep:</strong> Click the speaker icon to play native pronunciation audio.</li>
-              </ul>
-            </div>
-
-            {/* Practice progress dashboard */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "28px" }}>
-              <div className="glass-card" style={{ padding: "16px", textAlign: "center", backgroundColor: "var(--color-bg-surface-solid)" }}>
-                <div style={{ fontSize: "28px", fontWeight: "bold", color: "#10b981", marginBottom: "4px" }}>
-                  {getPracticeStats().learnedCount}
-                </div>
-                <div style={{ fontSize: "12px", color: "var(--color-text-secondary)", textTransform: "uppercase", fontWeight: 600 }}>
-                  ✨ Items Learned
-                </div>
-              </div>
-              <div className="glass-card" style={{ padding: "16px", textAlign: "center", backgroundColor: "var(--color-bg-surface-solid)" }}>
-                <div style={{ fontSize: "28px", fontWeight: "bold", color: "var(--color-primary)", marginBottom: "4px" }}>
-                  {getPracticeStats().inProgressCount}
-                </div>
-                <div style={{ fontSize: "12px", color: "var(--color-text-secondary)", textTransform: "uppercase", fontWeight: 600 }}>
-                  📈 In Progress
-                </div>
+              <div>
+                <h1 style={{ marginBottom: "6px" }}>Kakitai Practice Arena</h1>
+                <p style={{ color: "var(--color-text-secondary)", lineHeight: 1.5, fontSize: "14px", margin: 0 }}>
+                  Ten randomized multiple-choice questions per session — readings, meanings, and spelling context, with optional hints to guide you.
+                </p>
               </div>
             </div>
 
-            {(getPracticeStats().learnedCount > 0 || getPracticeStats().inProgressCount > 0) && (
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+            {/* Two-column body */}
+            <div className="practice-setup-grid">
+              {/* Left: quiz layout + stats */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", border: "1px dashed var(--color-border)" }}>
+                  <h3 style={{ marginBottom: "12px", fontSize: "15px" }}>Quiz Layout</h3>
+                  <ul style={{ fontSize: "13.5px", color: "var(--color-text-secondary)", marginLeft: "18px", display: "flex", flexDirection: "column", gap: "8px", lineHeight: 1.4 }}>
+                    <li><strong>Reading Comprehension:</strong> Identify correct furigana readings.</li>
+                    <li><strong>Cloze Sentence:</strong> Fill in blanks with contextually correct Kanji.</li>
+                    <li><strong>Kanji Selection:</strong> Match Hiragana writing with proper Kanji spellings.</li>
+                    <li><strong>Listening Prep:</strong> Click the speaker icon for native pronunciation.</li>
+                  </ul>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
+                  <div className="glass-card" style={{ padding: "16px", textAlign: "center", backgroundColor: "var(--color-bg-surface-solid)" }}>
+                    <div style={{ fontSize: "28px", fontWeight: "bold", color: "var(--color-success)", marginBottom: "4px" }}>
+                      {getPracticeStats().learnedCount}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "var(--color-text-secondary)", textTransform: "uppercase", fontWeight: 600 }}>
+                      Items Learned
+                    </div>
+                  </div>
+                  <div className="glass-card" style={{ padding: "16px", textAlign: "center", backgroundColor: "var(--color-bg-surface-solid)" }}>
+                    <div style={{ fontSize: "28px", fontWeight: "bold", color: "var(--color-primary)", marginBottom: "4px" }}>
+                      {getPracticeStats().inProgressCount}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "var(--color-text-secondary)", textTransform: "uppercase", fontWeight: 600 }}>
+                      In Progress
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: JLPT Progression Gating */}
+              <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", padding: "20px", textAlign: "left" }}>
+                <h3 style={{ marginBottom: "12px", fontSize: "15px" }}>
+                  JLPT Progression Board
+                </h3>
+                <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                  {/* N5 Level */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--color-border)", paddingBottom: "8px" }}>
+                    <div>
+                      <strong style={{ fontSize: "14px" }}>JLPT N5</strong>
+                      <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Basic Kanji & Vocabulary</div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <span className="tag" style={{ backgroundColor: "var(--color-success-bg)", color: "var(--color-success)", border: "1px solid color-mix(in srgb, var(--color-success) 30%, transparent)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                        Unlocked
+                      </span>
+                      <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
+                        {n5Learned} items learned
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* N4 Level */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--color-border)", paddingBottom: "8px" }}>
+                    <div>
+                      <strong style={{ fontSize: "14px" }}>JLPT N4</strong>
+                      <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Intermediate Kanji & Sentences</div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      {n4Unlocked ? (
+                        <span className="tag" style={{ backgroundColor: "var(--color-success-bg)", color: "var(--color-success)", border: "1px solid color-mix(in srgb, var(--color-success) 30%, transparent)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                          Unlocked
+                        </span>
+                      ) : (
+                        <span className="tag" style={{ backgroundColor: "var(--color-danger-bg)", color: "var(--color-danger)", border: "1px solid color-mix(in srgb, var(--color-danger) 30%, transparent)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                          Locked
+                        </span>
+                      )}
+                      <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
+                        {n4Unlocked ? `${n4Learned} items learned` : `Requires 6 N5 learned (${n5Learned}/6)`}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* N3 Level */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div>
+                      <strong style={{ fontSize: "14px" }}>JLPT N3</strong>
+                      <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Advanced Sentences & Grammar</div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      {n3Unlocked ? (
+                        <span className="tag" style={{ backgroundColor: "var(--color-success-bg)", color: "var(--color-success)", border: "1px solid color-mix(in srgb, var(--color-success) 30%, transparent)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                          Unlocked
+                        </span>
+                      ) : (
+                        <span className="tag" style={{ backgroundColor: "var(--color-danger-bg)", color: "var(--color-danger)", border: "1px solid color-mix(in srgb, var(--color-danger) 30%, transparent)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
+                          Locked
+                        </span>
+                      )}
+                      <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
+                        {n3Unlocked ? `${n3Learned} items learned` : !n4Unlocked ? "Unlock N4 first" : `Requires 6 N4 learned (${n4Learned}/6)`}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer actions */}
+            <div style={{ display: "flex", gap: "12px", alignItems: "center", marginTop: "24px" }}>
+              {(getPracticeStats().learnedCount > 0 || getPracticeStats().inProgressCount > 0) && (
                 <button
                   type="button"
                   className="btn btn-secondary"
@@ -557,89 +633,20 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                       resetPracticeProgress();
                     }
                   }}
-                  style={{ padding: "8px 16px", fontSize: "12px", color: "var(--color-danger)" }}
+                  style={{ fontSize: "13px", color: "var(--color-danger)", flexShrink: 0 }}
                 >
-                  Reset Practice Scores
+                  Reset Scores
                 </button>
-              </div>
-            )}
-
-            {/* JLPT Progression Gating */}
-            <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", padding: "20px", marginBottom: "28px", textAlign: "left" }}>
-              <h3 style={{ marginBottom: "12px", display: "flex", alignItems: "center", gap: "8px", fontSize: "15px" }}>
-                🔑 JLPT Progression Board
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                {/* N5 Level */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--color-border)", paddingBottom: "8px" }}>
-                  <div>
-                    <strong style={{ fontSize: "14px" }}>JLPT N5</strong>
-                    <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Basic Kanji & Vocabulary</div>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    <span className="tag" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
-                      🔓 Unlocked
-                    </span>
-                    <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
-                      {n5Learned} items learned
-                    </div>
-                  </div>
-                </div>
-
-                {/* N4 Level */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--color-border)", paddingBottom: "8px" }}>
-                  <div>
-                    <strong style={{ fontSize: "14px" }}>JLPT N4</strong>
-                    <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Intermediate Kanji & Sentences</div>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    {n4Unlocked ? (
-                      <span className="tag" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
-                        🔓 Unlocked
-                      </span>
-                    ) : (
-                      <span className="tag" style={{ backgroundColor: "rgba(239, 68, 68, 0.15)", color: "#ef4444", border: "1px solid rgba(239, 68, 68, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
-                        🔒 Locked
-                      </span>
-                    )}
-                    <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
-                      {n4Unlocked ? `${n4Learned} items learned` : `Requires 6 N5 learned (${n5Learned}/6)`}
-                    </div>
-                  </div>
-                </div>
-
-                {/* N3 Level */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <div>
-                    <strong style={{ fontSize: "14px" }}>JLPT N3</strong>
-                    <div style={{ fontSize: "12px", color: "var(--color-text-secondary)" }}>Advanced Sentences & Grammar</div>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    {n3Unlocked ? (
-                      <span className="tag" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
-                        🔓 Unlocked
-                      </span>
-                    ) : (
-                      <span className="tag" style={{ backgroundColor: "rgba(239, 68, 68, 0.15)", color: "#ef4444", border: "1px solid rgba(239, 68, 68, 0.3)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: 600 }}>
-                        🔒 Locked
-                      </span>
-                    )}
-                    <div style={{ fontSize: "11px", color: "var(--color-text-muted)", marginTop: "4px" }}>
-                      {n3Unlocked ? `${n3Learned} items learned` : !n4Unlocked ? "Unlock N4 first" : `Requires 6 N4 learned (${n4Learned}/6)`}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              )}
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={startSession}
+                style={{ flex: 1, padding: "14px 28px", fontSize: "16px" }}
+              >
+                Start Practice Session
+              </button>
             </div>
-
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={startSession}
-              style={{ width: "100%", padding: "14px 28px", fontSize: "16px" }}
-            >
-              Start Practice Session
-            </button>
           </div>
         </div>
       )}
@@ -664,32 +671,29 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
               <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
                 <span className="tag tag-jlpt">N{currentQuestion.level}</span>
                 {isLearned(currentQuestion.subject) ? (
-                  <span className="tag" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)" }}>✨ Learned</span>
+                  <span className="tag" style={{ backgroundColor: "var(--color-success-bg)", color: "var(--color-success)", border: "1px solid color-mix(in srgb, var(--color-success) 30%, transparent)" }}>Learned</span>
                 ) : (
-                  <span className="tag" style={{ backgroundColor: "var(--color-bg-surface-hover)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)" }}>📈 Score: {getScore(currentQuestion.subject)}/10</span>
+                  <span className="tag" style={{ backgroundColor: "var(--color-bg-surface-hover)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)" }}>Score: {getScore(currentQuestion.subject)}/10</span>
                 )}
                 <span className="tag" style={{
-                  backgroundColor: currentDifficulty === "easy" ? "rgba(59, 130, 246, 0.12)" :
-                                   currentDifficulty === "medium" ? "rgba(245, 158, 11, 0.12)" :
-                                   currentDifficulty === "hard" ? "rgba(239, 68, 68, 0.12)" :
-                                   "rgba(139, 92, 246, 0.12)",
-                  color: currentDifficulty === "easy" ? "#3b82f6" :
-                         currentDifficulty === "medium" ? "#f59e0b" :
-                         currentDifficulty === "hard" ? "#ef4444" :
-                         "#8b5cf6",
-                  border: currentDifficulty === "easy" ? "1px solid rgba(59, 130, 246, 0.25)" :
-                          currentDifficulty === "medium" ? "1px solid rgba(245, 158, 11, 0.25)" :
-                          currentDifficulty === "hard" ? "1px solid rgba(239, 68, 68, 0.25)" :
-                          "1px solid rgba(139, 92, 246, 0.25)",
+                  backgroundColor: currentDifficulty === "easy" ? "var(--color-kunyomi-bg)" :
+                                   currentDifficulty === "medium" ? "var(--color-warning-bg)" :
+                                   currentDifficulty === "hard" ? "var(--color-danger-bg)" :
+                                   "var(--color-primary-glow)",
+                  color: currentDifficulty === "easy" ? "var(--color-kunyomi)" :
+                         currentDifficulty === "medium" ? "var(--color-warning)" :
+                         currentDifficulty === "hard" ? "var(--color-danger)" :
+                         "var(--color-primary)",
+                  border: "1px solid color-mix(in srgb, currentColor 25%, transparent)",
                   fontSize: "11px",
                   fontWeight: 600,
                   padding: "2px 8px",
                   borderRadius: "6px"
                 }}>
-                  {currentDifficulty === "easy" ? "🐣 Novice" :
-                   currentDifficulty === "medium" ? "⚡ Intermediate" :
-                   currentDifficulty === "hard" ? "🔥 Advanced" :
-                   "🏆 Master"}
+                  {currentDifficulty === "easy" ? "Novice" :
+                   currentDifficulty === "medium" ? "Intermediate" :
+                   currentDifficulty === "hard" ? "Advanced" :
+                   "Master"}
                 </span>
                 <span className="label" style={{ fontSize: "12px" }}>
                   {currentQuestion.type === "kanji_select" ? "Kanji Selection" :
@@ -760,7 +764,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
               marginBottom: "20px"
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px" }}>
-                <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--color-text-secondary)" }}>💡 Learning Hints</span>
+                <span style={{ fontSize: "13px", fontWeight: "600", color: "var(--color-text-secondary)" }}>Learning Hints</span>
                 <div style={{ display: "flex", gap: "8px" }}>
                   <button
                     type="button"
@@ -769,7 +773,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                     disabled={showTranslationHint || isAnswered}
                     style={{ padding: "4px 8px", fontSize: "12px", display: "flex", alignItems: "center", gap: "4px" }}
                   >
-                    <span>🔍 English Hint</span>
+                    <span>English Hint</span>
                   </button>
                   <button
                     type="button"
@@ -783,7 +787,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                     disabled={eliminatedOptions.length > 0 || isAnswered}
                     style={{ padding: "4px 8px", fontSize: "12px", display: "flex", alignItems: "center", gap: "4px" }}
                   >
-                    <span>✂️ 50/50</span>
+                    <span>50 / 50</span>
                   </button>
                   <button
                     type="button"
@@ -791,7 +795,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                     onClick={() => setForceShowFurigana(prev => !prev)}
                     style={{ padding: "4px 8px", fontSize: "12px", display: "flex", alignItems: "center", gap: "4px" }}
                   >
-                    <span>📖 Force Furigana</span>
+                    <span>Force Furigana</span>
                   </button>
                 </div>
               </div>
@@ -865,7 +869,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                 {/* Subject Details Explanation Card */}
                 <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", padding: "16px", marginTop: "16px", marginBottom: "16px", border: "1px solid var(--color-border)", textAlign: "left" }}>
                   <h5 style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", marginTop: 0, marginBottom: "10px", borderBottom: "1px dashed var(--color-border)", paddingBottom: "6px", color: "var(--color-text)" }}>
-                    📚 Subject Focus: <strong style={{ fontSize: "15px", color: "var(--color-primary)" }}>{currentQuestion.subject}</strong>
+                    Subject Focus: <strong style={{ fontSize: "15px", color: "var(--color-primary)" }}>{currentQuestion.subject}</strong>
                   </h5>
                   {renderSubjectExplanation(currentQuestion.subject)}
                 </div>
@@ -889,7 +893,7 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
       {finished && (
         <div className="practice-container">
           <div className="glass-card result-card">
-            <h2>Practice Complete! 🎉</h2>
+            <h2>Practice Complete</h2>
             <p style={{ color: "var(--color-text-secondary)", marginTop: "8px", marginBottom: "32px" }}>
               Great effort! Review your metrics and look over the items.
             </p>
@@ -937,9 +941,9 @@ export const PracticeView: React.FC<PracticeViewProps> = ({ setView }) => {
                         <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
                           <span className="tag tag-jlpt" style={{ fontSize: "9px", padding: "1px 4px" }}>N{q.level}</span>
                           {isLearned(q.subject) ? (
-                            <span className="tag" style={{ fontSize: "9px", padding: "1px 4px", backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", border: "1px solid rgba(16, 185, 129, 0.3)" }}>✨ Learned</span>
+                            <span className="tag" style={{ fontSize: "9px", padding: "1px 4px", backgroundColor: "var(--color-success-bg)", color: "var(--color-success)", border: "1px solid color-mix(in srgb, var(--color-success) 30%, transparent)" }}>Learned</span>
                           ) : (
-                            <span className="tag" style={{ fontSize: "9px", padding: "1px 4px", backgroundColor: "var(--color-bg-surface-hover)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)" }}>📈 Score: {getScore(q.subject)}/10</span>
+                            <span className="tag" style={{ fontSize: "9px", padding: "1px 4px", backgroundColor: "var(--color-bg-surface-hover)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)" }}>Score: {getScore(q.subject)}/10</span>
                           )}
                           <span className="kanji-text" style={{ fontSize: "15px", fontWeight: 600, display: "flex", gap: "2px", flexWrap: "wrap", lineHeight: "1.8" }}>
                             {formatSentence(q.sentence)}

@@ -284,7 +284,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
         <div className="practice-container" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
           <div className="glass-card" style={{ textAlign: "center", padding: "40px" }}>
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-              <div className="stat-icon-wrapper blue" style={{ width: "64px", height: "64px", borderRadius: "50%", background: "rgba(59, 130, 246, 0.15)", color: "#3b82f6" }}>
+              <div className="stat-icon-wrapper blue" style={{ width: "64px", height: "64px", borderRadius: "50%", background: "var(--color-primary-glow)", color: "var(--color-primary)" }}>
                 <ClipboardCheck size={32} />
               </div>
             </div>
@@ -294,12 +294,12 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
             </p>
 
             <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", border: "1px dashed var(--color-border)", marginBottom: "28px", textAlign: "left" }}>
-              <h3 style={{ marginBottom: "10px", fontSize: "15px" }}>⚠️ Exam Rules:</h3>
+              <h3 style={{ marginBottom: "10px", fontSize: "15px" }}>Exam Rules</h3>
               <ul style={{ fontSize: "14px", color: "var(--color-text-secondary)", marginLeft: "20px", display: "flex", flexDirection: "column", gap: "8px" }}>
-                <li>⏱️ <strong>Timed Countdown:</strong> Exam submits automatically when time expires.</li>
-                <li>🚫 <strong>No Instant Answers:</strong> You will not see if your choices are right or wrong until you submit.</li>
-                <li>🔄 <strong>Exam Navigation:</strong> Navigate freely between all 20 questions, change answers, or flag questions for review.</li>
-                <li>📈 <strong>Detailed Score Report:</strong> Get a pass/fail grade (requires &ge; 60% to pass) and review mistakes with furigana explanations.</li>
+                <li><strong>Timed Countdown:</strong> Exam submits automatically when time expires.</li>
+                <li><strong>No Instant Answers:</strong> You will not see if your choices are right or wrong until you submit.</li>
+                <li><strong>Exam Navigation:</strong> Navigate freely between all 20 questions, change answers, or flag questions for review.</li>
+                <li><strong>Detailed Score Report:</strong> Get a pass/fail grade (requires &ge; 60% to pass) and review mistakes with furigana explanations.</li>
               </ul>
             </div>
 
@@ -341,7 +341,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
               type="button"
               className="btn btn-primary"
               onClick={() => startExam(level)}
-              style={{ width: "100%", maxWidth: "400px", padding: "14px 28px", fontSize: "16px", background: "#3b82f6", boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)", marginBottom: "12px" }}
+              style={{ width: "100%", maxWidth: "400px", padding: "14px 28px", fontSize: "16px", marginBottom: "12px" }}
             >
               Start JLPT Mock Exam
             </button>
@@ -380,7 +380,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
             {/* Exam Header bar */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--color-border)", paddingBottom: "16px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span className="tag" style={{ backgroundColor: "#3b82f6", color: "white", padding: "4px 10px", borderRadius: "4px", fontSize: "12px", fontWeight: "bold" }}>
+                <span className="tag" style={{ backgroundColor: "var(--color-primary)", color: "white", padding: "4px 10px", borderRadius: "4px", fontSize: "12px", fontWeight: "bold" }}>
                   JLPT N{selectedLevel} Exam
                 </span>
                 <span style={{ fontSize: "14px", color: "var(--color-text-secondary)" }}>
@@ -401,8 +401,8 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
                   gap: "6px",
                   borderRadius: "8px",
                   color: flagged[currentQuestion.id] ? "var(--color-kunyomi)" : "var(--color-text-secondary)",
-                  backgroundColor: flagged[currentQuestion.id] ? "rgba(32, 201, 151, 0.1)" : "transparent",
-                  border: flagged[currentQuestion.id] ? "1px solid rgba(32, 201, 151, 0.3)" : "1px solid var(--color-border)"
+                  backgroundColor: flagged[currentQuestion.id] ? "var(--color-kunyomi-bg)" : "transparent",
+                  border: flagged[currentQuestion.id] ? "1px solid color-mix(in srgb, var(--color-kunyomi) 30%, transparent)" : "1px solid var(--color-border)"
                 }}
                 title="Flag question to review later"
               >
@@ -430,9 +430,9 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
                     type="button"
                     className={`option-button ${isSelected ? "selected" : ""}`}
                     onClick={() => handleSelectOption(option)}
-                    style={isSelected ? { borderColor: "#3b82f6", backgroundColor: "rgba(59, 130, 246, 0.08)", color: "#3b82f6" } : {}}
+                    style={isSelected ? { borderColor: "var(--color-primary)", backgroundColor: "var(--color-primary-glow)", color: "var(--color-primary)" } : {}}
                   >
-                    <span className="option-badge" style={isSelected ? { backgroundColor: "#3b82f6", color: "white" } : {}}>
+                    <span className="option-badge" style={isSelected ? { backgroundColor: "var(--color-primary)", color: "white" } : {}}>
                       {String.fromCharCode(65 + idx)}
                     </span>
                     <span className="option-text">{option}</span>
@@ -511,14 +511,14 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
                   let border = "1px solid var(--color-border)";
 
                   if (isAnswered) {
-                    bgColor = "rgba(59, 130, 246, 0.15)";
-                    textColor = "#3b82f6";
-                    border = "1px solid rgba(59, 130, 246, 0.3)";
+                    bgColor = "var(--color-primary-glow)";
+                    textColor = "var(--color-primary)";
+                    border = "1px solid color-mix(in srgb, var(--color-primary) 30%, transparent)";
                   }
                   if (isFlagged) {
-                    bgColor = "rgba(32, 201, 151, 0.15)";
+                    bgColor = "var(--color-kunyomi-bg)";
                     textColor = "var(--color-kunyomi)";
-                    border = "1px solid rgba(32, 201, 151, 0.3)";
+                    border = "1px solid color-mix(in srgb, var(--color-kunyomi) 30%, transparent)";
                   }
                   if (isCurrent) {
                     border = "2px solid var(--color-primary)";
@@ -569,11 +569,11 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
                   <span>Unanswered</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <div style={{ width: "12px", height: "12px", borderRadius: "3px", backgroundColor: "rgba(59, 130, 246, 0.15)", border: "1px solid rgba(59, 130, 246, 0.3)" }} />
+                  <div style={{ width: "12px", height: "12px", borderRadius: "3px", backgroundColor: "var(--color-primary-glow)", border: "1px solid color-mix(in srgb, var(--color-primary) 30%, transparent)" }} />
                   <span>Answered</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  <div style={{ width: "12px", height: "12px", borderRadius: "3px", backgroundColor: "rgba(32, 201, 151, 0.15)", border: "1px solid rgba(32, 201, 151, 0.3)" }} />
+                  <div style={{ width: "12px", height: "12px", borderRadius: "3px", backgroundColor: "var(--color-kunyomi-bg)", border: "1px solid color-mix(in srgb, var(--color-kunyomi) 30%, transparent)" }} />
                   <span>Flagged for Review</span>
                 </div>
               </div>
@@ -608,11 +608,11 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
         {/* Results Banner */}
         <div className="glass-card" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "30px", padding: "40px", alignItems: "center", textAlign: "left" }}>
           <div>
-            <span className="tag" style={{ backgroundColor: "#3b82f6", color: "white", padding: "4px 10px", borderRadius: "4px", fontSize: "12px", fontWeight: "bold" }}>
+            <span className="tag" style={{ backgroundColor: "var(--color-primary)", color: "white", padding: "4px 10px", borderRadius: "4px", fontSize: "12px", fontWeight: "bold" }}>
               Exam Results: JLPT N{selectedLevel}
             </span>
             <h1 style={{ marginTop: "12px", marginBottom: "8px" }}>
-              {passed ? "🎉 Congratulations! You Passed!" : "😢 Keep Studying! You Failed"}
+              {passed ? "Congratulations! You Passed" : "Keep Studying"}
             </h1>
             <p style={{ color: "var(--color-text-secondary)", lineHeight: 1.5, margin: 0 }}>
               {passed 
@@ -625,7 +625,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
                 type="button"
                 className="btn btn-primary"
                 onClick={() => startExam(selectedLevel)}
-                style={{ background: "#3b82f6", display: "flex", alignItems: "center", gap: "6px" }}
+                style={{ background: "var(--color-primary)", display: "flex", alignItems: "center", gap: "6px" }}
               >
                 <RotateCcw size={16} />
                 <span>Retry Level N{selectedLevel}</span>
@@ -673,7 +673,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
 
         {/* Detailed Answer Review board */}
         <h2 style={{ fontSize: "16px", textTransform: "uppercase", color: "var(--color-text-muted)", letterSpacing: "0.05em", textAlign: "left", marginBottom: "0" }}>
-          🔎 Question Review & Answer Key
+          Question Review & Answer Key
         </h2>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -696,11 +696,11 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <span style={{ fontWeight: "bold", fontSize: "15px" }}>Question {idx + 1}</span>
                     {isCorrect ? (
-                      <span className="tag" style={{ backgroundColor: "rgba(16, 185, 129, 0.15)", color: "#10b981", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: "bold" }}>
+                      <span className="tag" style={{ backgroundColor: "var(--color-success-bg)", color: "var(--color-success)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: "bold" }}>
                         Correct
                       </span>
                     ) : (
-                      <span className="tag" style={{ backgroundColor: "rgba(239, 68, 68, 0.15)", color: "#ef4444", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: "bold" }}>
+                      <span className="tag" style={{ backgroundColor: "var(--color-danger-bg)", color: "var(--color-danger)", padding: "2px 8px", borderRadius: "4px", fontSize: "11px", fontWeight: "bold" }}>
                         Incorrect
                       </span>
                     )}
@@ -738,11 +738,11 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
                     if (isCorrectOption) {
                       border = "1px solid rgba(16, 185, 129, 0.4)";
                       bg = "rgba(16, 185, 129, 0.08)";
-                      color = "#10b981";
+                      color = "var(--color-success)";
                     } else if (isSelected && !isCorrect) {
                       border = "1px solid rgba(239, 68, 68, 0.4)";
                       bg = "rgba(239, 68, 68, 0.08)";
-                      color = "#ef4444";
+                      color = "var(--color-danger)";
                     }
 
                     return (
@@ -764,7 +764,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
                           width: "20px",
                           height: "20px",
                           borderRadius: "50%",
-                          backgroundColor: isCorrectOption ? "#10b981" : (isSelected ? "#ef4444" : "var(--color-bg-surface-hover)"),
+                          backgroundColor: isCorrectOption ? "var(--color-success)" : (isSelected ? "var(--color-danger)" : "var(--color-bg-surface-hover)"),
                           color: isCorrectOption || isSelected ? "white" : "var(--color-text-secondary)",
                           display: "flex",
                           alignItems: "center",
@@ -799,7 +799,7 @@ export const JLPTView: React.FC<JLPTViewProps> = ({ setView }) => {
                 {/* Subject Focus detail card */}
                 <div className="glass-card" style={{ backgroundColor: "var(--color-bg-surface-solid)", padding: "14px", marginTop: "12px", border: "1px solid var(--color-border)", fontSize: "12px" }}>
                   <div style={{ fontWeight: 600, color: "var(--color-text)", marginBottom: "6px", borderBottom: "1px dashed var(--color-border)", paddingBottom: "4px" }}>
-                    📚 Subject Focus: <strong style={{ color: "var(--color-primary)" }}>{q.subject}</strong>
+                    Subject Focus: <strong style={{ color: "var(--color-primary)" }}>{q.subject}</strong>
                   </div>
                   {renderSubjectExplanation(q.subject)}
                 </div>

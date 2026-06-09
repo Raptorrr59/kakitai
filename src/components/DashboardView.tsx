@@ -33,7 +33,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
     <div className="dashboard-view animate-fade-in">
       <div className="view-header">
         <div>
-          <h1>Konnichiwa! 👋</h1>
+          <h1>Konnichiwa</h1>
           <p style={{ color: "var(--color-text-secondary)", marginTop: "4px" }}>
             Welcome to Kakitai, your Japanese Kanji & Vocabulary study board.
           </p>
@@ -73,7 +73,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
                   type="button"
                   className="btn btn-primary"
                   onClick={() => setView("typing")}
-                  style={{ background: "var(--color-primary)", boxShadow: "0 4px 12px var(--color-primary-glow)" }}
                 >
                   <Keyboard size={16} />
                   <span>Type Kanji</span>
@@ -85,7 +84,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
                 type="button"
                 className="btn btn-primary"
                 onClick={() => setView("vocab")}
-                style={{ background: "var(--color-kunyomi)", boxShadow: "0 4px 12px rgba(32, 201, 151, 0.3)" }}
+                style={{ background: "var(--color-kunyomi)" }}
               >
                 <GraduationCap size={16} />
                 <span>Review Vocab</span>
@@ -94,7 +93,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
           </div>
         </div>
       ) : (
-        <div className="review-alert-banner" style={{ background: "linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(32, 201, 151, 0.08) 100%)", borderColor: "rgba(16, 185, 129, 0.2)" }}>
+        <div className="review-alert-banner" style={{ background: "var(--color-success-bg)", borderLeftColor: "var(--color-success)" }}>
           <div className="review-alert-content">
             <h3 className="review-alert-title" style={{ color: "var(--color-success)" }}>
               <CheckCircle2 size={20} />
@@ -111,7 +110,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
       <h2 style={{ fontSize: "16px", textTransform: "uppercase", color: "var(--color-text-muted)", letterSpacing: "0.05em", marginBottom: "12px" }}>
         Kanji Progress Details
       </h2>
-      <div className="stats-bar" style={{ marginBottom: "32px" }}>
+      <div className="stats-bar">
         <div className="glass-card stat-item">
           <div className="stat-icon-wrapper purple">
             <BookOpen size={20} />
@@ -156,9 +155,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
       <div className="dashboard-grid">
         {/* Left Side - Progress Overview */}
         <div className="glass-card">
-          <h2 style={{ marginBottom: "20px" }}>Learning Progress</h2>
-          
-          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+          <h2 style={{ marginBottom: "16px" }}>Learning Progress</h2>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             {/* Kanji study pool */}
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px", fontSize: "14px" }}>
@@ -208,7 +207,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
             </div>
           </div>
 
-          <h3 style={{ marginTop: "32px", marginBottom: "16px" }}>SRS Mastery Box Breakdown (Kanji)</h3>
+          <h3 style={{ marginTop: "20px", marginBottom: "12px" }}>SRS Mastery Box Breakdown (Kanji)</h3>
           <div className="stats-panel-grid">
             <div className="glass-card box-stat new">
               <span className="box-stat-num">{stats.newCount}</span>
@@ -228,7 +227,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
             </div>
           </div>
           
-          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "24px", borderTop: "1px solid var(--color-border)", paddingTop: "16px" }}>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "16px", borderTop: "1px solid var(--color-border)", paddingTop: "12px" }}>
             <button
               type="button"
               className="icon-btn danger-hover"
@@ -246,8 +245,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
         </div>
 
         {/* Right Side - Actions & Help */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-          <div className="glass-card" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <div className="glass-card" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             <h3>Study Recommendations</h3>
             <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", lineHeight: 1.5 }}>
               Maximize your retention by allocating 15 minutes a day. Here's what you can do right now:
@@ -297,7 +296,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ stats, vocabStats,
               type="button"
               className="btn btn-primary"
               onClick={() => setView("jlpt")}
-              style={{ justifyContent: "flex-start", width: "100%", background: "#3b82f6", boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)" }}
+              style={{ justifyContent: "flex-start", width: "100%" }}
             >
               <ClipboardCheck size={16} />
               <span>JLPT Mock Exam Simulator</span>

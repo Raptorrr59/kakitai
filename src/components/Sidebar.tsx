@@ -1,12 +1,12 @@
 import React from "react";
-import { BookOpen, LayoutDashboard, Award, Edit3, Moon, Sun, RefreshCw, GraduationCap, FolderOpen, Keyboard, Waves, ClipboardCheck } from "lucide-react";
+import { BookOpen, LayoutDashboard, Award, Edit3, Sun, RefreshCw, GraduationCap, FolderOpen, Keyboard, Waves, ClipboardCheck } from "lucide-react";
 
 interface SidebarProps {
   currentView: string;
   setView: (view: string) => void;
   dueCount: number;
   vocabDueCount: number;
-  theme: "dark" | "light" | "hokusai";
+  theme: "dark" | "hokusai";
   toggleTheme: () => void;
   onReset: () => void;
 }
@@ -143,20 +143,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           className="theme-toggle-btn"
           onClick={toggleTheme}
         >
-          {theme === "dark" ? (
-            <Sun size={15} />
-          ) : theme === "light" ? (
-            <Waves size={15} />
-          ) : (
-            <Moon size={15} />
-          )}
-          <span>
-            {theme === "dark"
-              ? "Light Mode"
-              : theme === "light"
-              ? "Hokusai Wave"
-              : "Dark Mode"}
-          </span>
+          {theme === "dark" ? <Waves size={15} /> : <Sun size={15} />}
+          <span>{theme === "dark" ? "Hokusai Wave" : "Dark Mode"}</span>
         </button>
 
         <button

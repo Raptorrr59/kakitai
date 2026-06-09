@@ -538,7 +538,7 @@ export const TypingView: React.FC<TypingViewProps> = ({
           <div
             style={{
               height: "100%",
-              background: "linear-gradient(to right, var(--color-primary), var(--color-kunyomi))",
+              background: "var(--color-primary)",
               width: `${((currentIndex + (isSubmitted ? 1 : 0)) / sessionKanji.length) * 100}%`,
               transition: "width 0.3s ease"
             }}
@@ -614,7 +614,7 @@ export const TypingView: React.FC<TypingViewProps> = ({
                     style={{
                       fontSize: "12px",
                       padding: "4px 10px",
-                      background: hintsRevealed.meaning ? "rgba(99, 102, 241, 0.1)" : "transparent",
+                      background: hintsRevealed.meaning ? "var(--color-primary-glow)" : "transparent",
                       borderColor: hintsRevealed.meaning ? "var(--color-primary)" : "var(--color-border)",
                       color: hintsRevealed.meaning ? "var(--color-primary)" : "var(--color-text-secondary)"
                     }}
@@ -630,7 +630,7 @@ export const TypingView: React.FC<TypingViewProps> = ({
                     style={{
                       fontSize: "12px",
                       padding: "4px 10px",
-                      background: hintsRevealed.reading ? "rgba(32, 201, 151, 0.1)" : "transparent",
+                      background: hintsRevealed.reading ? "var(--color-kunyomi-bg)" : "transparent",
                       borderColor: hintsRevealed.reading ? "var(--color-kunyomi)" : "var(--color-border)",
                       color: hintsRevealed.reading ? "var(--color-kunyomi)" : "var(--color-text-secondary)"
                     }}

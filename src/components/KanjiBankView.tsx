@@ -145,30 +145,32 @@ export const KanjiBankView: React.FC<KanjiBankViewProps> = ({
         </select>
       </div>
 
-      {/* Grid of cards */}
-      {filteredKanji.length > 0 ? (
-        <div className="kanji-grid">
-          {filteredKanji.map((item) => {
-            const progress = getKanjiProgress(item.kanji);
-            return (
-              <div
-                key={item.kanji}
-                className="glass-card kanji-card"
-                onClick={() => setActiveKanji(item)}
-              >
-                <div className={`card-srs-indicator box-${progress.box}`} />
-                <span className="tag tag-jlpt card-jlpt-tag">N{item.jlpt}</span>
-                <span className="char kanji-text">{item.kanji}</span>
-                <span className="meaning">{item.meanings[0]}</span>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="glass-card" style={{ textAlign: "center", padding: "48px 24px" }}>
-          <p style={{ color: "var(--color-text-secondary)" }}>No Kanji matched your query. Try resetting filters.</p>
-        </div>
-      )}
+      {/* Grid of cards — the only scrolling region on this page */}
+      <div className="bank-scroll-area">
+        {filteredKanji.length > 0 ? (
+          <div className="kanji-grid">
+            {filteredKanji.map((item) => {
+              const progress = getKanjiProgress(item.kanji);
+              return (
+                <div
+                  key={item.kanji}
+                  className="glass-card kanji-card"
+                  onClick={() => setActiveKanji(item)}
+                >
+                  <div className={`card-srs-indicator box-${progress.box}`} />
+                  <span className="tag tag-jlpt card-jlpt-tag">N{item.jlpt}</span>
+                  <span className="char kanji-text">{item.kanji}</span>
+                  <span className="meaning">{item.meanings[0]}</span>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="glass-card" style={{ textAlign: "center", padding: "48px 24px" }}>
+            <p style={{ color: "var(--color-text-secondary)" }}>No Kanji matched your query. Try resetting filters.</p>
+          </div>
+        )}
+      </div>
 
       {/* Kanji Details Modal */}
       {activeKanji && (

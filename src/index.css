@@ -1,177 +1,98 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  /* Fonts */
-  --font-sans: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Fonts — editorial: neutral sans for UI, serif for display & Japanese ink */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Noto Serif JP', 'Georgia', 'Times New Roman', serif;
   --font-japanese: 'Noto Sans JP', 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
 
-  /* Theme: Dark (Default) */
-  --color-bg-base: #0a0e17;
-  --color-bg-surface: rgba(18, 24, 38, 0.7);
-  --color-bg-surface-solid: #121826;
-  --color-bg-surface-hover: rgba(28, 38, 59, 0.8);
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-active: rgba(32, 201, 151, 0.4);
-  
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
-  
-  /* Accent Colors */
-  --color-primary: #6366f1; /* Indigo */
-  --color-primary-glow: rgba(99, 102, 241, 0.15);
-  
-  --color-onyomi: #ff6b6b; /* Coral Pink */
-  --color-onyomi-bg: rgba(255, 107, 107, 0.1);
-  --color-kunyomi: #20c997; /* Teal */
-  --color-kunyomi-bg: rgba(32, 201, 151, 0.1);
-  
-  --color-success: #10b981; /* Green */
-  --color-success-bg: rgba(16, 185, 129, 0.1);
-  --color-warning: #f59e0b; /* Yellow */
-  --color-warning-bg: rgba(245, 158, 11, 0.1);
-  --color-danger: #ef4444; /* Red */
-  --color-danger-bg: rgba(239, 68, 68, 0.1);
-  
-  /* Misc Settings */
-  --backdrop-blur: blur(12px);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+  /* Theme: Dark (Sumi ink) — flat, restrained ink + vermilion palette */
+  --color-bg-base: #100f12;
+  --color-bg-surface: #17161a;
+  --color-bg-surface-solid: #17161a;
+  --color-bg-surface-hover: #211f24;
+  --color-border: rgba(243, 240, 236, 0.10);
+  --color-border-active: rgba(214, 90, 60, 0.55);
+
+  --color-text-primary: #f3f0ec;
+  --color-text-secondary: #a6a09a;
+  --color-text-muted: #6f6a64;
+
+  /* Accent Colors — single intentional vermilion, muted ink secondaries */
+  --color-primary: #d65a3c; /* Vermilion seal */
+  --color-primary-glow: rgba(214, 90, 60, 0.12);
+
+  --color-onyomi: #d65a3c; /* Vermilion */
+  --color-onyomi-bg: rgba(214, 90, 60, 0.12);
+  --color-kunyomi: #5c9aa3; /* Muted Prussian teal */
+  --color-kunyomi-bg: rgba(92, 154, 163, 0.12);
+
+  --color-success: #6f9e85; /* Sage */
+  --color-success-bg: rgba(111, 158, 133, 0.12);
+  --color-warning: #c79a4e; /* Ochre */
+  --color-warning-bg: rgba(199, 154, 78, 0.12);
+  --color-danger: #c0584f; /* Lacquer red */
+  --color-danger-bg: rgba(192, 88, 79, 0.12);
+
+  /* Misc Settings — flat surfaces, hairline borders, crisp radii */
+  --backdrop-blur: none;
+  --radius-sm: 3px;
+  --radius-md: 5px;
+  --radius-lg: 8px;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
   --transition-fast: 0.15s ease;
   --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Light Theme overrides */
-[data-theme="light"] {
-  --color-bg-base: #f1f5f9;
-  --color-bg-surface: rgba(255, 255, 255, 0.75);
-  --color-bg-surface-solid: #ffffff;
-  --color-bg-surface-hover: rgba(241, 245, 249, 0.9);
-  --color-border: rgba(0, 0, 0, 0.08);
-  --color-border-active: rgba(99, 102, 241, 0.4);
-  
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
-  
-  --color-primary: #4f46e5;
-  --color-primary-glow: rgba(79, 70, 229, 0.1);
-  
-  --color-onyomi-bg: rgba(255, 107, 107, 0.15);
-  --color-kunyomi-bg: rgba(32, 201, 151, 0.15);
-  
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.12);
-}
-
-/* Japanese Art (Hokusai Wave) Theme overrides */
+/* Japanese Art (Hokusai Wave) Theme overrides — the light mode */
 [data-theme="hokusai"] {
-  /* Font overrides for a classic woodblock print style */
-  --font-sans: 'Outfit', 'Noto Serif JP', 'Georgia', serif;
+  /* Japanese ink display headings; Mincho serif for kanji */
   --font-japanese: 'Noto Serif JP', 'Sawarabi Mincho', 'MS Mincho', serif;
 
-  /* Traditional Ukiyo-e Light Color Palette */
-  --color-bg-base: #f5f2eb; /* Warm Washi mulberry paper background */
-  --color-bg-surface: #dde7ea; /* Ocean depth wave-teal wood block */
-  --color-bg-surface-solid: #dde7ea;
-  --color-bg-surface-hover: #ccdce0;
-  --color-border: #cbd5d8; /* Matching teal shadow line */
-  --color-border-active: #cc5a37; /* Cinnabar seal Vermilion */
-  
-  --color-text-primary: #0c2233; /* Prussian Blue Ink */
-  --color-text-secondary: #2a4054; /* Faded Indigo Ink */
-  --color-text-muted: #50667a;
-  
-  /* Primary Accent: Mt. Fuji sunset Vermilion */
-  --color-primary: #cc5a37;
-  --color-primary-glow: rgba(204, 90, 55, 0.08);
-  
-  --color-onyomi: #cc5a37; /* Vermilion Seal */
-  --color-onyomi-bg: rgba(204, 90, 55, 0.12);
-  --color-kunyomi: #2d6a78; /* Wave Prussian Teal */
-  --color-kunyomi-bg: rgba(45, 106, 120, 0.12);
-  
-  --color-success: #5f8a75; /* Faded Sage green */
-  --color-success-bg: rgba(95, 138, 117, 0.1);
-  --color-warning: #d9a05b; /* Ochre earth */
-  --color-warning-bg: rgba(217, 160, 91, 0.1);
-  --color-danger: #c24d4d; /* Red Lacquer */
-  --color-danger-bg: rgba(194, 77, 77, 0.1);
-  
-  --shadow-sm: 0 2px 8px rgba(12, 34, 51, 0.06);
-  --shadow-md: 0 8px 24px rgba(12, 34, 51, 0.09);
-  --shadow-lg: 0 16px 40px rgba(12, 34, 51, 0.13);
+  /* Washi paper light palette — flat panels, hairline borders */
+  --color-bg-base: #f4f1ea; /* Warm washi paper */
+  --color-bg-surface: #fbf9f4; /* Lighter paper panel */
+  --color-bg-surface-solid: #fbf9f4;
+  --color-bg-surface-hover: #efece3;
+  --color-border: #e2dccd; /* Warm hairline */
+  --color-border-active: #cc5a37; /* Cinnabar seal vermilion */
+
+  --color-text-primary: #14202b; /* Prussian-blue ink */
+  --color-text-secondary: #44545f;
+  --color-text-muted: #7c8790;
+
+  --color-primary: #cc5a37; /* Mt. Fuji sunset vermilion */
+  --color-primary-glow: rgba(204, 90, 55, 0.09);
+
+  --color-onyomi: #cc5a37;
+  --color-onyomi-bg: rgba(204, 90, 55, 0.10);
+  --color-kunyomi: #2d6a78; /* Wave Prussian teal */
+  --color-kunyomi-bg: rgba(45, 106, 120, 0.10);
+
+  --color-success: #5f8a75; /* Sage */
+  --color-success-bg: rgba(95, 138, 117, 0.10);
+  --color-warning: #c08a3e; /* Ochre */
+  --color-warning-bg: rgba(192, 138, 62, 0.10);
+  --color-danger: #c24d4d; /* Lacquer red */
+  --color-danger-bg: rgba(194, 77, 77, 0.10);
+
+  --shadow-lg: 0 12px 32px rgba(20, 32, 43, 0.12);
 }
 
-/* Custom Hokusai Wave Theme Styling Overrides */
 [data-theme="hokusai"] body {
-  /* Radial gradients simulating a vermilion sunset glow and teal sea foam on washi paper */
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(204, 90, 55, 0.03) 0px, transparent 40%),
-    radial-gradient(at 100% 100%, rgba(45, 106, 120, 0.04) 0px, transparent 45%),
-    linear-gradient(180deg, #f5f2eb 0%, #ebe6da 100%);
-  background-attachment: fixed;
+  background-color: var(--color-bg-base);
 }
 
 [data-theme="hokusai"] .sidebar {
-  /* Traditional seigaiha (waves) woodblock print pattern on warm sand/clay sidebar background */
-  background-image: 
-    radial-gradient(circle at 100% 150%, transparent 24%, rgba(204, 90, 55, 0.015) 24%, rgba(204, 90, 55, 0.015) 28%, transparent 28%, transparent),
-    radial-gradient(circle at 0% 150%, transparent 24%, rgba(204, 90, 55, 0.015) 24%, rgba(204, 90, 55, 0.015) 28%, transparent 28%, transparent),
-    radial-gradient(circle at 50% 100%, transparent 40%, rgba(45, 106, 120, 0.02) 40%, rgba(45, 106, 120, 0.02) 44%, transparent 44%, transparent),
-    radial-gradient(circle at 100% 50%, transparent 24%, rgba(204, 90, 55, 0.015) 24%, rgba(204, 90, 55, 0.015) 28%, transparent 28%, transparent),
-    radial-gradient(circle at 0% 50%, transparent 24%, rgba(204, 90, 55, 0.015) 24%, rgba(204, 90, 55, 0.015) 28%, transparent 28%, transparent),
-    radial-gradient(circle at 50% 0%, transparent 40%, rgba(45, 106, 120, 0.02) 40%, rgba(45, 106, 120, 0.02) 44%, transparent 44%, transparent);
-  background-size: 50px 25px;
-  background-color: #eae1cf; /* Warm sand/clay woodblock block */
-  border-right: 1.5px solid #d4cbb8;
-}
-
-[data-theme="hokusai"] .sidebar-footer {
-  border-top: 1px dashed rgba(12, 34, 51, 0.15);
-}
-
-[data-theme="hokusai"] .logo-icon {
-  background: linear-gradient(135deg, #cc5a37 0%, #2d6a78 100%);
-  box-shadow: 0 4px 14px rgba(204, 90, 55, 0.2);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: #efeadf; /* Warm sand sidebar */
+  border-right: 1px solid #e2dccd;
 }
 
 [data-theme="hokusai"] .logo-title {
-  font-family: 'Noto Serif JP', 'Sawarabi Mincho', serif;
-  font-weight: 700;
-}
-
-[data-theme="hokusai"] .review-alert-banner {
-  /* Vermilion/Teal warm banner style */
-  background: linear-gradient(135deg, rgba(204, 90, 55, 0.06) 0%, rgba(45, 106, 120, 0.06) 100%);
-  border-color: rgba(204, 90, 55, 0.2);
-  box-shadow: inset 0 0 12px rgba(204, 90, 55, 0.02);
-}
-
-[data-theme="hokusai"] .glass-card {
-  border-width: 1.5px;
-  box-shadow: var(--shadow-sm);
-  background: var(--color-bg-surface);
-}
-
-[data-theme="hokusai"] .nav-button.active {
-  border-left: 3px solid var(--color-primary);
-  background: rgba(204, 90, 55, 0.08);
-  color: #cc5a37;
-}
-
-[data-theme="hokusai"] .sidebar .nav-button:hover {
-  background-color: #dfd6c4;
-}
-
-[data-theme="hokusai"] .sidebar .theme-toggle-btn:hover {
-  background-color: #dfd6c4;
+  font-family: var(--font-serif);
+  font-weight: 600;
 }
 
 [data-theme="hokusai"] .tag {
@@ -223,11 +144,21 @@ body {
   background: var(--color-text-muted);
 }
 
-/* Typography Helpers */
+/* Typography Helpers — editorial hierarchy: serif display, restrained weights */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--color-text-primary);
+}
+
+h1, h2 {
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 30px;
+  line-height: 1.15;
 }
 
 .kanji-text {
@@ -267,15 +198,15 @@ h1, h2, h3, h4, h5, h6 {
 .logo-icon {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-kunyomi));
-  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
-  font-size: 20px;
-  color: white;
-  box-shadow: 0 4px 12px rgba(32, 201, 151, 0.3);
+  font-family: var(--font-japanese);
+  font-weight: 600;
+  font-size: 22px;
+  color: #fff;
 }
 
 .logo-text {
@@ -284,9 +215,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo-title {
-  font-size: 18px;
-  font-weight: 800;
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
   line-height: 1.1;
+  letter-spacing: -0.01em;
 }
 
 .logo-subtitle {
@@ -345,19 +278,14 @@ h1, h2, h3, h4, h5, h6 {
 .nav-button:hover {
   background-color: var(--color-bg-surface-hover);
   color: var(--color-text-primary);
-  transform: translateX(2px);
-}
-
-@media (max-width: 900px) {
-  .nav-button:hover {
-    transform: none;
-  }
 }
 
 .nav-button.active {
   background: var(--color-primary-glow);
   color: var(--color-primary);
-  border-color: rgba(99, 102, 241, 0.2);
+  border-color: transparent;
+  border-left: 2px solid var(--color-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-weight: 600;
 }
 
@@ -421,13 +349,13 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 24px;
-  box-shadow: var(--shadow-md);
-  transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .glass-card:hover {
   border-color: var(--color-border-active);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
 }
 
 /* Standard Button */
@@ -449,15 +377,9 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary {
   background-color: var(--color-primary);
   color: white;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 .btn-primary:hover {
-  background-color: #5053e3;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
-}
-.btn-primary:active {
-  transform: translateY(0);
+  background-color: #c14d30;
 }
 
 .btn-secondary {
@@ -473,11 +395,9 @@ h1, h2, h3, h4, h5, h6 {
 .btn-danger {
   background-color: var(--color-danger);
   color: white;
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 .btn-danger:hover {
   background-color: #dc2626;
-  transform: translateY(-1px);
 }
 
 .btn:disabled {
@@ -536,19 +456,19 @@ h1, h2, h3, h4, h5, h6 {
 .tag-jlpt {
   background-color: var(--color-primary-glow);
   color: var(--color-primary);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
 
 .tag-onyomi {
   background-color: var(--color-onyomi-bg);
   color: var(--color-onyomi);
-  border: 1px solid rgba(255, 107, 107, 0.2);
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
 
 .tag-kunyomi {
   background-color: var(--color-kunyomi-bg);
   color: var(--color-kunyomi);
-  border: 1px solid rgba(32, 201, 151, 0.2);
+  border: 1px solid color-mix(in srgb, currentColor 22%, transparent);
 }
 
 /* Grid Layouts */
@@ -562,6 +482,218 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* App shell — lock every page to the viewport, no page scroll (desktop) */
+@media (min-width: 901px) {
+  .main-content {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* The single view rendered by the router fills the frame; it scrolls
+     internally only if its content can't fit — the page itself never scrolls. */
+  .main-content > * {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .dashboard-view {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .dashboard-view .view-header {
+    margin-bottom: 14px;
+  }
+
+  .dashboard-view .review-alert-banner {
+    padding: 14px 22px;
+    margin-bottom: 14px;
+  }
+
+  .dashboard-view .review-alert-desc {
+    margin-bottom: 0;
+  }
+
+  /* "Kanji Progress Details" heading row */
+  .dashboard-view > h2 {
+    margin-bottom: 8px !important;
+  }
+
+  .dashboard-view .stats-bar {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .dashboard-view .stats-bar .glass-card {
+    padding: 14px 16px;
+  }
+
+  .dashboard-view .stat-icon-wrapper {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* Grid fills the remaining height; columns scroll internally only as a fallback */
+  .dashboard-view .dashboard-grid {
+    flex: 1;
+    min-height: 0;
+    margin-top: 0;
+    gap: 18px;
+  }
+
+  .dashboard-view .dashboard-grid > .glass-card,
+  .dashboard-view .dashboard-grid > div {
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .dashboard-view .dashboard-grid .box-stat {
+    padding: 10px;
+  }
+
+  .dashboard-view .stats-panel-grid {
+    margin-bottom: 0;
+  }
+
+  /* Kanji Bank — fixed header + search bar, only the grid below scrolls */
+  .kanji-bank-view {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .kanji-bank-view .view-header,
+  .kanji-bank-view .search-filter-bar {
+    flex: none;
+  }
+
+  .kanji-bank-view .view-header {
+    margin-bottom: 18px;
+  }
+
+  .kanji-bank-view .search-filter-bar {
+    margin-bottom: 18px;
+  }
+
+  .bank-scroll-area {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 6px; /* breathing room for the scrollbar */
+  }
+
+  /* Practice Arena — center the view vertically within the frame
+     (safe center keeps tall screens, e.g. results, scrollable from the top) */
+  .practice-arena {
+    display: flex;
+    flex-direction: column;
+    justify-content: safe center;
+    align-items: center;
+  }
+
+  /* Writing Studio — fits the frame; only the character list scrolls */
+  .writing-view {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .writing-view .view-header {
+    flex: none;
+    margin-bottom: 16px;
+  }
+
+  .writing-view-layout {
+    flex: 1;
+    min-height: 0;
+    margin-top: 0;
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  /* Left "Select Character" card fills its column; the list inside it scrolls */
+  .writing-view-layout > .glass-card:first-child {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .writing-kanji-list {
+    max-height: none;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Right studio column fits without its own scroll */
+  .writing-studio-main {
+    min-height: 0;
+    overflow: hidden;
+    gap: 16px;
+  }
+
+  .writing-studio-main > .glass-card {
+    padding: 16px;
+  }
+
+  /* Study Sets & Presets — same shell (reuses the writing layout classes):
+     fits the frame; the preset list (left) and the included-kanji grid (right) scroll. */
+  .presets-view {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .presets-view .view-header {
+    flex: none;
+    margin-bottom: 16px;
+  }
+
+  /* Right column: the detail card stays put, the "Included Kanji" grid card scrolls */
+  .presets-view .writing-studio-main > .glass-card:last-child {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .presets-view .writing-studio-main > .glass-card:last-child .kanji-grid {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+}
+
+/* Practice Arena setup — wide two-column layout so it fits without scrolling */
+.practice-setup-hero {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.practice-setup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 820px) {
+  .practice-setup-grid {
+    grid-template-columns: 1fr;
+  }
+  .practice-setup-hero {
+    flex-direction: column;
+    text-align: center;
   }
 }
 
@@ -590,24 +722,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .stat-icon-wrapper.blue {
-  color: #3b82f6;
-  background-color: rgba(59, 130, 246, 0.1);
-  border-color: rgba(59, 130, 246, 0.2);
+  color: var(--color-kunyomi);
+  background-color: var(--color-kunyomi-bg);
+  border-color: color-mix(in srgb, var(--color-kunyomi) 22%, transparent);
 }
 .stat-icon-wrapper.yellow {
   color: var(--color-warning);
   background-color: var(--color-warning-bg);
-  border-color: rgba(245, 158, 11, 0.2);
+  border-color: color-mix(in srgb, var(--color-warning) 22%, transparent);
 }
 .stat-icon-wrapper.green {
   color: var(--color-success);
   background-color: var(--color-success-bg);
-  border-color: rgba(16, 185, 129, 0.2);
+  border-color: color-mix(in srgb, var(--color-success) 22%, transparent);
 }
 .stat-icon-wrapper.purple {
-  color: #a855f7;
-  background-color: rgba(168, 85, 247, 0.1);
-  border-color: rgba(168, 85, 247, 0.2);
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-surface-hover);
+  border-color: var(--color-border);
 }
 
 .stat-text {
@@ -720,7 +852,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .kanji-card:hover .char {
-  transform: scale(1.15);
+  transform: scale(1.08);
 }
 
 .kanji-card .meaning {
@@ -748,7 +880,7 @@ h1, h2, h3, h4, h5, h6 {
 .box-2 { background-color: #ffb703; }
 .box-3 { background-color: #64dfdf; }
 .box-4 { background-color: #48cae4; }
-.box-5 { background-color: var(--color-success); box-shadow: 0 0 8px var(--color-success); }
+.box-5 { background-color: var(--color-success); }
 
 .kanji-card .card-jlpt-tag {
   position: absolute;
@@ -1065,8 +1197,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .color-dot:hover, .color-dot.active {
-  transform: scale(1.25);
-  box-shadow: 0 0 6px var(--color-primary);
+  transform: scale(1.15);
 }
 
 .brush-slider-container {
@@ -1122,7 +1253,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .progress-bar-fg {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-kunyomi));
+  background: var(--color-primary);
   transition: width 0.3s ease;
 }
 
@@ -1186,7 +1317,6 @@ h1, h2, h3, h4, h5, h6 {
 .option-button:hover:not(:disabled) {
   border-color: var(--color-primary);
   background-color: var(--color-bg-surface-hover);
-  transform: translateY(-1px);
 }
 
 .option-badge {
@@ -1335,8 +1465,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Dashboard review alert banner */
 .review-alert-banner {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(32, 201, 151, 0.15) 100%);
-  border: 1px solid rgba(99, 102, 241, 0.25);
+  background: var(--color-primary-glow);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
   border-radius: var(--radius-lg);
   padding: 24px;
   display: flex;
@@ -1346,17 +1477,6 @@ h1, h2, h3, h4, h5, h6 {
   gap: 20px;
   position: relative;
   overflow: hidden;
-}
-
-.review-alert-banner::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -20%;
-  width: 250px;
-  height: 250px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 60%);
-  pointer-events: none;
 }
 
 .review-alert-content {
@@ -1546,7 +1666,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .grade-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .grade-btn-num {
@@ -1698,5 +1818,4 @@ h1, h2, h3, h4, h5, h6 {
   border-color: var(--color-primary);
   color: var(--color-primary);
   font-weight: 700;
-  box-shadow: 0 0 8px rgba(99, 102, 241, 0.25);
 }

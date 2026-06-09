@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { Sidebar } from "./components/Sidebar";
 import { DashboardView } from "./components/DashboardView";
 import { KanjiBankView } from "./components/KanjiBankView";
@@ -13,8 +14,14 @@ import { usePresets } from "./hooks/usePresets";
 import { PresetsView } from "./components/PresetsView";
 
 function App() {
-  const [view, setView] = useState<string>("dashboard");
-  const [theme, setTheme] = useState<"dark" | "light" | "hokusai">("dark");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Active view is derived from the URL (e.g. "/bank" -> "bank"); navigating routes the app.
+  const view = location.pathname.split("/")[1] || "dashboard";
+  const setView = (next: string) => navigate(`/${next}`);
+
+  const [theme, setTheme] = useState<"dark" | "hokusai">("dark");
   
   const {
     progress: kanjiProgress,
@@ -45,11 +52,13 @@ function App() {
   const stats = getKanjiStats();
   const vocabStats = getVocabStats();
 
-  // Load and apply user theme
+  // Load and apply user theme (legacy "light" maps to the Hokusai light mode)
   useEffect(() => {
-    const savedTheme = localStorage.getItem("app_theme") as "dark" | "light" | "hokusai" | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
+    const savedTheme = localStorage.getItem("app_theme");
+    if (savedTheme === "hokusai" || savedTheme === "light") {
+      setTheme("hokusai");
+    } else if (savedTheme === "dark") {
+      setTheme("dark");
     }
   }, []);
 
@@ -59,11 +68,7 @@ function App() {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme((prev) => {
-      if (prev === "dark") return "light";
-      if (prev === "light") return "hokusai";
-      return "dark";
-    });
+    setTheme((prev) => (prev === "dark" ? "hokusai" : "dark"));
   };
 
   const handleResetAll = () => {
@@ -85,61 +90,79 @@ function App() {
       />
       
       <main className="main-content">
-        {view === "dashboard" && (
-          <DashboardView 
-            stats={stats} 
-            vocabStats={vocabStats} 
-            setView={setView} 
-            onClearQueue={handleResetAll}
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route
+            path="/dashboard"
+            element={
+              <DashboardView
+                stats={stats}
+                vocabStats={vocabStats}
+                setView={setView}
+                onClearQueue={handleResetAll}
+              />
+            }
           />
-        )}
-        {view === "bank" && (
-          <KanjiBankView
-            getKanjiProgress={getKanjiProgress}
-            gradeKanji={gradeKanji}
-            startLearning={startLearning}
+          <Route
+            path="/bank"
+            element={
+              <KanjiBankView
+                getKanjiProgress={getKanjiProgress}
+                gradeKanji={gradeKanji}
+                startLearning={startLearning}
+              />
+            }
           />
-        )}
-        {view === "practice" && (
-          <PracticeView setView={setView} />
-        )}
-        {view === "jlpt" && (
-          <JLPTView setView={setView} />
-        )}
-        {view === "writing" && (
-          <WritingView
-            getKanjiProgress={getKanjiProgress}
-            gradeKanji={gradeKanji}
-            startLearning={startLearning}
-            isDue={isKanjiDue}
+          <Route path="/practice" element={<PracticeView setView={setView} />} />
+          <Route path="/jlpt" element={<JLPTView setView={setView} />} />
+          <Route
+            path="/writing"
+            element={
+              <WritingView
+                getKanjiProgress={getKanjiProgress}
+                gradeKanji={gradeKanji}
+                startLearning={startLearning}
+                isDue={isKanjiDue}
+              />
+            }
           />
-        )}
-        {view === "typing" && (
-          <TypingView
-            getKanjiProgress={getKanjiProgress}
-            gradeKanji={gradeKanji}
-            isDue={isKanjiDue}
-            presets={presets}
-            setView={setView}
+          <Route
+            path="/typing"
+            element={
+              <TypingView
+                getKanjiProgress={getKanjiProgress}
+                gradeKanji={gradeKanji}
+                isDue={isKanjiDue}
+                presets={presets}
+                setView={setView}
+              />
+            }
           />
-        )}
-        {view === "vocab" && (
-          <VocabView
-            activeVocabList={getActiveVocab()}
-            gradeVocab={gradeVocab}
-            startLearningVocab={startLearningVocab}
+          <Route
+            path="/vocab"
+            element={
+              <VocabView
+                activeVocabList={getActiveVocab()}
+                gradeVocab={gradeVocab}
+                startLearningVocab={startLearningVocab}
+              />
+            }
           />
-        )}
-        {view === "presets" && (
-          <PresetsView
-            presets={presets}
-            createPreset={createPreset}
-            deletePreset={deletePreset}
-            activatePreset={activatePreset}
-            startLearningMultiple={startLearningMultiple}
-            getKanjiProgress={getKanjiProgress}
+          <Route
+            path="/presets"
+            element={
+              <PresetsView
+                presets={presets}
+                createPreset={createPreset}
+                deletePreset={deletePreset}
+                activatePreset={activatePreset}
+                startLearningMultiple={startLearningMultiple}
+                getKanjiProgress={getKanjiProgress}
+              />
+            }
           />
-        )}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
       </main>
     </div>
   );

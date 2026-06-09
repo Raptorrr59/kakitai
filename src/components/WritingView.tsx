@@ -117,10 +117,10 @@ export const WritingView: React.FC<WritingViewProps> = ({
 
       {sessionCompleted && (
         <div 
-          className="review-alert-banner" 
-          style={{ 
-            background: "linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(32, 201, 151, 0.12) 100%)", 
-            borderColor: "rgba(16, 185, 129, 0.3)" 
+          className="review-alert-banner"
+          style={{
+            background: "var(--color-success-bg)",
+            borderLeftColor: "var(--color-success)"
           }}
         >
           <div className="review-alert-content">

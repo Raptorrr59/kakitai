@@ -137,7 +137,7 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
             Available Lists
           </h3>
           
-          <div className="writing-kanji-list" style={{ maxHeight: "calc(100vh - 200px)" }}>
+          <div className="writing-kanji-list">
             {presets.map((preset) => {
               const isActive = preset.id === selectedPresetId;
               
@@ -269,7 +269,6 @@ export const PresetsView: React.FC<PresetsViewProps> = ({
                         justifyContent: "center",
                         borderWidth: isStudying ? "2px" : "1px",
                         borderColor: isStudying ? "var(--color-kunyomi)" : "var(--color-border)",
-                        boxShadow: isStudying ? "0 0 8px rgba(32, 201, 151, 0.15)" : "none",
                         position: "relative"
                       }}
                       title={`${kanjiDetails?.meanings.join(", ") || ""}`}
